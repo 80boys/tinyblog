@@ -1,0 +1,64 @@
+荒野无灯网址
+ 		-
+ 		-#### 介绍
+ 		-统计灯大常用的固件、教程等网址。
+ 		-
+ 		-一、灯灯的固件地址首页：http://rom.nanodm.net/  
+ 		-   （一）贝壳云小钢炮固件下载地址：http://rom.nanodm.net/beikeyun/    
+ 		-   （二）斐讯N1小钢炮固件下载地址：http://rom.nanodm.net/N1/  
+ 		-二、灯灯的教程首页：http://nanodm.net/  
+ 		-三、灯灯的码云首页：https://gitee.com/8ox86  
+ 		-四、灯灯的Docker首页：https://hub.docker.com/u/80x86   
+ 		-五、灯灯的路由器固件首页：http://p4davan.80x86.io/  
+ 		-六、灯灯的博客：http://80x86.io/  
+ 		-七、灯灯的恩山主页：https://www.right.com.cn/forum/?316501  
+ 		-八、灯灯的公众号：路由器的那些事儿
+ 		-
+ 		-
+ 		-查看贝壳云的cpu体质：
+ 		-dmesg | grep leakage
+ 		-
+ 		-小钢炮frp配置：
+ 		-1、要把服务器端的配置文件中privilege_token改为token，否则小钢炮无法连接，小钢炮用的是token字段
+ 		-2、所有http的都会走vhost_http_port指定的端口
+ 		-   所有https的都会走vhost_https_port指定的端口
+ 		-   所有http和https则不用指定remote port
+ 		-   所有TCP的访问模式为ip:端口，这个端口是在小钢炮frp界面中的remote port（还可以现在app中修改应用的端口，然后在frp中也进行修改local port及remote port以方便记忆）
+ 		-
+ 		-
+ 		-导航之类的静态页面DIY   
+ 		-可以放到 /usr/local/apps/dashboard/apps 下面，然后就能直接通过“ http://dash的ip/apps/你的页面路径 ”访问 到   
+ 		-模板下载：http://www.wdmomo.fun:81/doc/Public/Uploads/meibeike/web/web.html 密码pypy  
+ 		-dashload背景图片路径：/usr/local/apps/dashboard/theme/darkmatter/static/img/wallpaper  
+ 		-
+ 		-
+ 		-
+ 		-docker加速
+ 		-这个加速不是那个公共加速（那个其实很慢）  
+ 		-自己用支付宝账号登录访问 https://cr.console.aliyun.com/cn-beijing/instances/mirrors     
+ 		-（注意：地址要先切一下。比如在深圳，顶部切到华南。https://cr.console.aliyun.com/cn-shenzhen/instances/mirrors）   
+ 		-然后把获取到的https://****.mirror.aliyuncs.com填写到dash里的docker mirror配置处（替换掉原有的比较好）  
+ 		-这个地址每个人其实是不同的。。。   
+ 		-然后你拉镜像就能飞起来。  
+ 		-
+ 		-
+ 		-dock ui用命令行装     
+ 		-docker volume create portainer_data  
+ 		-docker run --name portainer -d --restart always -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer   
+ 		-(不要随意修改graph dir，否则会导致ui安装不上，lychee等镜像都安装不上，如果已经修改了，想要改回来，改回来之后save一下一定要重启）  
+ 		-
+ 		-
+ 		-贝壳云，请刷最新版。刷完之后要确保联网更新时间(在dash首页可以看到贝壳的时间是否正常，如果不正常，说明 ntp没有正确更新，请更换ntp服务器），  
+ 		-时间更新OK后，请在系统里点击重启，然后再观察各服务的启动状态。  
+ 		-刷普通版不行的贝壳，去下载 freq-limited 版本刷就OK了。     
+ 		-如果安装docker提示no space 那么用如下命令：    
+ 		-如果想使用整个8G emmc空间，刷机完成后登录ssh执行一次 root-growing 即可扩容空间
+ 		-
+ 		-
+ 		-
+ 		-frp之后，aria2的特殊情况说明
+ 		-aria2 ui显示状态未连接情况说明：  
+ 		-1、dashload里的Rpc Secret与网页ariang->rpc中设置要一致（最好用谷歌浏览器）
+ 		-2、如果使用Force Rpc Secure(SSL)，显示未连接，需要在ariang->rpc中设置aira2 rpc协议为https，同理不用ssl的时候也要切回到http，否则就会显示不连接，而且在网页访问ui的时候一定也要遵从无ssl时用http，有ssl是用https，否则会显示未连接
+ 		-3、做个frp之后同理，aira2的TCP映射端口是用来rpc通信的，不是用来网页访问的，网页访问只能进小钢炮主页后点击aira2，同理，设置了ssl后，需要进入小钢炮的时候就https方式访问，反之，用http访问，这样aria2才会显示连接正常。
+ 		-4、将第三访步骤问的网址直接拷贝 类似于这样的网址 http（https）://网址（IP）:端口号/apps/AriaNg，有如下两种情况1，如果你的本地浏览器关闭重新打开设置了保存cookies，则将如上网址复制进去可以直接打开aira2，直至你的cookies失效或者被清除，这时候如果直接用贴网址访问就会出现和下面要说的情况一样，如果你的浏览器设置了退出浏览器清楚记录及cookies操作，或者使用无痕浏览或者在一台本地或者异地从未登录过aira2的电脑上登录aira2的frp网址，则会发现aria2状态显示一直在连接，分析发现rpc端口使用了默认端口并且密码栏目为空，将端口修改为正确的端口并填入正确的密码，点击网页弹出的重新加载页面，就会发现aira2连接恢复正常，因此我们总结出浏览器prc设置通过复制网址访问无法带入密码，放弃直接访问aria2，改为从小钢炮主界面接入
