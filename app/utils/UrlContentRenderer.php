@@ -6,6 +6,7 @@ class UrlContentRenderer
 {
     protected $baseUrl;
     protected $basePath;
+    protected $allowedExtensions = ['md', 'php', 'js', 'css', 'png', 'html'];
 
     public function __construct($baseUrl,$basePath)
     {
@@ -15,24 +16,40 @@ class UrlContentRenderer
 
     public function renderByUrl()
     {
-        $localPath =$this->getLocalPath();
-        
-        // 检查 Markdown 文件是否存在
-        if ($this->fileExists($localPath, '.md')) {
-            return $this->markdownToHtml(str_replace('.html', '.md', $localPath));
+        $localPath = str_replace('\\', '/', $this->getLocalPath());
+        $fileExtension = pathinfo($localPath, PATHINFO_EXTENSION);
+        if (!$fileExtension) {
+            return $this->includePhpFile(PROJECT_ROOT . '/app/block/index.php');
+        }
+        if (!in_array($fileExtension,$this->allowedExtensions)) {
+            return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
         }
 
-        // 检查 Markdown 文件是否存在
-        if ($this->fileExists($localPath, '.markdown')) {
-            return $this->markdownToHtml(str_replace('.html', '.markdown', $localPath));
+        if (!$this->isPathWithinBasePath($localPath, PROJECT_ROOT) ) {
+            return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
         }
 
-        // 检查 PHP 文件是否存在
-        if ($this->fileExists($localPath, '.php')) {
-            return $this->includePhpFile(str_replace('.html', '.php', $localPath));
+        $fileExtension = "." . $fileExtension;
+        if ($this->fileExists($fileExtension, '.md', $localPath)) {
+            return $this->markdownToHtml(str_replace($fileExtension, '.md', $localPath));
         }
 
+        if ($this->fileExists($fileExtension, '.markdown', $localPath)) {
+            return $this->markdownToHtml(str_replace($fileExtension, '.markdown', $localPath));
+        }
+
+        if ($this->fileExists($fileExtension, '.php', $localPath)) {
+            return $this->includePhpFile(str_replace($fileExtension, '.php', $localPath));
+        }
+
+        if (file_exists($localPath) && in_array($fileExtension, [".js", ".css", ".png"]) ) {
+            return $this->includeStaticFile( $localPath );
+        }
         return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
+    }
+
+    protected function isPathWithinBasePath($path,$basePath) {
+        return strpos($path,$basePath) === 0;
     }
 
     protected function getLocalPath()
@@ -41,9 +58,9 @@ class UrlContentRenderer
                     . DIRECTORY_SEPARATOR . trim( $this->baseUrl )); 
     }
 
-    protected function fileExists($filePath, $suffix)
+    protected function fileExists($fileExtension, $suffix, $filePath)
     {
-        $path = str_replace('.html', $suffix, $filePath);
+        $path = str_replace($fileExtension, $suffix, $filePath);
         return file_exists($path);
     }
 
@@ -55,12 +72,16 @@ class UrlContentRenderer
         $htmlContent = "<pre>" . htmlspecialchars($markdownContent) . "</pre>";
         return $htmlContent;
     }
+    
+    protected function includeStaticFile($markdownFilePath)
+    {
+        return file_get_contents($markdownFilePath);
+    }
 
     protected function includePhpFile($phpFilePath)
     {
         ob_start();
         include $phpFilePath;
-        $content = ob_get_clean();
-        return $content;
+        return ob_get_clean();
     }
 }
