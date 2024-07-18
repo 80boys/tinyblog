@@ -17,16 +17,21 @@ class UrlContentRenderer
     public function renderByUrl()
     {
         $localPath = str_replace('\\', '/', $this->getLocalPath());
-        $fileExtension = pathinfo($localPath, PATHINFO_EXTENSION);
-        if (!$fileExtension) {
-            return $this->includePhpFile(PROJECT_ROOT . '/app/block/index.php');
+        if ( rtrim($localPath, "/") == PROJECT_ROOT ) {
+            return $this->returnIndex();
         }
+        $fileExtension = pathinfo($localPath, PATHINFO_EXTENSION);
+
+        if (!$fileExtension) {
+            return $this->return404();
+        }
+
         if (!in_array($fileExtension,$this->allowedExtensions)) {
-            return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
+            return $this->return404();
         }
 
         if (!$this->isPathWithinBasePath($localPath, PROJECT_ROOT) ) {
-            return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
+            return $this->return404();
         }
 
         $fileExtension = "." . $fileExtension;
@@ -45,6 +50,12 @@ class UrlContentRenderer
         if (file_exists($localPath) && in_array($fileExtension, [".js", ".css", ".png"]) ) {
             return $this->includeStaticFile( $localPath );
         }
+        return $this->return404();
+    }
+    protected function returnIndex() {
+        return $this->includePhpFile(PROJECT_ROOT . '/app/block/index.php');
+    }
+    protected function return404() {
         return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
     }
 
@@ -80,6 +91,9 @@ class UrlContentRenderer
 
     protected function includePhpFile($phpFilePath)
     {
+        if ( $phpFilePath == PROJECT_ROOT . "/index.php" ) {
+            return $this->returnIndex();
+        }
         ob_start();
         include $phpFilePath;
         return ob_get_clean();

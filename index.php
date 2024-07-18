@@ -3,27 +3,27 @@
 mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
 define('PROJECT_ROOT', str_replace('\\', '/', __DIR__));
-
 define('BASE_PATH', dirname($_SERVER["SCRIPT_NAME"]));
 
-function autoload($className) {
-    $className = ltrim($className, '\\');
-    $fileName  = '';
-    $namespace = '';
-    if ($lastNsPos = strrpos($className, '\\')) {
-        $namespace = lcfirst(substr($className, 0, $lastNsPos));
-        $className = substr($className, $lastNsPos + 1);
-        $fileName  = str_replace('\\', DIRECTORY_SEPARATOR,$namespace) . DIRECTORY_SEPARATOR;
+if (!function_exists('autoload')) {
+    function autoload($className) {
+        $className = ltrim($className, '\\');
+        $fileName  = '';
+        $namespace = '';
+        if ($lastNsPos = strrpos($className, '\\')) {
+            $namespace = lcfirst(substr($className, 0, $lastNsPos));
+            $className = substr($className, $lastNsPos + 1);
+            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR,$namespace) . DIRECTORY_SEPARATOR;
+        }
+        $fileName .= str_replace('_', DIRECTORY_SEPARATOR,$className) . '.php';
+        $baseDir = PROJECT_ROOT . DIRECTORY_SEPARATOR; 
+        $filePath =$baseDir . $fileName;
+        if (file_exists($filePath)) { 
+            require_once $filePath;
+        }
     }
-    $fileName .= str_replace('_', DIRECTORY_SEPARATOR,$className) . '.php';
-    $baseDir = PROJECT_ROOT . DIRECTORY_SEPARATOR; 
-    $filePath =$baseDir . $fileName;
-    if (file_exists($filePath)) {
-        require $filePath;
-    }
+    spl_autoload_register('autoload');
 }
-
-spl_autoload_register('autoload');
 
 //首页导航
 // try {
