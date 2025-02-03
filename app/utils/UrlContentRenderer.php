@@ -6,7 +6,7 @@ class UrlContentRenderer
 {
     protected $baseUrl;
     protected $basePath;
-    protected $allowedExtensions = ['md', 'php', 'js', 'css', 'png', 'html'];
+    protected $allowedExtensions = ['md', 'php', 'js', 'css', 'png', 'html', 'json'];
 
     public function __construct($baseUrl,$basePath)
     {
@@ -50,10 +50,28 @@ class UrlContentRenderer
         if (file_exists($localPath) && in_array($fileExtension, [".js", ".css", ".png"]) ) {
             return $this->includeStaticFile( $localPath );
         }
+        
+        $getLocalPath = str_replace('.html', '.json', $localPath);
+        if (file_exists($getLocalPath) && in_array($fileExtension, [".html"]) ) {
+            $blogData  = file_get_contents($getLocalPath);
+            $blog = json_decode($blogData, true);
+            $blog['content'] = $this->mdDataToHtml($blog['content']);
+            return $this->includePhpFile(PROJECT_ROOT. "/app/block/blog.php", ['blog' => $blog]);
+        }
         return $this->return404();
     }
     protected function returnIndex() {
-        return $this->includePhpFile(PROJECT_ROOT . '/app/block/index.php');
+        $blogs = [];
+        try {
+            $traverser = new \App\Utils\DirectoryTraverser();
+            $entries = $traverser->getDirectoryEntries(PROJECT_ROOT . '/app/blogs', true, ['json']);
+            foreach ($entries as $entry) {
+                $blogs[] = $traverser->getJsonContent($entry["path"]);
+            }
+        } catch (\InvalidArgumentException $e) {
+            //echo $e->getMessage() . "\n";
+        }
+        return $this->includePhpFile(PROJECT_ROOT . '/app/block/index.php', ['blogs' => $blogs]);
     }
     protected function return404() {
         return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
@@ -75,12 +93,18 @@ class UrlContentRenderer
         return file_exists($path);
     }
 
-    protected function markdownToHtml($markdownFilePath)
+    public function markdownToHtml($markdownFilePath)
     {
-        // 这里只是一个示例，实际应用中你可能需要使用 Markdown 解析库
-        $markdownContent = file_get_contents($markdownFilePath);
-        // 这里简单地将 Markdown 转换为 HTML，实际应用中请使用 Markdown 解析器
-        $htmlContent = "<pre>" . htmlspecialchars($markdownContent) . "</pre>";
+        $parsedown = new ParsedownExtra();
+        $markdown = file_get_contents($markdownFilePath);
+        $htmlContent = $parsedown->text($markdown);
+        return $htmlContent;
+    }
+
+    public function mdDataToHtml($markdownData)
+    {
+        $parsedown = new ParsedownExtra();
+        $htmlContent = $parsedown->text($markdownData);
         return $htmlContent;
     }
     
@@ -89,11 +113,16 @@ class UrlContentRenderer
         return file_get_contents($markdownFilePath);
     }
 
-    protected function includePhpFile($phpFilePath)
+    protected function includePhpFile($phpFilePath, $variables = [])
     {
         if ( $phpFilePath == PROJECT_ROOT . "/index.php" ) {
             return $this->returnIndex();
         }
+
+        // 提取变量
+        extract($variables);
+
+        // 包含文件并获取输出
         ob_start();
         include $phpFilePath;
         return ob_get_clean();

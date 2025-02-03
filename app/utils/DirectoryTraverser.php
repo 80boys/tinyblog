@@ -54,7 +54,7 @@ class DirectoryTraverser
                             $entries = array_merge($entries, $this->listDirectoryEntries($path, true, $filter));
                         }
                     } else {
-                        if (is_null($filter) ||$this->matchesFilter($entry,$filter)) {
+                        if (is_null($filter) || $this->matchesFilter($entry,$filter)) {
                             $entries[] = ['type' => 'file', 'path' =>$path];
                         }
                     }
@@ -72,13 +72,13 @@ class DirectoryTraverser
      * @param string|array $filter 过滤器
      * @return bool
      */
-    private function matchesFilter($file,$filter)
+    private function matchesFilter($file, $filter)
     {
         if (is_string($filter)) {
             $filter = [$filter];
         }
         $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
-        return in_array($fileExtension,$filter);
+        return in_array($fileExtension, $filter);
     }
 
     /**
@@ -90,6 +90,21 @@ class DirectoryTraverser
     private function isDir($path)
     {
         return is_dir($path);
+    }
+
+    /**
+     * 根据路径取json文件内容
+     *
+     * @param string $path 路径
+     * @return array
+     */
+    public function getJsonContent($path)
+    {
+        if (!file_exists($path)) {
+            return [];
+        }
+        $content = file_get_contents($path);
+        return json_decode($content, true);
     }
 }
 

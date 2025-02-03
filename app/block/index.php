@@ -30,12 +30,20 @@
     </header>
     
     <section class="blog-posts">
-        <article class="blog-post">
-            <h2>最新博客文章标题</h2>
-            <p>这篇文章简要介绍了博客的主要内容，吸引读者继续阅读全文。</p>
-            <a href="#">阅读全文 &raquo;</a>
-        </article>
-        <!-- 更多文章可以复制上面的结构进行添加 -->
+        <?php
+        try {
+            foreach ($blogs as $blog) {
+                // 渲染博客列表
+                echo '<article class="blog-post">';
+                echo '<h2>' . $blog['title'] . '</h2>';
+                echo '<p>' . $blog['subtitle'] . '</p>';
+                echo '<a href="/tinyblog/index.php/app/blogs/' . str_replace('.json', '.html', $blog['path']) . '">阅读全文 &raquo;</a>';
+                echo '</article>';
+            }
+        } catch (\InvalidArgumentException $e) {
+            //echo $e->getMessage() . "\n";
+        }
+        ?>
     </section>
     
     <section class="contact">
