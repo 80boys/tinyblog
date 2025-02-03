@@ -61,8 +61,31 @@ include(PROJECT_ROOT . "/app/block/navi.php");
         </article>
     </main>
     <script src="<?php echo BASE_PATH; ?>/app/html/js/simplemde.min.js"></script>
-    <script> 
-        new SimpleMDE(
+    <script src="<?php echo BASE_PATH; ?>/app/html/js/qiniu.min.js"></script>
+    <script>
+        async function getQiniuToken() {
+            const response = await fetch('/app/end/getQiniuToken.html');
+            const data = await response.json();
+            console.log(data)
+            return data.token;
+        }
+
+        async function uploadToQiniu(file, filekey) {
+            const token = await getQiniuToken();
+            var config = {
+                useCdnDomain: true,
+                region: qiniu.region.z1
+            };
+            const observable = qiniu.upload(file, `mapleBridge/${filekey}`, token, null, config);
+            return new Promise((resolve, reject) => {
+                observable.subscribe({
+                    next: () => {},
+                    error: (err) => reject(err),
+                    complete: (res) => resolve(res.key)
+                });
+            });
+        }
+        const simplemde = new SimpleMDE(
             { 
                 element: document.getElementById("my-editor"),
                 toolbar: [
@@ -87,5 +110,43 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                     "guide"
                 ]
             }
-        ); </script>
+        );
+        // 处理图片粘贴事件
+        simplemde.codemirror.on('paste', async (cm, event) => {
+            const clipboardData = event.clipboardData || event.originalEvent.clipboardData;
+            if (clipboardData.items) {
+                for (let i = 0; i < clipboardData.items.length; i++) {
+                    const item = clipboardData.items[i];
+                    if (item.type.indexOf('image')!== -1) {
+                        const file = await new Promise((resolve) => {
+                            // 直接从 clipboardData.files 获取文件
+                            const blob = clipboardData.files[i];
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(blob);
+                            reader.readAsDataURL(blob);
+                        });
+                        const key = await uploadToQiniu(file,  Date.now() + '.png');
+                        const imageUrl = `http://cdn.maplebridge.net/${key}`;
+                        const cursor = cm.getCursor();
+                        cm.replaceRange(`![Uploaded Image](${imageUrl})`, cursor);
+                    }
+                }
+            }
+        });
+
+        // 处理图片拖拽事件
+        simplemde.codemirror.on('drop', async (cm, event) => {
+            event.preventDefault();
+            const files = event.dataTransfer.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.indexOf('image') !== -1) {
+                    const key = await uploadToQiniu(file, Date.now() + "-" + file.name);
+                    const imageUrl = `http://cdn.maplebridge.net/${key}`;
+                    const cursor = cm.getCursor();
+                    cm.replaceRange(`![Uploaded Image](${imageUrl})`, cursor);
+                }
+            }
+        }); 
+    </script>
 <?php include(PROJECT_ROOT . "/app/block/footer.php"); ?>

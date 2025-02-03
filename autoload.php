@@ -60,19 +60,28 @@ if (!function_exists('getBasePath')) {
 
 if (!function_exists('autoload')) {
     function autoload($className) {
-        $className = ltrim($className, '\\');
-        $fileName  = '';
-        $namespace = '';
-        if ($lastNsPos = strrpos($className, '\\')) {
-            $namespace = lcfirst(substr($className, 0, $lastNsPos));
-            $className = substr($className, $lastNsPos + 1);
-            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR,$namespace) . DIRECTORY_SEPARATOR;
+
+        $namespace_map = [
+            'Qiniu\\' => __DIR__. '/app/utils/Qiniu/',
+            'App\\Utils\\' => __DIR__. '/app/utils/'
+        ];
+
+        foreach ($namespace_map as $namespace => $base_dir) {
+            if (strpos($className, $namespace) === 0) {
+                $relative_class = str_replace($namespace, '', $className);
+                $relative_class = trim($relative_class, '\\');
+                $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+                if (file_exists($file)) {
+                    require_once $file;
+                    return;
+                }
+            }
         }
-        $fileName .= str_replace('_', DIRECTORY_SEPARATOR,$className) . '.php';
-        $baseDir = getProjectRoot() . DIRECTORY_SEPARATOR; 
-        $filePath =$baseDir . $fileName;
-        if (file_exists($filePath)) { 
-            require_once $filePath;
+    
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+        $file = __DIR__ . DIRECTORY_SEPARATOR . $path . '.php';
+        if (file_exists($file)) {
+            require_once $file;
         }
     }
     spl_autoload_register('autoload');
