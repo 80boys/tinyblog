@@ -13,9 +13,9 @@ if (!file_exists($categoriesFile)) {
 } else {
     $categories = json_decode(file_get_contents($categoriesFile), true);
 }
-
-$categories[] = $categoryName;
+// 合并数组 并去重
+$categories = array_unique(array_merge($categories, [$categoryName]));
 file_put_contents($categoriesFile, json_encode($categories, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 // 输出成功信息
-echo '分类保存成功！';
+showMessage("分类保存成功！");

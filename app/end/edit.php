@@ -20,7 +20,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
         ?>
         <article>
             <h2>编写博客</h2>
-            <form action="<?php echo BASE_PATH; ?>/app/end/save.php" method="post" enctype="multipart/form-data">
+            <form action="<?php echo BASE_PATH; ?>/app/end/save_blogs.php" method="post" enctype="multipart/form-data">
                 <section class="form-container">
                     <div class="full-width">
                         <label for="blog-subtitle">博文介绍：</label>
