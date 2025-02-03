@@ -1,7 +1,10 @@
-<?php !defined('PROJECT_ROOT') && exit();  ?>
+<?php 
+// 引入自动加载文件
+!defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";
+include(PROJECT_ROOT . "/app/block/head.php");
+include(PROJECT_ROOT . "/app/block/navi.php"); 
 
-<?php include(PROJECT_ROOT . "/app/block/head.php"); ?>
-<?php include(PROJECT_ROOT . "/app/block/navi.php"); ?>
+?>
     <main class="container">
         <article>
             <h2>分类管理</h2>
@@ -14,7 +17,7 @@
                 <h3>已存在的分类：</h3>
                 <ul>
                     <?php
-                    $categoriesFile = PROJECT_ROOT . '/app/cache/categories.json';
+                    $categoriesFile = PROJECT_ROOT . '/app/blogs/categories.data';
                     if (file_exists($categoriesFile)) {
                         $categories = json_decode(file_get_contents($categoriesFile), true);
                         foreach ($categories as $category) {

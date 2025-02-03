@@ -2,11 +2,6 @@
 
 require_once "../../autoload.php";
 
-mb_internal_encoding('UTF-8');
-header('Content-Type: text/html; charset=UTF-8');
-define('PROJECT_ROOT', getProjectRoot());
-define('BASE_PATH', getBasePath());
-
 
 /**
  * 这个页面一共有2个功能

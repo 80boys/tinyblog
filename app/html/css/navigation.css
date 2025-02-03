@@ -1,0 +1,36 @@
+.navbar-top {
+    background-color: #383c44;
+    width: 100%;
+}
+.navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #c6c9d1;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+.navbar a {
+    text-decoration: none; /* 移除下划线 */
+    color: inherit; /* 继承父元素颜色 */
+    transition: color 0.3s ease; /* 颜色过渡效果 */
+    margin-right: 20px; /* 链接之间的右边距，增加间距 */
+}
+.navbar a:hover {
+    color: #c678dd; /* 鼠标悬停时的颜色 */
+}
+/* 移动端样式 */
+@media (max-width: 768px) {
+    .navbar {
+        display: flex;
+        padding:0;
+        justify-content: flex-start;
+    }
+    .navbar a {
+        width: auto; /* 导航链接占满整个宽度 */
+        text-align: left; /* 文本居中对齐 */
+        padding: 10px; /* 增加内边距，提高可点击区域 */
+    }
+}

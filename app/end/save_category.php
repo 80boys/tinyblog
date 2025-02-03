@@ -1,11 +1,6 @@
 <?php
 
-require_once "../../autoload.php";
-
-mb_internal_encoding('UTF-8');
-header('Content-Type: text/html; charset=UTF-8');
-define('PROJECT_ROOT', getProjectRoot());
-define('BASE_PATH', getBasePath());
+!defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";
 
 // 获取表单提交的分类名称
 $categoryName = $_POST['category_name'];

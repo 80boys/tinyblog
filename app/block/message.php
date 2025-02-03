@@ -1,3 +1,4 @@
+<?php !defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";  ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
     <style>
-        body { background-color: #f7f7f7; color: #333; font-family: Arial, sans-serif; }
-        .container { margin: 50px auto; max-width: 600px; text-align: center; }
-        h1 { font-size: 48px; margin-bottom: 20px; }
-        p { font-size: 24px; }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 50vw;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container {
+                width: 90vw;
+                text-align: center;
+            } 
+        }
+        p {
+            font-size: 14px;
+        }
     </style>
+
 </head>
 <body>
     <div class="container">
-        <h1><?php echo $title; ?></h1>
+        <h3><?php echo $title; ?></h3>
         <p><?php echo $text; ?></p>
         <p>页面将在 <span id="countdown"><?php echo $seconds; ?></span> 秒后自动跳转。</p>
     </div>

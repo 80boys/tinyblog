@@ -106,6 +106,42 @@ class DirectoryTraverser
         $content = file_get_contents($path);
         return json_decode($content, true);
     }
+
+    public function deleteFile($path) {
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
+
+    public function getAllBlogs() {
+        $itemsPerPage = 20; // 每页显示的博客数量
+        $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1; // 当前页码
+        $totalPages = 0; // 总页数
+        try {
+            $traverser = new \App\Utils\DirectoryTraverser();
+            $entries = $traverser->getDirectoryEntries(PROJECT_ROOT . '/app/blogs', true, ['json']);
+            $totalEntries = count($entries);
+            $totalPages = ceil($totalEntries / $itemsPerPage); // 计算总页数
+
+            $startIndex = ($currentPage - 1) * $itemsPerPage; // 计算起始索引
+            $endIndex = $startIndex + $itemsPerPage; // 计算结束索引
+
+            for ($i = $startIndex; $i < $endIndex && $i < $totalEntries; $i++) {
+                $blog = $traverser->getJsonContent($entries[$i]["path"]);
+                $blogs[] = $blog;
+            }
+        } catch (\InvalidArgumentException $e) {
+            //echo $e->getMessage() . "\n";
+        }
+
+        return [
+            "blogs" => $blogs,
+            "totalPages" => $totalPages,
+            "currentPage" => $currentPage,
+            "totalEntries" => $totalEntries,
+            "itemsPerPage" => $itemsPerPage,
+        ];
+    }
 }
 
 
