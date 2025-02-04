@@ -51,14 +51,18 @@
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
         }
-
+        const allowedLanguages = ['javascript', 'php', 'python', 'java', 
+        'c++', 'c', 'objetc-c', 'js', 'css', 'go', 'html', 'shell'];
         const loadedLanguages = new Set();
         document.addEventListener('DOMContentLoaded', async function () {
             const codeBlocks = document.querySelectorAll('pre code');
             for (const block of codeBlocks) {
-                hljs.highlightBlock(block);
                 result = hljs.highlightAuto(block.textContent);
                 const detectedLanguage = result.language;
+                if (!allowedLanguages.includes(detectedLanguage)) {
+                    continue;
+                }
+                hljs.highlightBlock(block);
                 if (!loadedLanguages.has(detectedLanguage)) {
                     try {
                         // 检查浏览器是否支持动态导入

@@ -166,3 +166,6 @@ body,html {
     cursor: pointer;
 }
 
+pre {
+    word-wrap: break-word;
+}
