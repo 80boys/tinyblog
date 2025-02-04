@@ -114,6 +114,7 @@ class DirectoryTraverser
     }
 
     public function getAllBlogs() {
+        $blogs = [];
         $itemsPerPage = 20; // 每页显示的博客数量
         $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1; // 当前页码
         $totalPages = 0; // 总页数
