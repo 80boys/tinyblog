@@ -11,7 +11,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
         <?php
         $blog = [];
         if (isset($_GET['blog_path'])) {
-            $blogPath = $_GET['blog_path'];
+            $blogPath = \App\Utils\InputValidator::getSafeInput($_GET['blog_path']);
             $dt = new \App\Utils\DirectoryTraverser();
             $blog = $dt->getJsonContent( PROJECT_ROOT . "/app/blogs/" . $blogPath);
             // dump($blog);
@@ -63,6 +63,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
     <script src="<?php echo BASE_PATH; ?>/app/html/js/simplemde.min.js"></script>
     <script src="<?php echo BASE_PATH; ?>/app/html/js/qiniu.min.js"></script>
     <script>
+        const bucketDoman = '<?php  $settings = getBlogsConfig(); echo $settings["qiniu_domain"];  ?>';
         async function getQiniuToken() {
             const response = await fetch('/app/end/getQiniuToken.html');
             const data = await response.json();
@@ -126,7 +127,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                             reader.readAsDataURL(blob);
                         });
                         const key = await uploadToQiniu(file,  Date.now() + '.png');
-                        const imageUrl = `http://cdn.maplebridge.net/${key}`;
+                        const imageUrl = `${bucketDoman}${key}`;
                         const cursor = cm.getCursor();
                         cm.replaceRange(`![Uploaded Image](${imageUrl})`, cursor);
                     }
@@ -142,7 +143,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                 const file = files[i];
                 if (file.type.indexOf('image') !== -1) {
                     const key = await uploadToQiniu(file, Date.now() + "-" + file.name);
-                    const imageUrl = `http://cdn.maplebridge.net/${key}`;
+                    const imageUrl = `${bucketDoman}${key}`;
                     const cursor = cm.getCursor();
                     cm.replaceRange(`![Uploaded Image](${imageUrl})`, cursor);
                 }

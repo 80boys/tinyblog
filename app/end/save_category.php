@@ -2,8 +2,10 @@
 
 !defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";
 
+use App\Utils\InputValidator;
+
 // 获取表单提交的分类名称
-$categoryName = $_POST['category_name'];
+$categoryName = InputValidator::getSafeInput($_POST['category_name']);
 
 // 保存分类信息到文件或数据库
 $categoriesFile = PROJECT_ROOT . '/app/blogs/categories.data';

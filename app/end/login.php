@@ -3,7 +3,7 @@
 !defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";
 include(PROJECT_ROOT . "/app/block/head.php");
 
-
+use App\Utils\InputValidator;
 
 /**
  * 验证用户函数
@@ -33,8 +33,8 @@ function validateUser($username, $password)
 
 // 处理登录逻辑
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = InputValidator::getSafeInput($_POST['username']);
+    $password = InputValidator::getSafeInput($_POST['password']);
 
     $user_id = validateUser($username, $password);
 

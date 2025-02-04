@@ -22,16 +22,36 @@
             <?php echo $blog['content']; ?>
         </div>
         <div class="attachment">
-            <?php if (!empty($blog['attachment']) && !empty($blog['attachment']['name'])): ?>
+            <?php if (!empty($blog['attachment']) && is_string($blog['attachment'])): ?>
                 <span>附件:</span>
-                <a href="<?php echo BASE_PATH; ?>/app/blogs/<?php echo $blog['attachment']['name']; ?>" download>
-                    <?php echo $blog['attachment']['name']; ?>
+                <a href="<?php 
+                    if (is_string($blog['attachment'])) {
+                        echo $blog['attachment'];
+                    }
+                ?>" download>
+                    <?php echo pathinfo($blog['attachment'])["filename"]; ?>
                 </a>
             <?php endif; ?>
         </div>
     </div>
+    <script src="<?php echo BASE_PATH; ?>/app/html/js/interact.min.js"></script>
     <script src="<?php echo BASE_PATH; ?>/app/html/js/highlight/highlight.min.js"></script>
     <script>
+        function dragMoveListener(event) {
+            event.stopPropagation();
+            var target = event.target;
+            var scale = parseFloat(target.style.transform.split('scale(')[1]);
+            if (isNaN(scale)) {
+                scale = 1;
+            }
+            var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+            var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+            target.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
+
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        }
+
         const loadedLanguages = new Set();
         document.addEventListener('DOMContentLoaded', async function () {
             const codeBlocks = document.querySelectorAll('pre code');
@@ -105,25 +125,50 @@
 
                 // 为复制按钮添加点击事件处理程序
                 copyButton.addEventListener('click', function (e) {
-                    e.preventDefault(); // 阻止默认的链接行为
-
-                    // 创建一个临时的 textarea 元素
+                    e.preventDefault();
                     const textarea = document.createElement('textarea');
                     textarea.value = block.textContent;
-
-                    // 将 textarea 添加到页面中
                     document.body.appendChild(textarea);
-
-                    // 选中 textarea 中的内容
                     textarea.select();
-
-                    // 复制选中的内容到剪贴板
                     document.execCommand('copy');
-
-                    // 移除临时的 textarea 元素
                     document.body.removeChild(textarea);
                 });
             }
+
+            // 为所有大图添加点击和双击事件
+            const images = document.querySelectorAll('img');
+            images.forEach(image => {
+                image.addEventListener('click', function () {
+                    event.stopPropagation(); 
+                    const zoomImage = document.createElement('div');
+                    zoomImage.classList.add('zoom-image');
+                    const zoomImg = document.createElement('img');
+                    zoomImg.src = this.src;
+                    zoomImage.appendChild(zoomImg);
+                    zoomImg.style.transform = 'scale(1)'
+                    document.body.appendChild(zoomImage);
+                    interact(zoomImg).draggable({
+                        inertia: true,
+                        modifiers: [
+                            interact.modifiers.restrictRect({
+                                restriction: 'parent',
+                                endOnly: true
+                            })
+                        ],
+                        autoScroll: true,
+                        listeners: {
+                            move: dragMoveListener,
+                            end (event) {
+                                event.stopPropagation();
+                            }
+                        }
+                    });
+                    zoomImg.addEventListener('click', function () {
+                        event.stopPropagation(); 
+                        document.body.removeChild(zoomImage);
+                    });
+                });
+            });
         });
     </script>
 </body>

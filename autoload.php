@@ -112,6 +112,26 @@ if (!function_exists('dump')) {
     }
 }
 
+if (!function_exists('getBlogsConfig')) {
+    function getBlogsConfig() {
+        $settings = [
+            'website_name' => "我的博客",
+            'beian_number' => "",
+            'contact_email' => "",
+            'wechat_id' => "",
+            'qiniu_access_key' => "",
+            'qiniu_secret_key' => "",
+            'qiniu_bucket' =>  "",
+            'qiniu_domain' => "",
+        ];
+        $settingsFile = getProjectRoot() . '/app/blogs/settings.data';
+        if (file_exists($settingsFile)) {
+            $settings = array_merge($settings, json_decode(file_get_contents($settingsFile), true));
+        }
+        return $settings;
+    }
+}
+
 mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
 define('PROJECT_ROOT', getProjectRoot());

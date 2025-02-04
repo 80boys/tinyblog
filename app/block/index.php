@@ -30,17 +30,7 @@
 
     <section class="contact">
         <?php
-            $settingsFile = PROJECT_ROOT . '/app/blogs/settings.data';
-            if (file_exists($settingsFile)) {
-                $settings = json_decode(file_get_contents($settingsFile), true);
-            } else {
-                $settings = [
-                    'website_name' => '枫桥驿站',
-                    'beian_number' => '黑ICP备16002822号-5号',
-                    'contact_email' => '123456@qq.com',
-                    'wechat_id' => '123456',
-                ];
-            }
+            $settings = getBlogsConfig();
         ?>
         <h2>联系我们</h2>
         <p>如果您有任何问题或建议，请通过以下方式联系我们：</p>

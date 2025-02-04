@@ -35,6 +35,22 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                     <label for="wechat_id">微信号码：</label>
                     <input type="text" id="wechat_id" name="wechat_id" value="<?php echo isset($settings['wechat_id']) ? $settings['wechat_id'] : ''; ?>">
                 </div>
+                <div class="form-group">
+                    <label for="qiniu_access_key">七牛 Access Key：</label>
+                    <input type="text" id="qiniu_access_key" name="qiniu_access_key" value="<?php echo isset($settings['qiniu_access_key']) ? $settings['qiniu_access_key'] : ''; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="qiniu_secret_key">七牛 Secret Key：</label>
+                    <input type="text" id="qiniu_secret_key" name="qiniu_secret_key" value="<?php echo isset($settings['qiniu_secret_key']) ? $settings['qiniu_secret_key'] : ''; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="qiniu_bucket">七牛 Bucket：</label>
+                    <input type="text" id="qiniu_bucket" name="qiniu_bucket" value="<?php echo isset($settings['qiniu_bucket']) ? $settings['qiniu_bucket'] : ''; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="qiniu_domain">七牛加速域名：</label>
+                    <input type="text" id="qiniu_domain" name="qiniu_domain" value="<?php echo isset($settings['qiniu_domain']) ? $settings['qiniu_domain'] : ''; ?>" required>
+                </div>
                 <button type="submit">保存设置</button>
             </section>
         </form>

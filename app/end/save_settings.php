@@ -3,10 +3,16 @@
 !defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";
 
 // 获取表单提交的数据
-$websiteName = $_POST['website_name'];
-$beianNumber = $_POST['beian_number'];
-$contactEmail = $_POST['contact_email'];
-$wechatId = $_POST['wechat_id'];
+use App\Utils\InputValidator;
+
+$websiteName = InputValidator::getSafeInput($_POST['website_name']);
+$beianNumber = InputValidator::getSafeInput($_POST['beian_number']);
+$contactEmail = InputValidator::getSafeInput($_POST['contact_email']);
+$wechatId = InputValidator::getSafeInput($_POST['wechat_id']);
+$qiniuAccessKey = InputValidator::getSafeInput($_POST['qiniu_access_key']);
+$qiniuSecretKey = InputValidator::getSafeInput($_POST['qiniu_secret_key']);
+$qiniuBucket = InputValidator::getSafeInput($_POST['qiniu_bucket']);
+$qiniuDomain = InputValidator::getSafeInput($_POST['qiniu_domain']);
 
 // 构建设置数组
 $settings = [
@@ -14,6 +20,10 @@ $settings = [
     'beian_number' => $beianNumber,
     'contact_email' => $contactEmail,
     'wechat_id' => $wechatId,
+    'qiniu_access_key' => $qiniuAccessKey,
+    'qiniu_secret_key' => $qiniuSecretKey,
+    'qiniu_bucket' => $qiniuBucket,
+    'qiniu_domain' => $qiniuDomain,
 ];
 
 // 将设置数组保存到 JSON 文件
