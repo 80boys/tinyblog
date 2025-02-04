@@ -15,7 +15,7 @@ class InputValidator
     public static function getInput($input, $default = '')
     {
         if (isset($input)) {
-            return trim($input);
+            return $input;
         }
         return $default;
     }
