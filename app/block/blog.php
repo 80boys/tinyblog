@@ -6,11 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/highlight/atom-one-dark.min.css">
-    <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/responsive.css"> <!-- 新增响应式样式表 -->
+    <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/responsive.css">
     <title>我的博客</title>
+    <!-- 添加关键词和描述 -->
+    <meta name="keywords" content="<?php echo $blog['blog_tags']; ?>">
+    <meta name="description" content="<?php echo $blog['blog_subtitle']; ?>">
 </head>
+
 <body>
-    <?php include(PROJECT_ROOT. "/app/block/navigation.php");?>
+    <?php include(PROJECT_ROOT . "/app/block/navigation.php"); ?>
     <div class="blog-details">
         <h1><?php echo $blog['title']; ?></h1>
         <div class="meta">
@@ -24,11 +28,11 @@
         <div class="attachment">
             <?php if (!empty($blog['attachment']) && is_string($blog['attachment'])): ?>
                 <span>附件:</span>
-                <a href="<?php 
-                    if (is_string($blog['attachment'])) {
-                        echo $blog['attachment'];
-                    }
-                ?>" download>
+                <a href="<?php
+                            if (is_string($blog['attachment'])) {
+                                echo $blog['attachment'];
+                            }
+                            ?>" download>
                     <?php echo pathinfo($blog['attachment'])["filename"]; ?>
                 </a>
             <?php endif; ?>
@@ -51,10 +55,11 @@
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
         }
-        const allowedLanguages = ['javascript', 'php', 'python', 'java', 
-        'c++', 'c', 'objetc-c', 'js', 'css', 'go', 'html', 'shell'];
+        const allowedLanguages = ['javascript', 'php', 'python', 'java',
+            'c++', 'c', 'objetc-c', 'js', 'css', 'go', 'html', 'shell'
+        ];
         const loadedLanguages = new Set();
-        document.addEventListener('DOMContentLoaded', async function () {
+        document.addEventListener('DOMContentLoaded', async function() {
             const codeBlocks = document.querySelectorAll('pre code');
             for (const block of codeBlocks) {
                 result = hljs.highlightAuto(block.textContent);
@@ -85,7 +90,7 @@
                         console.error(`Failed to load ${detectedLanguage} language:`, error);
                     }
                 }
-                
+
                 // 获取代码块的父元素（通常是 <pre> 标签）
                 const preElement = block.parentElement;
                 const titleBar = document.createElement('div');
@@ -95,7 +100,7 @@
                 const languageLabel = document.createElement('span');
                 languageLabel.innerText = detectedLanguage;
                 languageLabel.classList.add('language-label');
-                
+
                 // 创建折叠按钮
                 const collapseButton = document.createElement('a');
                 collapseButton.innerText = '折叠';
@@ -117,7 +122,7 @@
                 preElement.insertBefore(titleBar, block);
 
                 // 为折叠按钮添加点击事件处理程序
-                collapseButton.addEventListener('click', function () {
+                collapseButton.addEventListener('click', function() {
                     if (block.style.display === 'none') {
                         block.style.display = 'block';
                         collapseButton.innerText = '折叠';
@@ -128,7 +133,7 @@
                 });
 
                 // 为复制按钮添加点击事件处理程序
-                copyButton.addEventListener('click', function (e) {
+                copyButton.addEventListener('click', function(e) {
                     e.preventDefault();
                     const textarea = document.createElement('textarea');
                     textarea.value = block.textContent;
@@ -142,8 +147,8 @@
             // 为所有大图添加点击和双击事件
             const images = document.querySelectorAll('img');
             images.forEach(image => {
-                image.addEventListener('click', function () {
-                    event.stopPropagation(); 
+                image.addEventListener('click', function() {
+                    event.stopPropagation();
                     const zoomImage = document.createElement('div');
                     zoomImage.classList.add('zoom-image');
                     const zoomImg = document.createElement('img');
@@ -162,13 +167,13 @@
                         autoScroll: true,
                         listeners: {
                             move: dragMoveListener,
-                            end (event) {
+                            end(event) {
                                 event.stopPropagation();
                             }
                         }
                     });
-                    zoomImg.addEventListener('click', function () {
-                        event.stopPropagation(); 
+                    zoomImg.addEventListener('click', function() {
+                        event.stopPropagation();
                         document.body.removeChild(zoomImage);
                     });
                 });
@@ -176,4 +181,5 @@
         });
     </script>
 </body>
+
 </html>
