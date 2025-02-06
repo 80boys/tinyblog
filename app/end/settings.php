@@ -12,9 +12,9 @@ include(PROJECT_ROOT . "/app/block/navi.php");
             <section class="form-container">
                 <?php
                 // 读取 settings.json 文件
-                $settingsFile = PROJECT_ROOT . '/app/blogs/settings.data';
+                $settingsFile = PROJECT_ROOT . '/app/blogs/settings.php';
                 if (file_exists($settingsFile)) {
-                    $settings = json_decode(file_get_contents($settingsFile), true);
+                    $settings = require_once($settingsFile);
                 } else {
                     $settings = [];
                 }

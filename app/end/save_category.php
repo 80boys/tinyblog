@@ -8,16 +8,17 @@ use App\Utils\InputValidator;
 $categoryName = InputValidator::getSafeInput($_POST['category_name']);
 
 // 保存分类信息到文件或数据库
-$categoriesFile = PROJECT_ROOT . '/app/blogs/categories.data';
+$categoriesFile = PROJECT_ROOT . '/app/blogs/categories.php';
 
 if (!file_exists($categoriesFile)) {
     $categories = [];
 } else {
-    $categories = json_decode(file_get_contents($categoriesFile), true);
+    $categories = require $categoriesFile;
 }
+
 // 合并数组 并去重
 $categories = array_unique(array_merge($categories, [$categoryName]));
-file_put_contents($categoriesFile, json_encode($categories, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+file_put_contents($categoriesFile, '<?php return ' . var_export($categories, true) . ';');
 
 // 输出成功信息
 showMessage("分类保存成功！");

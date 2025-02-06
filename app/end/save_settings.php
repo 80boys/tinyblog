@@ -26,9 +26,9 @@ $settings = [
     'qiniu_domain' => $qiniuDomain,
 ];
 
-// 将设置数组保存到 JSON 文件
-$settingsFile = PROJECT_ROOT . '/app/blogs/settings.data';
-file_put_contents($settingsFile, json_encode($settings, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+// 将设置数组保存到 PHP 文件
+$settingsFile = PROJECT_ROOT . '/app/blogs/settings.php';
+file_put_contents($settingsFile, '<?php return ' . var_export($settings, true) . ';');
 
 // 输出成功信息
 showMessage("设置保存成功", isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/app/end/settings.php');

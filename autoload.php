@@ -3,7 +3,8 @@
 session_start();
 
 if (!function_exists('getProjectRoot')) {
-    function getProjectRoot() {
+    function getProjectRoot()
+    {
         $currentDir  = str_replace('\\', '/', __DIR__);
         $projectRoot = '';
 
@@ -47,10 +48,10 @@ if (!function_exists('getBasePath')) {
             if (empty($part)) {
                 continue;
             }
-            if ( $part !== 'app') {
+            if ($part !== 'app') {
                 array_push($parts, $part);
             } else {
-                return count($parts) ? "/". implode('/', $parts) : '';
+                return count($parts) ? "/" . implode('/', $parts) : '';
             }
         }
         return '';
@@ -59,11 +60,12 @@ if (!function_exists('getBasePath')) {
 
 
 if (!function_exists('autoload')) {
-    function autoload($className) {
+    function autoload($className)
+    {
 
         $namespace_map = [
-            'Qiniu\\' => __DIR__. '/app/utils/Qiniu/',
-            'App\\Utils\\' => __DIR__. '/app/utils/'
+            'Qiniu\\' => __DIR__ . '/app/utils/Qiniu/',
+            'App\\Utils\\' => __DIR__ . '/app/utils/'
         ];
 
         foreach ($namespace_map as $namespace => $base_dir) {
@@ -77,7 +79,7 @@ if (!function_exists('autoload')) {
                 }
             }
         }
-    
+
         $path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
         $file = __DIR__ . DIRECTORY_SEPARATOR . $path . '.php';
         if (file_exists($file)) {
@@ -88,9 +90,10 @@ if (!function_exists('autoload')) {
 }
 
 if (!function_exists('showMessage')) {
-    function showMessage($title = '操作提示', $redirectUrl = null, $text = '操作成功', $seconds = 3 ) {
+    function showMessage($title = '操作提示', $redirectUrl = null, $text = '操作成功', $seconds = 3)
+    {
         if ($redirectUrl === null) {
-            $redirectUrl = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : '/';
+            $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
         }
         extract(compact('title', 'text', 'seconds', 'redirectUrl'));
         ob_start();
@@ -101,7 +104,8 @@ if (!function_exists('showMessage')) {
 }
 
 if (!function_exists('dump')) {
-    function dump() {
+    function dump()
+    {
         $args = func_get_args();
         echo '<pre>';
         foreach ($args as $arg) {
@@ -113,7 +117,8 @@ if (!function_exists('dump')) {
 }
 
 if (!function_exists('getBlogsConfig')) {
-    function getBlogsConfig() {
+    function getBlogsConfig()
+    {
         $settings = [
             'website_name' => "我的博客",
             'beian_number' => "",
@@ -124,9 +129,10 @@ if (!function_exists('getBlogsConfig')) {
             'qiniu_bucket' =>  "",
             'qiniu_domain' => "",
         ];
-        $settingsFile = getProjectRoot() . '/app/blogs/settings.data';
+        $settingsFile = getProjectRoot() . '/app/blogs/settings.php';
         if (file_exists($settingsFile)) {
-            $settings = array_merge($settings, json_decode(file_get_contents($settingsFile), true));
+            $oldSettings = require_once($settingsFile);
+            $settings = array_merge($settings, $oldSettings);
         }
         return $settings;
     }

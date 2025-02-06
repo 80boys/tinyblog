@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/highlight/atom-one-dark.min.css">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/responsive.css">
-    <title>我的博客</title>
+    <title><?php echo $blog['title']; ?></title>
     <!-- 添加关键词和描述 -->
     <meta name="keywords" content="<?php echo $blog['blog_tags']; ?>">
     <meta name="description" content="<?php echo $blog['blog_subtitle']; ?>">
