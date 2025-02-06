@@ -128,6 +128,7 @@ if (!function_exists('getBlogsConfig')) {
             'qiniu_secret_key' => "",
             'qiniu_bucket' =>  "",
             'qiniu_domain' => "",
+            'qiniu_accelerate_domain' => "",
         ];
         $settingsFile = getProjectRoot() . '/app/blogs/settings.php';
         if (file_exists($settingsFile)) {
@@ -142,3 +143,4 @@ mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
 define('PROJECT_ROOT', getProjectRoot());
 define('BASE_PATH', getBasePath());
+define('ACCELERATE_DOMAIN', getBlogsConfig()['qiniu_accelerate_domain']);

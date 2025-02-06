@@ -4,7 +4,7 @@
 include(PROJECT_ROOT . "/app/block/head.php");
 include(PROJECT_ROOT . "/app/block/navi.php");
 ?>
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/settings.css" />
+<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/settings.css" />
 <main class="container">
     <article>
         <h2>网站设置</h2>
@@ -48,7 +48,11 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                     <input type="text" id="qiniu_bucket" name="qiniu_bucket" value="<?php echo isset($settings['qiniu_bucket']) ? $settings['qiniu_bucket'] : ''; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="qiniu_domain">七牛加速域名：</label>
+                    <label for="qiniu_accelerate_domain">七牛加速域名：</label>
+                    <input type="text" id="qiniu_accelerate_domain" name="qiniu_accelerate_domain" value="<?php echo isset($settings['qiniu_accelerate_domain']) ? $settings['qiniu_accelerate_domain'] : ''; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="qiniu_domain">七牛云存储域名：</label>
                     <input type="text" id="qiniu_domain" name="qiniu_domain" value="<?php echo isset($settings['qiniu_domain']) ? $settings['qiniu_domain'] : ''; ?>" required>
                 </div>
                 <button type="submit">保存设置</button>

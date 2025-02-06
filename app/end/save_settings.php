@@ -13,6 +13,7 @@ $qiniuAccessKey = InputValidator::getSafeInput($_POST['qiniu_access_key']);
 $qiniuSecretKey = InputValidator::getSafeInput($_POST['qiniu_secret_key']);
 $qiniuBucket = InputValidator::getSafeInput($_POST['qiniu_bucket']);
 $qiniuDomain = InputValidator::getSafeInput($_POST['qiniu_domain']);
+$qiniuAccelerateDomain = InputValidator::getSafeInput($_POST['qiniu_accelerate_domain']);
 
 // 构建设置数组
 $settings = [
@@ -24,6 +25,7 @@ $settings = [
     'qiniu_secret_key' => $qiniuSecretKey,
     'qiniu_bucket' => $qiniuBucket,
     'qiniu_domain' => $qiniuDomain,
+    'qiniu_accelerate_domain' => $qiniuAccelerateDomain,
 ];
 
 // 将设置数组保存到 PHP 文件

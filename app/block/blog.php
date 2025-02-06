@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/highlight/atom-one-dark.min.css">
-    <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/responsive.css">
+    <link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/highlight/atom-one-dark.min.css">
+    <link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/responsive.css">
     <title><?php echo $blog['title']; ?></title>
     <!-- 添加关键词和描述 -->
     <meta name="keywords" content="<?php echo $blog['blog_tags']; ?>">
@@ -38,8 +38,8 @@
             <?php endif; ?>
         </div>
     </div>
-    <script src="<?php echo BASE_PATH; ?>/app/html/js/interact.min.js"></script>
-    <script src="<?php echo BASE_PATH; ?>/app/html/js/highlight/highlight.min.js"></script>
+    <script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/interact.min.js"></script>
+    <script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/highlight/highlight.min.js"></script>
     <script>
         function dragMoveListener(event) {
             event.stopPropagation();
@@ -72,11 +72,11 @@
                     try {
                         // 检查浏览器是否支持动态导入
                         if ('import' in window) {
-                            await import(`<?php echo BASE_PATH; ?>/app/html/js/highlight/languages/${detectedLanguage}.min.js`);
+                            await import(`<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/highlight/languages/${detectedLanguage}.min.js`);
                         } else {
                             // 如果不支持动态导入，使用传统的 <script> 标签加载脚本
                             const script = document.createElement('script');
-                            script.src = `<?php echo BASE_PATH; ?>/app/html/js/highlight/languages/${detectedLanguage}.min.js`;
+                            script.src = `<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/highlight/languages/${detectedLanguage}.min.js`;
                             script.onload = function() {
                                 loadedLanguages.add(detectedLanguage);
                             };

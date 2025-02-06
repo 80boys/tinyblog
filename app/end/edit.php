@@ -5,8 +5,8 @@ include(PROJECT_ROOT . "/app/block/head.php");
 include(PROJECT_ROOT . "/app/block/navi.php");
 
 ?>
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/simplemde.min.css" />
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/edit.css" />
+<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/simplemde.min.css" />
+<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/edit.css" />
 <main class="container">
     <?php
     $blog = [];
@@ -60,8 +60,8 @@ include(PROJECT_ROOT . "/app/block/navi.php");
         </form>
     </article>
 </main>
-<script src="<?php echo BASE_PATH; ?>/app/html/js/simplemde.min.js"></script>
-<script src="<?php echo BASE_PATH; ?>/app/html/js/qiniu.min.js"></script>
+<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/simplemde.min.js"></script>
+<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/qiniu.min.js"></script>
 <script>
     const bucketDoman = '<?php $settings = getBlogsConfig();
                             echo $settings["qiniu_domain"];  ?>';

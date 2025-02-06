@@ -2,12 +2,12 @@
 
 <?php
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ". BASE_PATH. "/app/block/login.html");
+    header("Location: " . BASE_PATH . "/app/block/login.html");
     exit();
 }
 ?>
 
-<link rel="stylesheet" href="<?php echo BASE_PATH;?>/app/html/css/navigation.css">
+<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/navigation.css">
 <header class="navbar-top">
     <nav class="navbar">
         <a href="<?php echo BASE_PATH; ?>/app/block/index.html">前台</a>
