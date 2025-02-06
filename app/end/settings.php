@@ -14,7 +14,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                 // 读取 settings.json 文件
                 $settingsFile = PROJECT_ROOT . '/app/blogs/settings.php';
                 if (file_exists($settingsFile)) {
-                    $settings = require_once($settingsFile);
+                    $settings = require($settingsFile);
                 } else {
                     $settings = [];
                 }

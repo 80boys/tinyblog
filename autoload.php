@@ -131,7 +131,7 @@ if (!function_exists('getBlogsConfig')) {
         ];
         $settingsFile = getProjectRoot() . '/app/blogs/settings.php';
         if (file_exists($settingsFile)) {
-            $oldSettings = require_once($settingsFile);
+            $oldSettings = require($settingsFile);
             $settings = array_merge($settings, $oldSettings);
         }
         return $settings;

@@ -45,7 +45,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                 <?php
                 $categoriesFile = PROJECT_ROOT . '/app/blogs/categories.php';
                 if (file_exists($categoriesFile)) {
-                    $categories = require_once $categoriesFile;
+                    $categories = require $categoriesFile;
                     foreach ($categories as $category) {
                         echo '<li>' . $category . '</li>';
                     }
