@@ -7,7 +7,7 @@ include(PROJECT_ROOT . "/app/block/head.php");
 include(PROJECT_ROOT . "/app/block/navi.php");
 ?>
 
-<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/admin.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
 <main class="container">
     <article>
         <h2>博客管理</h2>

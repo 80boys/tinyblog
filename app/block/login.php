@@ -3,7 +3,7 @@
 !defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";
 include(PROJECT_ROOT . "/app/block/head.php");
 ?>
-<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/login.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/login.css">
 <main class="container">
     <article>
         <h2>登录后台</h2>

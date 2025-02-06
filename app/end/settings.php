@@ -4,7 +4,7 @@
 include(PROJECT_ROOT . "/app/block/head.php");
 include(PROJECT_ROOT . "/app/block/navi.php");
 ?>
-<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/settings.css" />
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/settings.css" />
 <main class="container">
     <article>
         <h2>网站设置</h2>

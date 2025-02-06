@@ -6,7 +6,7 @@ if (!isset($totalPages) || !isset($currentPage)) {
     return;
 }
 ?>
-<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/pagination.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/pagination.css">
 <div class="pagination">
     <?php if ($currentPage > 1): ?>
         <a href="?page=<?php echo $currentPage - 1; ?>">上一页</a>
