@@ -126,7 +126,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                         reader.readAsDataURL(blob);
                     });
                     const key = await uploadToQiniu(file, Date.now() + '.png');
-                    const imageUrl = `${bucketDoman}${key}`;
+                    const imageUrl = `http://${bucketDoman}/${key}`;
                     const cursor = cm.getCursor();
                     cm.replaceRange(`![Uploaded Image](${imageUrl})`, cursor);
                 }
@@ -142,7 +142,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
             const file = files[i];
             if (file.type.indexOf('image') !== -1) {
                 const key = await uploadToQiniu(file, Date.now() + "-" + file.name);
-                const imageUrl = `${bucketDoman}${key}`;
+                const imageUrl = `http://${bucketDoman}/${key}`;
                 const cursor = cm.getCursor();
                 cm.replaceRange(`![Uploaded Image](${imageUrl})`, cursor);
             }
