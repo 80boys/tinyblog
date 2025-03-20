@@ -1,38 +1,112 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
 
+.settings-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-/* 表单样式 */
-.form-container {
-    margin-top: 20px;
+.settings-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #eee;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
-label {
+.form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+    font-weight: 500;
 }
 
-input[type="text"],
-input[type="email"] {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s;
 }
 
-button {
-    background-color: #007bff;
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+}
+
+.form-group .hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+button[type="submit"] {
+    background: #3498db;
     color: #fff;
-    padding: 10px 20px;
     border: none;
+    padding: 0.75rem 2rem;
     border-radius: 4px;
+    font-size: 1rem;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
-button:hover {
-    background-color: #0056b3;
+button[type="submit"]:hover {
+    background: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .settings-section {
+        padding: 1rem;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group textarea {
+        padding: 0.5rem;
+    }
+}
+
+.message {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }

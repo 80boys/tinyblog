@@ -8,10 +8,10 @@ class UrlContentRenderer
     protected $basePath;
     protected $allowedExtensions = ['md', 'php', 'js', 'css', 'png', 'html', 'json'];
 
-    public function __construct($baseUrl,$basePath)
+    public function __construct($baseUrl, $basePath)
     {
-        $this->baseUrl =$baseUrl;
-        $this->basePath =$basePath;
+        $this->baseUrl = $baseUrl;
+        $this->basePath = $basePath;
     }
 
     public function renderByUrl()
@@ -19,9 +19,11 @@ class UrlContentRenderer
         $localPath = str_replace('\\', '/', $this->getLocalPath());
         $pathinfo  = pathinfo($this->baseUrl);
         // 禁止套娃
-        if ( rtrim($localPath, "/") == PROJECT_ROOT 
+        if (
+            rtrim($localPath, "/") == PROJECT_ROOT
             || ($pathinfo['filename'] == "index" && $pathinfo['dirname'] == "")
-            || ($pathinfo['filename'] == "index" && $pathinfo['dirname'] == "/") ) {
+            || ($pathinfo['filename'] == "index" && $pathinfo['dirname'] == "/")
+        ) {
             return $this->returnIndex();
         }
         $fileExtension = pathinfo($localPath, PATHINFO_EXTENSION);
@@ -34,7 +36,7 @@ class UrlContentRenderer
             return $this->return404();
         }
 
-        if (!$this->isPathWithinBasePath($localPath, PROJECT_ROOT) ) {
+        if (!$this->isPathWithinBasePath($localPath, PROJECT_ROOT)) {
             return $this->return404();
         }
 
@@ -46,42 +48,63 @@ class UrlContentRenderer
         if ($this->fileExists($fileExtension, '.markdown', $localPath)) {
             return $this->markdownToHtml(str_replace($fileExtension, '.markdown', $localPath));
         }
-        
+
         if ($this->fileExists($fileExtension, '.php', $localPath) && $this->baseUrl != "index.html") {
             return $this->includePhpFile(str_replace($fileExtension, '.php', $localPath));
         }
-        
-        if (file_exists($localPath) && in_array($fileExtension, [".js", ".css", ".png"]) ) {
-            return $this->includeStaticFile( $localPath );
+
+        if (file_exists($localPath) && in_array($fileExtension, [".js", ".css", ".png"])) {
+            return $this->includeStaticFile($localPath);
         }
-        
+
         if ($this->fileExists($fileExtension, '.json', $localPath)) {
             $getLocalPath = str_replace($fileExtension, '.json', $localPath);
+
             if (file_exists($getLocalPath)) {
-                $blogData  = file_get_contents($getLocalPath);
+
+                $blogData = file_get_contents($getLocalPath);
+                if ($blogData === false) {
+                    error_log("无法读取博客文件: " . $getLocalPath);
+                    return $this->return404();
+                }
+
                 $blog = json_decode($blogData, true);
+                if ($blog === null) {
+                    error_log("无法解析博客 JSON 数据: " . $getLocalPath);
+                    return $this->return404();
+                }
+
+                if (!isset($blog['content'])) {
+                    error_log("博客内容字段缺失: " . $getLocalPath);
+                    return $this->return404();
+                }
+
                 $blog['content'] = $this->mdDataToHtml($blog['content']);
-                return $this->includePhpFile(PROJECT_ROOT. "/app/block/blog.php", ['blog' => $blog]);
+                return $this->includePhpFile(PROJECT_ROOT . "/app/block/blog.php", ['blog' => $blog]);
             }
         }
-        
+
+        error_log("博客文件不存在: " . $localPath);
         return $this->return404();
     }
-    protected function returnIndex() {
+    protected function returnIndex()
+    {
         return $this->includePhpFile(PROJECT_ROOT . '/app/block/index.php');
     }
-    protected function return404() {
+    protected function return404()
+    {
         return file_get_contents(PROJECT_ROOT . "/app/html/404.html");
     }
 
-    protected function isPathWithinBasePath($path,$basePath) {
-        return strpos($path,$basePath) === 0;
+    protected function isPathWithinBasePath($path, $basePath)
+    {
+        return strpos($path, $basePath) === 0;
     }
 
     protected function getLocalPath()
     {
-        return  str_replace('\\', '/', $this->basePath 
-                    . DIRECTORY_SEPARATOR . trim($this->baseUrl , "/")); 
+        return  str_replace('\\', '/', $this->basePath
+            . DIRECTORY_SEPARATOR . trim($this->baseUrl, "/"));
     }
 
     protected function fileExists($fileExtension, $suffix, $filePath)
@@ -104,7 +127,7 @@ class UrlContentRenderer
         $htmlContent = $parsedown->text($markdownData);
         return $htmlContent;
     }
-    
+
     protected function includeStaticFile($markdownFilePath)
     {
         return file_get_contents($markdownFilePath);
@@ -112,7 +135,7 @@ class UrlContentRenderer
 
     protected function includePhpFile($phpFilePath, $variables = [])
     {
-        if ( $phpFilePath == PROJECT_ROOT . "/index.php" ) {
+        if ($phpFilePath == PROJECT_ROOT . "/index.php") {
             return $this->returnIndex();
         }
 

@@ -14,23 +14,107 @@
 }
 .navbar a {
     text-decoration: none; /* 移除下划线 */
-    color: inherit; /* 继承父元素颜色 */
-    transition: color 0.3s ease; /* 颜色过渡效果 */
-    margin-right: 20px; /* 链接之间的右边距，增加间距 */
+    color: inherit;
+    transition: color 0.3s ease;
+    margin-right: 20px;
 }
 .navbar a:hover {
     color: #c678dd; /* 鼠标悬停时的颜色 */
 }
+/* 下拉菜单样式 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #2d3139;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    z-index: 1001;
+    left: 0;
+    top: 100%;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content a {
+    color: #c6c9d1;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+    margin: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dropdown-content a:hover {
+    background-color: #383c44;
+    color: #c678dd;
+}
 /* 移动端样式 */
 @media (max-width: 768px) {
+    .navbar-top {
+        position: relative;
+        overflow-x: auto;
+    }
+
     .navbar {
         display: flex;
-        padding:0;
+        flex-direction: row;
+        flex-wrap: nowrap;
         justify-content: flex-start;
+        align-items: center;
+        padding: 0;
+        min-width: min-content;
     }
+
     .navbar a {
-        width: auto; /* 导航链接占满整个宽度 */
-        text-align: left; /* 文本居中对齐 */
-        padding: 10px; /* 增加内边距，提高可点击区域 */
+        margin: 0;
+        padding: 12px 15px;
+        white-space: nowrap;
+        border-bottom: none;
+        font-size: 14px;
+    }
+
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown > a:after {
+        content: '▼';
+        font-size: 10px;
+        margin-left: 3px;
+        display: inline-block;
+        vertical-align: middle;
+        position: static;
+        transform: none;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        width: auto;
+        min-width: 150px;
+        left: 0;
+        top: 100%;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        border-radius: 4px;
+        background-color: #2d3139;
+        padding: 0.5rem 0;
+    }
+
+    .dropdown-content a {
+        padding: 8px 15px;
+        font-size: 13px;
+        background-color: transparent;
+    }
+
+    .dropdown:hover .dropdown-content {
+        border-bottom: none;
     }
 }
