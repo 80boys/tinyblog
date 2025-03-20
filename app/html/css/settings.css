@@ -9,7 +9,6 @@
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .settings-section h3 {
@@ -32,6 +31,7 @@
 
 .form-group input[type="text"],
 .form-group input[type="email"],
+.form-group input[type="password"],
 .form-group textarea {
     width: 100%;
     padding: 0.75rem;
@@ -48,6 +48,7 @@
 
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
 .form-group textarea:focus {
     border-color: #3498db;
     outline: none;
@@ -62,7 +63,7 @@
 }
 
 button[type="submit"] {
-    background: #3498db;
+    background: #383c44;
     color: #fff;
     border: none;
     padding: 0.75rem 2rem;
@@ -73,7 +74,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background: #2980b9;
+    background: #4a4e57;
 }
 
 @media (max-width: 768px) {
@@ -87,6 +88,7 @@ button[type="submit"]:hover {
     
     .form-group input[type="text"],
     .form-group input[type="email"],
+    .form-group input[type="password"],
     .form-group textarea {
         padding: 0.5rem;
     }

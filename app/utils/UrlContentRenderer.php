@@ -2,11 +2,13 @@
 
 namespace App\Utils;
 
+use App\Utils\ParsedownExtra;
+
 class UrlContentRenderer
 {
     protected $baseUrl;
     protected $basePath;
-    protected $allowedExtensions = ['md', 'php', 'js', 'css', 'png', 'html', 'json'];
+    protected $allowedExtensions = ['md', 'php', 'js', 'css', 'png', 'html'];
 
     public function __construct($baseUrl, $basePath)
     {
@@ -49,6 +51,27 @@ class UrlContentRenderer
             return $this->markdownToHtml(str_replace($fileExtension, '.markdown', $localPath));
         }
 
+        // 处理html文件请求：如果html文件不存在，尝试寻找同名的php文件来处理
+        if ($fileExtension === '.html' && !file_exists($localPath)) {
+            $phpPath = str_replace('.html', '.php', $localPath);
+
+            // 处理博客路径下的php文件
+            if (file_exists($phpPath) && strpos($phpPath, '/app/blogs/') !== false) {
+                $blog = require($phpPath);
+
+                if (is_array($blog)) {
+                    if (isset($blog['content'])) {
+                        $blog['content'] = $this->mdDataToHtml($blog['content']);
+                    }
+                    return $this->includePhpFile(PROJECT_ROOT . "/app/block/blog.php", ['blog' => $blog]);
+                }
+            }
+            // 处理其他路径下的php文件
+            else if (file_exists($phpPath)) {
+                return $this->includePhpFile($phpPath);
+            }
+        }
+
         if ($this->fileExists($fileExtension, '.php', $localPath) && $this->baseUrl != "index.html") {
             return $this->includePhpFile(str_replace($fileExtension, '.php', $localPath));
         }
@@ -57,29 +80,21 @@ class UrlContentRenderer
             return $this->includeStaticFile($localPath);
         }
 
-        if ($this->fileExists($fileExtension, '.json', $localPath)) {
-            $getLocalPath = str_replace($fileExtension, '.json', $localPath);
+        // 尝试加载PHP格式的博客文件
+        if ($this->fileExists($fileExtension, '.php', $localPath) && strpos($localPath, '/app/blogs/') !== false) {
+            $phpFilePath = str_replace($fileExtension, '.php', $localPath);
+            if (file_exists($phpFilePath)) {
+                $blog = require($phpFilePath);
 
-            if (file_exists($getLocalPath)) {
-
-                $blogData = file_get_contents($getLocalPath);
-                if ($blogData === false) {
-                    error_log("无法读取博客文件: " . $getLocalPath);
+                if (!is_array($blog)) {
+                    error_log("无法解析博客数据: " . $phpFilePath);
                     return $this->return404();
                 }
 
-                $blog = json_decode($blogData, true);
-                if ($blog === null) {
-                    error_log("无法解析博客 JSON 数据: " . $getLocalPath);
-                    return $this->return404();
+                if (isset($blog['content'])) {
+                    $blog['content'] = $this->mdDataToHtml($blog['content']);
                 }
 
-                if (!isset($blog['content'])) {
-                    error_log("博客内容字段缺失: " . $getLocalPath);
-                    return $this->return404();
-                }
-
-                $blog['content'] = $this->mdDataToHtml($blog['content']);
                 return $this->includePhpFile(PROJECT_ROOT . "/app/block/blog.php", ['blog' => $blog]);
             }
         }

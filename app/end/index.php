@@ -8,10 +8,13 @@ include(PROJECT_ROOT . "/app/block/navi.php");
 ?>
 
 <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
-<main class="container">
-    <article>
+<div class="container">
+    <div class="main-content">
         <h2>博客管理</h2>
-        <section>
+        <div class="admin-actions">
+            <a href="<?php echo BASE_PATH; ?>/app/end/edit.html" class="btn btn-primary">添加新博客</a>
+        </div>
+        <section class="blog-posts">
             <?php
             $dt = new \App\Utils\DirectoryTraverser();
             $result = $dt->getAllBlogs();
@@ -20,23 +23,28 @@ include(PROJECT_ROOT . "/app/block/navi.php");
             $currentPage = $result['currentPage'];
             // 遍历博客列表并输出
             foreach ($blogs as $blog) {
-                echo '<section class="blog-item">';
-                echo '<p> 博客标题: <a href="' . BASE_PATH . '/app/blogs/' . rtrim($blog['path'], '.json') . '.html">' . $blog['title'] . '</a></p>';
-                echo '<p> 博客描述: ' . $blog['subtitle'] . '</p>';
-                echo '<p> 编辑时间: ' . $blog['date'] . '</p>';
+                echo '<article class="blog-post">';
+                echo '<h3>' . $blog['title'] . '</h3>';
+                echo '<p>' . $blog['subtitle'] . '</p>';
+                echo '<p class="meta"><span>发布于: ' . $blog['date'] . '</span>';
+                if (isset($blog['category'])) {
+                    echo '<span>分类: ' . $blog['category'] . '</span>';
+                }
+                echo '</p>';
                 echo '<div class="actions">';
-                echo '  <a href="' . BASE_PATH . '/app/end/edit.html?blog_path=' . $blog['path'] . '">编辑</a> | <a href="' . BASE_PATH . '/app/end/del.html?blog_path=' . $blog['path'] . '">删除</a>';
+                echo '<a href="' . BASE_PATH . '/app/blogs/' . str_replace('.php', '.html', $blog['path']) . '">查看</a> | ';
+                echo '<a href="' . BASE_PATH . '/app/end/edit.html?blog_path=' . $blog['path'] . '">编辑</a> | ';
+                echo '<a href="' . BASE_PATH . '/app/end/del.html?blog_path=' . $blog['path'] . '">删除</a>';
                 echo '</div>';
-                echo '</section>';
-                echo '<hr>';
+                echo '</article>';
             }
             ?>
         </section>
 
         <!-- 分页 -->
         <?php include(PROJECT_ROOT . "/app/block/pagination.php"); ?>
-    </article>
-</main>
+    </div>
+</div>
 
 <?php
 // 引入页脚

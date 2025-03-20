@@ -30,7 +30,7 @@ class SitemapGenerator
         // 添加所有博客文章
         $blogs = $this->dt->getAllBlogs()['blogs'];
         foreach ($blogs as $blog) {
-            $blogUrl = $this->baseUrl . '/app/blogs/' . str_replace('.json', '.html', $blog['path']);
+            $blogUrl = $this->baseUrl . '/app/blogs/' . str_replace('.php', '.html', $blog['path']);
             $lastmod = isset($blog['date']) ? date('Y-m-d', strtotime($blog['date'])) : date('Y-m-d');
             $xml .= $this->createUrlEntry($blogUrl, '0.9', 'weekly', $lastmod);
         }

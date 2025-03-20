@@ -35,7 +35,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                 </div>
                 <div class="form-group">
                     <label for="blog-tags">博客标签：</label>
-                    <input type="text" id="blog-tags" value="<?php echo isset($blog['tags']) ? $blog['tags'] : ''  ?>" name="blog_tags">
+                    <input type="text" id="blog-tags" value="<?php echo isset($blog['tags']) ? (is_array($blog['tags']) ? implode(', ', $blog['tags']) : $blog['tags']) : ''  ?>" name="blog_tags">
                 </div>
                 <div class="form-group">
                     <label for="blog-category">博客分类：</label>

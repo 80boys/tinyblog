@@ -23,6 +23,10 @@ function getBlogsConfig()
             'qiniu_accelerate_domain' => '',
             'qiniu_domain' => '',
 
+            // 安全设置
+            'admin_username' => 'admin', // 默认管理员用户名
+            'admin_password' => password_hash('admin888', PASSWORD_DEFAULT), // 默认密码：admin888
+
             // 其他设置
             'beian_number' => '',
             'footer_text' => '© ' . date('Y') . ' 枫桥驿站 All Rights Reserved.',
@@ -99,4 +103,61 @@ function getCategories()
         }
     }
     return [];
+}
+
+/**
+ * 验证用户登录
+ * @param string $username 用户名
+ * @param string $password 密码
+ * @return bool 是否验证成功
+ */
+function verifyLogin($username, $password)
+{
+    $settings = getBlogsConfig();
+
+    // 验证用户名和密码
+    if (
+        $username === $settings['admin_username'] &&
+        password_verify($password, $settings['admin_password'])
+    ) {
+        // 登录成功，设置session
+        $_SESSION['user_id'] = md5($username); // 使用用户名的md5值作为UID
+        $_SESSION['username'] = $username;
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * 保存博客配置
+ * @param array $settings 配置数组
+ * @return bool 是否保存成功
+ */
+function saveBlogsConfig($settings)
+{
+    $configFile = PROJECT_ROOT . '/app/blogs/settings.php';
+
+    // 确保目录存在
+    if (!is_dir(dirname($configFile))) {
+        mkdir(dirname($configFile), 0755, true);
+    }
+
+    // 生成配置文件内容
+    $content = "<?php\nreturn " . var_export($settings, true) . ";\n";
+
+    // 写入文件
+    return file_put_contents($configFile, $content) !== false;
+}
+
+/**
+ * 修改管理员密码
+ * @param string $newPassword 新密码
+ * @return bool 是否修改成功
+ */
+function changeAdminPassword($newPassword)
+{
+    $settings = getBlogsConfig();
+    $settings['admin_password'] = password_hash($newPassword, PASSWORD_DEFAULT);
+    return saveBlogsConfig($settings);
 }

@@ -21,9 +21,9 @@
 }
 
 .pagination .active {
-    background-color: #333;
+    background-color: #383c44;
     color: #fff;
-    border-color: #333;
+    border-color: #383c44;
 }
 
 /* 手机端样式 */

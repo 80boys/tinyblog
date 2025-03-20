@@ -17,7 +17,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
 
     /* 美化按钮 */
     button[type="submit"] {
-        background-color: #1f8cea;
+        background-color: #383c44;
         color: white;
         padding: 10px 20px;
         margin: 5px 0;

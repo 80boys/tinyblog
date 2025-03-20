@@ -14,20 +14,16 @@ use App\Utils\InputValidator;
  */
 function validateUser($username, $password)
 {
-    // 用户名密码是固定的，这里使用数组存储
-    $users = [
-        [
-            'id' => time(),
-            'username' => 'admin',
-            'password' => password_hash('admin123', PASSWORD_DEFAULT)
-        ],
-    ];
+    // 从配置文件获取用户名和密码
+    $settings = getBlogsConfig();
 
-    foreach ($users as $user) {
-        if ($user['username'] === $username && password_verify($password, $user['password'])) {
-            return $user['id'];
-        }
+    if (
+        $settings['admin_username'] === $username &&
+        password_verify($password, $settings['admin_password'])
+    ) {
+        return md5($username); // 使用用户名的md5值作为UID
     }
+
     return false;
 }
 
@@ -41,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user_id) {
         // 登录成功，将用户ID存入session
         $_SESSION['user_id'] = $user_id;
+        $_SESSION['username'] = $username; // 保存用户名到session
         header('Location: ' . BASE_PATH . '/app/end/index.php');
         exit;
     } else {
@@ -48,5 +45,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     // 显示登录表单
-    header('Location: '. BASE_PATH. '/app/block/login.html');
+    header('Location: ' . BASE_PATH . '/app/block/login.html');
 }

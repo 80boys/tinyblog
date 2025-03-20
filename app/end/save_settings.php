@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'qiniu_accelerate_domain' => $_POST['qiniu_accelerate_domain'] ?? '',
         'qiniu_domain' => $_POST['qiniu_domain'] ?? '',
 
+        // 安全设置
+        'admin_username' => $_POST['admin_username'] ?? 'admin',
+
         // 其他设置
         'beian_number' => $_POST['beian_number'] ?? '',
         'footer_text' => $_POST['footer_text'] ?? '',
@@ -29,19 +32,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     try {
+        // 获取现有配置
+        $currentSettings = getBlogsConfig();
+
+        // 如果提供了新密码，则更新密码
+        if (!empty($_POST['admin_password'])) {
+            $settings['admin_password'] = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
+        } else {
+            // 保持原有密码不变
+            $settings['admin_password'] = $currentSettings['admin_password'];
+        }
+
         // 确保配置目录存在
         $configDir = PROJECT_ROOT . '/app/blogs';
         if (!is_dir($configDir)) {
             mkdir($configDir, 0755, true);
         }
 
-        // 保存设置到 PHP 文件
-        $content = "<?php\nreturn " . var_export($settings, true) . ";\n";
-        $saved = file_put_contents($configDir . '/settings.php', $content);
-
-        if ($saved === false) {
-            throw new Exception('无法保存设置文件');
-        }
+        saveBlogsConfig($settings);
 
         // 使用统一提示页面
         showMessage('设置保存成功', BASE_PATH . '/app/end/settings.php');

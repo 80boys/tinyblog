@@ -34,3 +34,5 @@ if (!isset($keywords)) {
 </head>
 
 <body>
+</body>
+</rewritten_file>

@@ -89,6 +89,21 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                     </div>
                 </div>
 
+                <!-- 安全设置 -->
+                <div class="settings-section">
+                    <h3>安全设置</h3>
+                    <div class="form-group">
+                        <label for="admin_username">管理员用户名：</label>
+                        <input type="text" id="admin_username" name="admin_username"
+                            value="<?php echo htmlspecialchars($settings['admin_username'] ?? ''); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin_password">修改密码：</label>
+                        <input type="password" id="admin_password" name="admin_password">
+                        <span class="hint">如不修改密码请留空</span>
+                    </div>
+                </div>
+
                 <!-- 其他设置 -->
                 <div class="settings-section">
                     <h3>其他设置</h3>

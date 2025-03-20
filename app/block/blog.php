@@ -91,7 +91,12 @@
                 <h2>相关文章</h2>
                 <?php foreach ($relatedPosts as $post): ?>
                     <div class="related-post">
-                        <h3><a href="/app/blogs/<?php echo str_replace('.json', '.html', $post['path']); ?>">
+                        <h3><a href="<?php echo BASE_PATH; ?>/app/blogs/<?php
+                                                                        $path = $post['path'];
+                                                                        // 只处理php文件
+                                                                        $path = str_replace('.php', '.html', $path);
+                                                                        echo $path;
+                                                                        ?>">
                                 <?php echo htmlspecialchars($post['title']); ?>
                             </a></h3>
                         <?php if (isset($post['subtitle'])): ?>

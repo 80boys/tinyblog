@@ -8,6 +8,17 @@ body,html {
     box-sizing: border-box;
 }
 
+/* 通用元信息样式 */
+.meta {
+    font-size: 14px;
+    color: #777;
+    margin: 5px 0 15px 0;
+}
+
+.meta span {
+    margin-right: 15px;
+}
+
 /* 标题栏样式 */
 .title-bar {
     display: flex;
@@ -67,11 +78,11 @@ body,html {
 .blog-details .meta {
     font-size: 14px;
     color: #777;
-    margin-bottom: 10px;
+    margin: 5px 0 15px 0;
 }
 
 .blog-details .meta span {
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .blog-details .markdown-body {
@@ -144,6 +155,18 @@ body,html {
     .blog-details {
         padding: 10px;
     } 
+    .meta {
+        font-size: 13px;
+    }
+    
+    .meta span {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    body, html {
+        padding-top: 25px; /* 减小固定导航栏的空间 */
+    }
 }
 
 /* 图片放大样式 */
@@ -172,8 +195,9 @@ pre {
 
 .related-posts {
     max-width: 1024px;
-    margin: 2rem auto;
-    padding: 1rem;
+    margin: 0 auto;
+    padding: 1rem 20px;
+    background-color: #fff;
 }
 
 .related-posts h2 {
@@ -186,15 +210,17 @@ pre {
 
 .related-post {
     background: #fff;
-    border-radius: 8px;
-    padding: 1rem;
+    border-radius: 0;
+    padding: 1rem 0;
     margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease;
+    border-bottom: 1px solid #eee;
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
 
 .related-post:hover {
-    transform: translateY(-3px);
+    background-color: #fff;
 }
 
 .related-post h3 {
@@ -219,10 +245,25 @@ pre {
 
 @media (max-width: 768px) {
     .related-posts {
-        padding: 1rem;
+        padding: 1rem 10px;
     }
     
     .related-post {
-        padding: 0.8rem;
+        padding: 0.8rem 0;
+    }
+}
+
+.search-summary {
+    font-size: 1rem;
+    color: #666;
+    margin: 0.5rem 0 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+@media (max-width: 768px) {
+    .search-summary {
+        font-size: 0.9rem;
+        margin: 0.5rem 0 1.5rem;
     }
 }

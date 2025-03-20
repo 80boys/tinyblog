@@ -19,7 +19,7 @@ include(PROJECT_ROOT . "/app/block/navigation.php");
                     echo '<article class="blog-post">';
                     echo '<h2>' . $blog['title'] . '</h2>';
                     echo '<p>' . $blog['subtitle'] . '</p>';
-                    echo '<a href="/app/blogs/' . str_replace('.json', '.html', $blog['path']) . '">阅读全文 &raquo;</a>';
+                    echo '<a href="' . BASE_PATH . '/app/blogs/' . str_replace('.php', '.html', $blog['path']) . '">阅读全文 &raquo;</a>';
                     echo '</article>';
                 }
             } catch (\InvalidArgumentException $e) {
