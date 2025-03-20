@@ -49,7 +49,7 @@ if (!function_exists('error_log')) {
     {
         try {
             // 设置日志目录为 app/logs
-            $logDir = dirname(dirname(__FILE__)) . '/logs';
+            $logDir = dirname(dirname(__FILE__)) . '/app/logs';
 
             // 检查目录是否存在，如果不存在则创建
             if (!is_dir($logDir)) {
