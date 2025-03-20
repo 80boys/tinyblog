@@ -44,11 +44,16 @@ include(PROJECT_ROOT . "/app/block/navi.php");
             <ul>
                 <?php
                 $categoriesFile = PROJECT_ROOT . '/app/blogs/categories.php';
+                $categories = [];
                 if (file_exists($categoriesFile)) {
                     $categories = require $categoriesFile;
+                }
+                if (!empty($categories)) {
                     foreach ($categories as $category) {
                         echo '<li>' . $category . '</li>';
                     }
+                } else {
+                    echo '<li>暂无分类</li>';
                 }
                 ?>
             </ul>
