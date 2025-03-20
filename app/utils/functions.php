@@ -84,3 +84,19 @@ if (!function_exists('error_log')) {
         }
     }
 }
+
+/**
+ * 获取所有分类
+ * @return array
+ */
+function getCategories()
+{
+    $categoriesFile = PROJECT_ROOT . '/app/blogs/categories.php';
+    if (file_exists($categoriesFile)) {
+        $categories = require $categoriesFile;
+        if (is_array($categories)) {
+            return $categories;
+        }
+    }
+    return [];
+}
