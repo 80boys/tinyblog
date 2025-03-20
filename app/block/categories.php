@@ -10,7 +10,8 @@
     $currentCategory = isset($_GET['category']) ? $_GET['category'] : null;
 
     $dt = new \App\Utils\DirectoryTraverser();
-    $allBlogs = $dt->getAllBlogs()['blogs'];
+    $result = $dt->getAllBlogs();
+    $allBlogs = $result['blogs'];
 
     // 收集所有分类信息
     $categories = [];
@@ -64,15 +65,8 @@
     <section class="categories">
         <?php
         try {
-            $dt = new \App\Utils\DirectoryTraverser();
-            $allBlogs = $dt->getAllBlogs()['blogs'];
-
             // 获取当前分类
             $currentCategory = isset($_GET['category']) ? $_GET['category'] : null;
-
-            // 获取当前页码
-            $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-            $perPage = 10; // 每页显示的文章数
 
             // 筛选当前分类的文章
             $categoryBlogs = [];
@@ -85,17 +79,6 @@
                 }
             }
 
-            // 计算总页数
-            $totalBlogs = count($categoryBlogs);
-            $totalPages = ceil($totalBlogs / $perPage);
-
-            // 确保页码不超出范围
-            $page = min($page, $totalPages);
-
-            // 获取当前页的文章
-            $start = ($page - 1) * $perPage;
-            $pageBlogs = array_slice($categoryBlogs, $start, $perPage);
-
             // 显示当前分类标题
             if ($currentCategory) {
                 echo '<h1>' . htmlspecialchars($currentCategory) . ' 分类下的文章</h1>';
@@ -104,8 +87,8 @@
             }
 
             // 显示文章列表
-            if (!empty($pageBlogs)) {
-                foreach ($pageBlogs as $blog) {
+            if (!empty($categoryBlogs)) {
+                foreach ($categoryBlogs as $blog) {
                     echo '<article class="blog-post">';
                     echo '<h2>' . htmlspecialchars($blog['title']) . '</h2>';
                     if (isset($blog['subtitle'])) {
@@ -121,29 +104,8 @@
                     echo '</article>';
                 }
 
-                // 显示分页
-                if ($totalPages > 1) {
-                    echo '<div class="pagination">';
-                    // 上一页
-                    if ($page > 1) {
-                        $prevUrl = '?page=' . ($page - 1) . ($currentCategory ? '&category=' . urlencode($currentCategory) : '');
-                        echo '<a href="' . $prevUrl . '" class="page-link">&laquo; 上一页</a>';
-                    }
-
-                    // 页码
-                    for ($i = 1; $i <= $totalPages; $i++) {
-                        $pageUrl = '?page=' . $i . ($currentCategory ? '&category=' . urlencode($currentCategory) : '');
-                        $activeClass = $i === $page ? ' active' : '';
-                        echo '<a href="' . $pageUrl . '" class="page-link' . $activeClass . '">' . $i . '</a>';
-                    }
-
-                    // 下一页
-                    if ($page < $totalPages) {
-                        $nextUrl = '?page=' . ($page + 1) . ($currentCategory ? '&category=' . urlencode($currentCategory) : '');
-                        echo '<a href="' . $nextUrl . '" class="page-link">下一页 &raquo;</a>';
-                    }
-                    echo '</div>';
-                }
+                // 使用公共分页组件
+                include(PROJECT_ROOT . "/app/block/pagination.php");
             } else {
                 echo '<p class="no-posts">该分类下暂无文章</p>';
             }
