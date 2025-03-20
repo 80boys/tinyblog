@@ -1,43 +1,108 @@
 <?php !defined('PROJECT_ROOT') && require_once __DIR__ . "/../../autoload.php";  ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<?php echo isset($blog['subtitle']) ? htmlspecialchars($blog['subtitle']) : htmlspecialchars(mb_substr(strip_tags($blog['content']), 0, 150)); ?>">
+    <meta name="keywords" content="<?php
+                                    $keywords = [];
+                                    if (isset($blog['category'])) $keywords[] = $blog['category'];
+                                    if (isset($blog['tags'])) {
+                                        $tags = is_array($blog['tags']) ? $blog['tags'] : explode(',', $blog['tags']);
+                                        $keywords = array_merge($keywords, $tags);
+                                    }
+                                    echo htmlspecialchars(implode(',', $keywords));
+                                    ?>">
+    <meta name="author" content="<?php echo isset($blog['author']) ? htmlspecialchars($blog['author']) : '博客作者'; ?>">
+
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="<?php echo htmlspecialchars($blog['title']); ?>">
+    <meta property="og:description" content="<?php echo isset($blog['subtitle']) ? htmlspecialchars($blog['subtitle']) : htmlspecialchars(mb_substr(strip_tags($blog['content']), 0, 150)); ?>">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+    <?php if (isset($blog['cover_image'])): ?>
+        <meta property="og:image" content="<?php echo htmlspecialchars($blog['cover_image']); ?>">
+    <?php endif; ?>
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($blog['title']); ?>">
+    <meta name="twitter:description" content="<?php echo isset($blog['subtitle']) ? htmlspecialchars($blog['subtitle']) : htmlspecialchars(mb_substr(strip_tags($blog['content']), 0, 150)); ?>">
+    <?php if (isset($blog['cover_image'])): ?>
+        <meta name="twitter:image" content="<?php echo htmlspecialchars($blog['cover_image']); ?>">
+    <?php endif; ?>
+
+    <link rel="canonical" href="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
     <link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/highlight/atom-one-dark.min.css">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/responsive.css">
-    <title><?php echo $blog['title']; ?></title>
-    <!-- 添加关键词和描述 -->
-    <meta name="keywords" content="<?php echo $blog['blog_tags']; ?>">
-    <meta name="description" content="<?php echo $blog['blog_subtitle']; ?>">
+    <title><?php echo htmlspecialchars($blog['title']); ?> - <?php echo htmlspecialchars(isset($blog['category']) ? $blog['category'] : '博客'); ?></title>
 </head>
 
 <body>
     <?php include(PROJECT_ROOT . "/app/block/navigation.php"); ?>
-    <div class="blog-details">
-        <h1><?php echo $blog['title']; ?></h1>
+    <article class="blog-details" itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 itemprop="headline"><?php echo htmlspecialchars($blog['title']); ?></h1>
         <div class="meta">
-            <span>分类: <?php echo $blog['category']; ?></span>
-            <span>标签: <?php echo $blog['tags']; ?></span>
-            <span>写作时间: <?php echo $blog['date']; ?></span>
-        </div>
-        <div class="markdown-body">
-            <?php echo $blog['content']; ?>
-        </div>
-        <div class="attachment">
-            <?php if (!empty($blog['attachment']) && is_string($blog['attachment'])): ?>
-                <span>附件:</span>
-                <a href="<?php
-                            if (is_string($blog['attachment'])) {
-                                echo $blog['attachment'];
-                            }
-                            ?>" download>
-                    <?php echo pathinfo($blog['attachment'])["filename"]; ?>
-                </a>
+            <span itemprop="articleSection">分类: <?php echo isset($blog['category']) ? htmlspecialchars($blog['category']) : '未分类'; ?></span>
+            <?php if (isset($blog['tags'])): ?>
+                <span itemprop="keywords">标签: <?php echo htmlspecialchars(is_array($blog['tags']) ? implode(', ', $blog['tags']) : $blog['tags']); ?></span>
+            <?php endif; ?>
+            <time itemprop="datePublished" datetime="<?php echo isset($blog['date']) ? date('Y-m-d', strtotime($blog['date'])) : date('Y-m-d'); ?>">
+                写作时间: <?php echo isset($blog['date']) ? htmlspecialchars($blog['date']) : date('Y-m-d'); ?>
+            </time>
+            <?php if (isset($blog['author'])): ?>
+                <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                    <span itemprop="name">作者: <?php echo htmlspecialchars($blog['author']); ?></span>
+                </span>
             <?php endif; ?>
         </div>
-    </div>
+        <div class="markdown-body" itemprop="articleBody">
+            <?php echo $blog['content']; ?>
+        </div>
+        <?php if (!empty($blog['attachment']) && is_string($blog['attachment'])): ?>
+            <div class="attachment">
+                <span>附件:</span>
+                <a href="<?php echo htmlspecialchars($blog['attachment']); ?>" download>
+                    <?php echo htmlspecialchars(pathinfo($blog['attachment'])["filename"]); ?>
+                </a>
+            </div>
+        <?php endif; ?>
+    </article>
+
+    <!-- 添加相关文章推荐 -->
+    <?php if (isset($blog['category'])): ?>
+        <section class="related-posts">
+            <?php
+            $dt = new \App\Utils\DirectoryTraverser();
+            $allBlogs = $dt->getAllBlogs()['blogs'];
+            $relatedPosts = array_filter($allBlogs, function ($post) use ($blog) {
+                return isset($post['category']) &&
+                    $post['category'] === $blog['category'] &&
+                    $post['path'] !== $blog['path'];
+            });
+            $relatedPosts = array_slice($relatedPosts, 0, 3);
+
+            if (empty($relatedPosts)): ?>
+                <h2>相关文章</h2>
+                <div class="no-related">暂无相关文章</div>
+            <?php else: ?>
+                <h2>相关文章</h2>
+                <?php foreach ($relatedPosts as $post): ?>
+                    <div class="related-post">
+                        <h3><a href="/app/blogs/<?php echo str_replace('.json', '.html', $post['path']); ?>">
+                                <?php echo htmlspecialchars($post['title']); ?>
+                            </a></h3>
+                        <?php if (isset($post['subtitle'])): ?>
+                            <p><?php echo htmlspecialchars($post['subtitle']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </section>
+    <?php endif; ?>
+
     <script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/interact.min.js"></script>
     <script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/highlight/highlight.min.js"></script>
     <script>

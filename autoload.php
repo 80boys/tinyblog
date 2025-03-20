@@ -2,6 +2,9 @@
 
 session_start();
 
+// 引入通用函数库
+require_once __DIR__ . '/app/utils/functions.php';
+
 if (!function_exists('getProjectRoot')) {
     function getProjectRoot()
     {
@@ -116,28 +119,6 @@ if (!function_exists('dump')) {
     }
 }
 
-if (!function_exists('getBlogsConfig')) {
-    function getBlogsConfig()
-    {
-        $settings = [
-            'website_name' => "我的博客",
-            'beian_number' => "",
-            'contact_email' => "",
-            'wechat_id' => "",
-            'qiniu_access_key' => "",
-            'qiniu_secret_key' => "",
-            'qiniu_bucket' =>  "",
-            'qiniu_domain' => "",
-            'qiniu_accelerate_domain' => "",
-        ];
-        $settingsFile = getProjectRoot() . '/app/blogs/settings.php';
-        if (file_exists($settingsFile)) {
-            $oldSettings = require($settingsFile);
-            $settings = array_merge($settings, $oldSettings);
-        }
-        return $settings;
-    }
-}
 
 mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');

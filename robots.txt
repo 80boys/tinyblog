@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Allow: /app/blogs/
+Allow: /app/block/
+Disallow: /app/end/
+Disallow: /*.json$
+Sitemap: /sitemap.xml 
