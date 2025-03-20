@@ -47,4 +47,4 @@ bin-release/
 
 # Whitelist specific directories
 !app/logs/
-!app/blogs/
+!app/blogs/**/*.json
