@@ -86,3 +86,57 @@ button:hover {
     display: block;
     margin: 0 auto;
 }
+
+/* 添加 toggle 开关样式 */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-switch label {
+    display: block;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.toggle-switch label:before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: left 0.3s;
+}
+
+.toggle-switch input[type="checkbox"]:checked + label {
+    background-color: #2196F3;
+}
+
+.toggle-switch input[type="checkbox"]:checked + label:before {
+    left: 22px;
+}
+
+.toggle-label {
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.form-help {
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 5px;
+    margin-bottom: 0;
+}

@@ -60,6 +60,15 @@ class UrlContentRenderer
                 $blog = require($phpPath);
 
                 if (is_array($blog)) {
+                    // 检查是否为私有博客，如果是私有博客则需要验证用户是否登录
+                    if (isset($blog['is_private']) && $blog['is_private'] === true) {
+                        // 检查用户是否登录管理后台
+                        if (!isset($_SESSION['user_id']) || !$_SESSION['user_id']) {
+                            // 未登录时返回404
+                            return $this->return404();
+                        }
+                    }
+
                     if (isset($blog['content'])) {
                         $blog['content'] = $this->mdDataToHtml($blog['content']);
                     }
@@ -89,6 +98,15 @@ class UrlContentRenderer
                 if (!is_array($blog)) {
                     error_log("无法解析博客数据: " . $phpFilePath);
                     return $this->return404();
+                }
+
+                // 检查是否为私有博客，如果是私有博客则需要验证用户是否登录
+                if (isset($blog['is_private']) && $blog['is_private'] === true) {
+                    // 检查用户是否登录管理后台
+                    if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
+                        // 未登录时返回404
+                        return $this->return404();
+                    }
                 }
 
                 if (isset($blog['content'])) {

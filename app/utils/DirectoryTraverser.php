@@ -205,9 +205,10 @@ class DirectoryTraverser
 
     /**
      * 获取所有博客
+     * @param bool $includePrivate 是否包含私有博客
      * @return array
      */
-    public function getAllBlogs()
+    public function getAllBlogs($includePrivate = false)
     {
         $itemsPerPage = 20; // 每页显示的博客数量
         $currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1; // 当前页码
@@ -220,6 +221,20 @@ class DirectoryTraverser
         usort($blogs, function ($a, $b) {
             return strtotime($b['date']) - strtotime($a['date']);
         });
+
+        // 过滤私有博客
+        if (!$includePrivate) {
+            $blogs = array_filter($blogs, function ($blog) {
+                $blogFilePath = PROJECT_ROOT . '/app/blogs/' . $blog['path'];
+                if (file_exists($blogFilePath)) {
+                    $fullBlog = require($blogFilePath);
+                    return !isset($fullBlog['is_private']) || $fullBlog['is_private'] === false;
+                }
+                return true;
+            });
+            // 重新索引数组
+            $blogs = array_values($blogs);
+        }
 
         $totalEntries = count($blogs);
         $totalPages = ceil($totalEntries / $itemsPerPage);
@@ -338,6 +353,16 @@ class DirectoryTraverser
                             'path' => $relativePath
                         ];
 
+                        // 如果是独立页面，在缓存中添加标记
+                        if (isset($blogData['is_independent']) && $blogData['is_independent'] === true) {
+                            $caches['blogs'][$relativePath]['is_independent'] = true;
+                        }
+
+                        // 如果是私有博客，在缓存中添加标记
+                        if (isset($blogData['is_private']) && $blogData['is_private'] === true) {
+                            $caches['blogs'][$relativePath]['is_private'] = true;
+                        }
+
                         // 更新分类索引
                         if (!isset($caches['categories'][$blogData['category']])) {
                             $caches['categories'][$blogData['category']] = ['count' => 0, 'blogs' => []];
@@ -399,5 +424,30 @@ class DirectoryTraverser
             error_log("Cache rebuild failed: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * 获取所有设置为独立页面的博客
+     * @return array
+     */
+    public function getIndependentPages()
+    {
+        // 从缓存文件获取博客列表
+        $caches = $this->getBlogCaches();
+        $blogs = array_values($caches['blogs']);
+        $independentPages = [];
+
+        foreach ($blogs as $blog) {
+            $blogFilePath = PROJECT_ROOT . '/app/blogs/' . $blog['path'];
+            if (file_exists($blogFilePath)) {
+                $fullBlog = require($blogFilePath);
+                // 判断是否为独立页面并且不是私有的
+                if (isset($fullBlog['is_independent']) && $fullBlog['is_independent'] === true) {
+                    $independentPages[] = array_merge($blog, $fullBlog);
+                }
+            }
+        }
+
+        return $independentPages;
     }
 }

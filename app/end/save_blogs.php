@@ -20,6 +20,8 @@ $blogContent = InputValidator::getInput($_POST['blog_content']);
 $blogSubtitle = InputValidator::getSafeInput($_POST['blog_subtitle']);
 $blogPath = InputValidator::getSafeInput($_POST['blog_path']);
 $blogAttachment = $_FILES['blog_attachment'];
+$blogPublic = isset($_POST['blog_public']) ? true : false;  // 获取博客公开状态
+$blogIndependent = isset($_POST['blog_independent']) ? true : false;  // 获取博客类型状态
 
 // 生成博客存储路径
 $year = date('Y');
@@ -45,7 +47,9 @@ $saveData = [
     'subtitle' => $blogSubtitle,
     'attachment' => "",
     'path' => $fileName,
-    'date' => date('Y-m-d H:i:s')
+    'date' => date('Y-m-d H:i:s'),
+    'is_private' => !$blogPublic,  // 将公开状态取反保存为私有状态
+    'is_independent' => $blogIndependent  // 保存博客类型状态
 ];
 
 // 如果是更新现有文件，合并旧数据
@@ -105,6 +109,16 @@ function updateBlogCache($blogData, $filePath)
         'date' => $blogData['date'],
         'path' => $filePath
     ];
+
+    // 如果是独立页面，在缓存中添加标记
+    if (isset($blogData['is_independent']) && $blogData['is_independent'] === true) {
+        $caches['blogs'][$filePath]['is_independent'] = true;
+    }
+
+    // 如果是私有博客，在缓存中添加标记
+    if (isset($blogData['is_private']) && $blogData['is_private'] === true) {
+        $caches['blogs'][$filePath]['is_private'] = true;
+    }
 
     // 更新分类索引
     if (!isset($caches['categories'][$blogData['category']])) {

@@ -10,8 +10,16 @@ include(PROJECT_ROOT . "/app/block/navigation.php");
             <?php
             try {
                 $dt = new \App\Utils\DirectoryTraverser();
-                $result = $dt->getAllBlogs();
+                $result = $dt->getAllBlogs(false);
                 $blogs = $result['blogs'];
+
+                // 过滤掉独立页面
+                $blogs = array_filter($blogs, function ($blog) {
+                    return !isset($blog['is_independent']) || $blog['is_independent'] === false;
+                });
+                // 重新索引数组
+                $blogs = array_values($blogs);
+
                 $totalPages = $result['totalPages'];
                 $currentPage = $result['currentPage'];
                 foreach ($blogs as $blog) {

@@ -232,3 +232,32 @@ hr {
     background-color: #4a4e57;
     text-decoration: none;
 }
+
+/* 私有博客样式 */
+.private-blog {
+    background-color: #f8f8f8;
+    border-left: 3px solid #999;
+}
+
+.private-label {
+    background-color: #999;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+
+/* 独立页面样式 */
+.independent-blog {
+    border-left: 3px solid #4a90e2;
+}
+
+.independent-label {
+    background-color: #4a90e2;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    margin-left: 10px;
+}

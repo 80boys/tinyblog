@@ -17,18 +17,27 @@ include(PROJECT_ROOT . "/app/block/navi.php");
         <section class="blog-posts">
             <?php
             $dt = new \App\Utils\DirectoryTraverser();
-            $result = $dt->getAllBlogs();
+            $result = $dt->getAllBlogs(true); // 后台显示所有博客，包括私有的
             $blogs = $result['blogs'];
             $totalPages = $result['totalPages'];
             $currentPage = $result['currentPage'];
             // 遍历博客列表并输出
             foreach ($blogs as $blog) {
-                echo '<article class="blog-post">';
+                $isPrivate = isset($blog['is_private']) && $blog['is_private'] === true;
+                $isIndependent = isset($blog['is_independent']) && $blog['is_independent'] === true;
+                echo '<article class="blog-post' . ($isPrivate ? ' private-blog' : '') . ($isIndependent ? ' independent-blog' : '') . '">';
                 echo '<h3>' . $blog['title'] . '</h3>';
                 echo '<p>' . $blog['subtitle'] . '</p>';
-                echo '<p class="meta"><span>发布于: ' . $blog['date'] . '</span>';
+                echo '<p class="meta">';
+                echo '<span>发布于: ' . $blog['date'] . '</span>';
                 if (isset($blog['category'])) {
                     echo '<span>分类: ' . $blog['category'] . '</span>';
+                }
+                if ($isPrivate) {
+                    echo '<span class="private-label">私有</span>';
+                }
+                if ($isIndependent) {
+                    echo '<span class="independent-label">独立页面</span>';
                 }
                 echo '</p>';
                 echo '<div class="actions">';

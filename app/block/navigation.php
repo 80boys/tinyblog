@@ -20,8 +20,23 @@
                     ?>
                 </div>
             </div>
+            <?php
+            // 获取所有设置为独立页面的博客
+            $dt = new \App\Utils\DirectoryTraverser();
+            $independentPages = $dt->getIndependentPages();
+
+            // 显示独立页面链接
+            if (!empty($independentPages)) {
+                foreach ($independentPages as $page) {
+                    if (!isset($page['is_private']) || $page['is_private'] === false) {
+                        echo '<a href="' . BASE_PATH . '/app/blogs/' . str_replace('.php', '.html', $page['path']) . '">'
+                            . htmlspecialchars($page['title'])
+                            . '</a>';
+                    }
+                }
+            }
+            ?>
             <a href="<?php echo BASE_PATH; ?>/app/end/index.html">后台</a>
-            <a href="<?php echo BASE_PATH; ?>/app/block/about.html">关于</a>
             <div class="search-container">
                 <form action="<?php echo BASE_PATH; ?>/app/block/categories.html" method="get">
                     <div class="search-input-wrapper">

@@ -53,6 +53,24 @@ include(PROJECT_ROOT . "/app/block/navi.php");
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="blog-public">博客公开状态：</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="blog-public" name="blog_public" <?php echo !isset($blog['is_private']) || $blog['is_private'] === false ? 'checked' : ''; ?>>
+                        <label for="blog-public"></label>
+                        <span class="toggle-label">公开</span>
+                    </div>
+                    <p class="form-help">关闭后，博客仅在后台可见，前台不会显示</p>
+                </div>
+                <div class="form-group">
+                    <label for="blog-type">博客类型：</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="blog-type" name="blog_independent" <?php echo isset($blog['is_independent']) && $blog['is_independent'] === true ? 'checked' : ''; ?>>
+                        <label for="blog-type"></label>
+                        <span class="toggle-label">独立页面</span>
+                    </div>
+                    <p class="form-help">开启后，此博客将作为独立页面显示在导航栏</p>
+                </div>
+                <div class="form-group">
                     <label for="blog-attachment">博客附件：</label>
                     <input type="file" id="blog-attachment" name="blog_attachment">
                 </div>
