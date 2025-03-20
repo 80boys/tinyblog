@@ -61,6 +61,26 @@ button:hover {
     background-color: #4a4e57;
 }
 
+/* 返回首页链接样式 */
+.home-link {
+    text-align: left;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+.home-link a {
+    color: #383c44;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.home-link a:hover {
+    color: #4a4e57;
+    text-decoration: underline;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
     .container {
@@ -86,5 +106,10 @@ button:hover {
         padding: 0px;
         width: 90%;
         padding: 10px;
+    }
+    
+    .home-link {
+        margin-top: 15px;
+        padding-left: 10px;
     }
 }

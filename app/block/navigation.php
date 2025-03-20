@@ -230,73 +230,57 @@
             });
         }
 
-        // 移动端搜索按钮点击事件
+        // 搜索按钮点击事件 - 适用于所有设备
         const searchContainer = document.querySelector('.search-container');
         const searchButton = searchContainer.querySelector('button');
         const searchInput = searchContainer.querySelector('input[type="text"]');
 
-        if (window.innerWidth <= 768) {
-            // 点击搜索按钮时切换搜索输入框的显示状态
-            searchButton.addEventListener('click', function(e) {
-                if (!searchContainer.classList.contains('active')) {
-                    e.preventDefault(); // 阻止表单提交
-                    searchContainer.classList.add('active');
-                    searchInput.focus();
-
-                    // 点击页面其他地方时隐藏搜索框
-                    document.addEventListener('click', hideSearchOnClickOutside);
-                }
-            });
-
-            // 添加触摸事件支持
-            searchButton.addEventListener('touchstart', function(e) {
-                if (!searchContainer.classList.contains('active')) {
-                    e.preventDefault();
-                    searchContainer.classList.add('active');
-                    searchInput.focus();
-
-                    // 点击页面其他地方时隐藏搜索框
-                    document.addEventListener('touchstart', hideSearchOnClickOutside);
-                }
-            });
-
-            // 输入框聚焦时保持搜索框打开状态
-            searchInput.addEventListener('click', function(e) {
-                e.stopPropagation();
+        // 点击搜索按钮时切换搜索输入框的显示状态
+        searchButton.addEventListener('click', function(e) {
+            if (!searchContainer.classList.contains('active')) {
+                e.preventDefault(); // 阻止表单提交
                 searchContainer.classList.add('active');
-            });
+                searchInput.focus();
 
-            searchInput.addEventListener('touchstart', function(e) {
-                e.stopPropagation();
-                searchContainer.classList.add('active');
-            });
-
-            // 添加输入框聚焦事件
-            searchInput.addEventListener('focus', function() {
-                searchContainer.classList.add('active');
-            });
-
-            function hideSearchOnClickOutside(e) {
-                if (!searchContainer.contains(e.target)) {
-                    searchContainer.classList.remove('active');
-                    document.removeEventListener('click', hideSearchOnClickOutside);
-                    document.removeEventListener('touchstart', hideSearchOnClickOutside);
-                }
-            }
-        }
-
-        // 窗口大小变化时更新事件监听器
-        window.addEventListener('resize', function() {
-            if (window.innerWidth <= 768 && !searchButton.hasSearchHandler) {
-                searchButton.hasSearchHandler = true;
-                searchButton.addEventListener('click', function(e) {
-                    if (!searchContainer.classList.contains('active')) {
-                        e.preventDefault();
-                        searchContainer.classList.add('active');
-                        searchInput.focus();
-                    }
-                });
+                // 点击页面其他地方时隐藏搜索框
+                document.addEventListener('click', hideSearchOnClickOutside);
             }
         });
+
+        // 添加触摸事件支持
+        searchButton.addEventListener('touchstart', function(e) {
+            if (!searchContainer.classList.contains('active')) {
+                e.preventDefault();
+                searchContainer.classList.add('active');
+                searchInput.focus();
+
+                // 点击页面其他地方时隐藏搜索框
+                document.addEventListener('touchstart', hideSearchOnClickOutside);
+            }
+        });
+
+        // 输入框聚焦时保持搜索框打开状态
+        searchInput.addEventListener('click', function(e) {
+            e.stopPropagation();
+            searchContainer.classList.add('active');
+        });
+
+        searchInput.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+            searchContainer.classList.add('active');
+        });
+
+        // 添加输入框聚焦事件
+        searchInput.addEventListener('focus', function() {
+            searchContainer.classList.add('active');
+        });
+
+        function hideSearchOnClickOutside(e) {
+            if (!searchContainer.contains(e.target)) {
+                searchContainer.classList.remove('active');
+                document.removeEventListener('click', hideSearchOnClickOutside);
+                document.removeEventListener('touchstart', hideSearchOnClickOutside);
+            }
+        }
     });
 </script>

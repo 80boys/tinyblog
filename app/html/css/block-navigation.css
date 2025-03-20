@@ -35,6 +35,78 @@
     color: #ffffff; /* 鼠标悬停时的颜色 */
 }
 
+/* PC端通用搜索样式 - 默认缩起 */
+.search-container {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: auto;
+    z-index: 1000;
+    margin-left: auto;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.search-container form {
+    position: relative;
+}
+
+.search-container .search-input-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input[type="text"] {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    padding: 8px 0;
+    border: none;
+    background: transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.search-container.active input[type="text"] {
+    width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #4a4e57;
+    background-color: #2d3139;
+    opacity: 1;
+    visibility: visible;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.search-container button {
+    position: relative;
+    right: 0;
+    background: #383c44;
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 2;
+}
+
+.search-container button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.search-container.active button {
+    background: #4a4e57;
+    color: white;
+}
+
 /* PC端下拉菜单样式 */
 @media (min-width: 769px) {
     .tiny-blog-nav .dropdown {
@@ -74,6 +146,18 @@
     .tiny-blog-nav .dropdown-content a:hover {
         background-color: #383c44;
         color: #ffffff;
+    }
+    
+    /* PC端搜索框聚焦状态 */
+    .search-container input[type="text"]:focus {
+        width: 200px;
+        padding: 8px 12px;
+        border: 1px solid #4a4e57;
+        background-color: #2d3139;
+        opacity: 1;
+        visibility: visible;
+        border-radius: 20px;
+        box-shadow: 0 0 0 2px rgba(74, 78, 87, 0.2);
     }
 }
 
@@ -115,75 +199,9 @@
         text-align: center;
     }
 
-    /* 移动端搜索按钮样式 */
-    .search-container {
-        position: relative;
-        top: auto;
-        right: auto;
-        width: auto;
-        z-index: 1000;
-        margin-left: auto;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-    
-    .search-container form {
-        position: relative;
-    }
-    
-    .search-container .search-input-wrapper {
-        display: flex;
-        align-items: center;
-    }
-    
-    .search-container input[type="text"] {
-        position: absolute;
-        right: 40px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 0;
-        padding: 8px 0;
-        border: none;
-        background: transparent;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-    }
-    
+    /* 移动端搜索输入框特有样式 */
     .search-container.active input[type="text"] {
         width: 180px;
-        padding: 0px 12px;
-        border: 1px solid #4a4e57;
-        background-color: #2d3139;
-        opacity: 1;
-        visibility: visible;
-        border-radius: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-    
-    .search-container button {
-        position: relative;
-        right: 0;
-        background: #383c44;
-        padding: 10px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        width: 40px;
-        height: 40px;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .search-container button svg {
-        width: 18px;
-        height: 18px;
-    }
-    
-    .search-container.active button {
-        background: #4a4e57;
-        color: white;
     }
 
     /* 移动端下拉菜单重新设计 */

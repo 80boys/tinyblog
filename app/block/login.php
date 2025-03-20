@@ -20,6 +20,9 @@ include(PROJECT_ROOT . "/app/block/head.php");
                 <button type="submit">登录</button>
             </section>
         </form>
+        <div class="home-link">
+            <a href="<?php echo BASE_PATH; ?>/app/block/index.html">返回首页</a>
+        </div>
     </article>
 </main>
 <?php include(PROJECT_ROOT . "/app/block/footer.php"); ?>
