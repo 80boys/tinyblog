@@ -45,7 +45,8 @@ bin-release/
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
 
+# Exclude directories
+app/blogs/
+
 # Whitelist specific directories
-!app/logs/
-!app/blogs/*.json
-!app/blogs/**/*.json
+!app/
