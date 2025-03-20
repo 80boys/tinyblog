@@ -78,12 +78,12 @@ include(PROJECT_ROOT . "/app/block/navigation.php");
 
             // 显示当前分类标题
             if ($currentCategory) {
-                echo '<h1>' . htmlspecialchars($currentCategory) . ' 分类下的文章</h1>';
+                echo '<h2>' . htmlspecialchars($currentCategory) . ' 分类下的文章</h2>';
             } elseif (!empty($searchQuery)) {
-                echo '<h1>搜索"' . htmlspecialchars($searchQuery) . '"的结果</h1>';
+                echo '<h2>搜索"' . htmlspecialchars($searchQuery) . '"的结果</h2>';
                 echo '<p class="search-summary">共找到 ' . count($categoryBlogs) . ' 篇相关文章</p>';
             } else {
-                echo '<h1>所有文章分类</h1>';
+                echo '<h2>所有文章分类</h2>';
             }
         ?>
 
