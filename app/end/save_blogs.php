@@ -37,8 +37,8 @@ $saveData = [
 
 
 // 如果$fileName已存在, 则取出数据 合并数组 以新数组为准 在保存
-if (file_exists(PROJECT_ROOT. '/app/blogs/'. $fileName)) {
-    $oldBlog = json_decode(file_get_contents(PROJECT_ROOT. '/app/blogs/'. $fileName), true);
+if (file_exists(PROJECT_ROOT . '/app/blogs/' . $fileName)) {
+    $oldBlog = json_decode(file_get_contents(PROJECT_ROOT . '/app/blogs/' . $fileName), true);
     $saveData = array_merge($oldBlog, $saveData);
 }
 
@@ -50,14 +50,16 @@ if (!empty($blogAttachment['tmp_name'])) {
 }
 
 // 保存博客内容到 Markdown 文件
-file_put_contents(PROJECT_ROOT . '/app/blogs/' . $fileName, json_encode($saveData,
-    JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT
+file_put_contents(PROJECT_ROOT . '/app/blogs/' . $fileName, json_encode(
+    $saveData,
+    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
 ));
 
 // 输出成功信息
 showMessage();
 
-function uploadToQiniu($filePath, $fileName) {
+function uploadToQiniu($filePath, $fileName)
+{
     // 这里需要您根据七牛云的API文档来实现文件上传逻辑
     $settings = getBlogsConfig();
     $accessKey = $settings['qiniu_access_key'];
@@ -70,6 +72,6 @@ function uploadToQiniu($filePath, $fileName) {
     if ($err !== null) {
         //echo ("上传失败: " . $err->message());
     } else {
-        return $settings["qiniu_domain"] . $ret['key'];
+        return $settings["qiniu_domain"] . "/" . $ret['key'];
     }
 }
