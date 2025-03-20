@@ -38,6 +38,9 @@
     left: 0;
     top: 100%;
 }
+.dropdown-content.show {
+    display: block;
+}
 .dropdown:hover .dropdown-content {
     display: block;
 }
