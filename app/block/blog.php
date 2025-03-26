@@ -35,7 +35,7 @@
     <?php endif; ?>
 
     <link rel="canonical" href="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
-    <link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/highlight/atom-one-dark.min.css">
+    <link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/highlight/xcode.min.css">
     <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/responsive.css">
     <title><?php echo htmlspecialchars($blog['title']); ?> - <?php echo htmlspecialchars(isset($blog['category']) ? $blog['category'] : '博客'); ?></title>
 </head>
