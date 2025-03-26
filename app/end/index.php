@@ -8,6 +8,7 @@ include(PROJECT_ROOT . "/app/block/navi.php");
 ?>
 
 <link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin-theme.css">
 <div class="container">
     <div class="main-content">
         <h2>博客管理</h2>

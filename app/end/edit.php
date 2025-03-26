@@ -6,7 +6,10 @@ include(PROJECT_ROOT . "/app/block/navi.php");
 
 ?>
 <link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/simplemde.min.css" />
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/edit.css" />
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin-theme.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/edit.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/edit-theme.css">
 <main class="container">
     <?php
     $blog = [];

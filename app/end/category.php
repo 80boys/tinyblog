@@ -4,21 +4,25 @@
 include(PROJECT_ROOT . "/app/block/head.php");
 include(PROJECT_ROOT . "/app/block/navi.php");
 ?>
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin-theme.css">
 <style>
     /* 美化输入框 */
     input[type="text"] {
         width: 80%;
         padding: 10px;
         margin: 5px 0;
-        border: 1px solid #ccc;
+        border: 1px solid var(--input-border);
         border-radius: 4px;
         box-sizing: border-box;
+        background-color: var(--input-bg);
+        color: var(--input-text);
     }
 
     /* 美化按钮 */
     button[type="submit"] {
-        background-color: #383c44;
-        color: white;
+        background-color: var(--bg-navbar);
+        color: var(--text-navbar);
         padding: 10px 20px;
         margin: 5px 0;
         border: none;
@@ -27,7 +31,16 @@ include(PROJECT_ROOT . "/app/block/navi.php");
     }
 
     button[type="submit"]:hover {
-        background-color: #45a049;
+        background-color: var(--dropdown-hover);
+    }
+
+    /* 分类列表样式 */
+    ul {
+        color: var(--text-primary);
+    }
+
+    li {
+        margin-bottom: 5px;
     }
 </style>
 <main class="container">

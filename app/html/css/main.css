@@ -3,26 +3,27 @@ body,html {
     margin: 0;
     padding: 0;
     width: 100%;
-    background-color: #f4f4f4;
+    background-color: var(--bg-primary);
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
+    color: var(--text-primary);
 }
 
 .container {
     max-width: 1024px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-secondary);
+    box-shadow: 0 0 10px var(--shadow-color);
 }
 
 footer {
     text-align: center;
     padding: 20px; 
-    color: black;
+    color: var(--text-primary);
 }
 footer a {
-    color: black;
+    color: var(--text-primary);
     text-decoration: none;
 }
 footer a:hover {
@@ -49,7 +50,7 @@ footer a:hover {
 .blog-post {
     margin-bottom: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color);
 }
 .blog-post h2 {
     margin-top: 0;
