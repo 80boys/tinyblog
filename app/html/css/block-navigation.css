@@ -72,6 +72,7 @@
 
 .search-container.active input[type="text"] {
     width: 200px;
+    height: 18px;
     padding: 8px 12px;
     border: 1px solid var(--search-border);
     background-color: var(--search-bg);
@@ -205,6 +206,7 @@
     /* 移动端搜索输入框特有样式 */
     .search-container.active input[type="text"] {
         width: 180px;
+        height: 16px;
     }
 
     /* 移动端下拉菜单重新设计 */
