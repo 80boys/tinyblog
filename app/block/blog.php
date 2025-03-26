@@ -134,9 +134,9 @@
             for (const block of codeBlocks) {
                 result = hljs.highlightAuto(block.textContent);
                 const detectedLanguage = result.language;
-                if (!allowedLanguages.includes(detectedLanguage)) {
-                    continue;
-                }
+                //if (!allowedLanguages.includes(detectedLanguage)) {
+                //    continue;
+                //}
                 hljs.highlightBlock(block);
                 if (!loadedLanguages.has(detectedLanguage)) {
                     try {
