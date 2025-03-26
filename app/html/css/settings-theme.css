@@ -1,0 +1,50 @@
+/* 设置页面的暗色模式样式 */
+
+[data-theme="dark"] .settings-section {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+[data-theme="dark"] .settings-section h3 {
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+[data-theme="dark"] .form-group label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-group input[type="text"],
+[data-theme="dark"] .form-group input[type="email"],
+[data-theme="dark"] .form-group input[type="password"],
+[data-theme="dark"] .form-group textarea {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+}
+
+[data-theme="dark"] .form-group input[type="text"]:focus,
+[data-theme="dark"] .form-group input[type="email"]:focus,
+[data-theme="dark"] .form-group input[type="password"]:focus,
+[data-theme="dark"] .form-group textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+}
+
+[data-theme="dark"] .form-group .hint {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .message.success {
+    background-color: rgba(21, 87, 36, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(21, 87, 36, 0.3);
+}
+
+[data-theme="dark"] .message.error {
+    background-color: rgba(114, 28, 36, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(114, 28, 36, 0.3);
+} 

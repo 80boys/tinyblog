@@ -1,0 +1,42 @@
+/* 登录页面的暗色模式样式 */
+
+[data-theme="dark"] body {
+    background-color: var(--bg-primary);
+}
+
+[data-theme="dark"] .container {
+    background-color: var(--bg-secondary);
+    box-shadow: 0 0 10px var(--shadow-color);
+}
+
+[data-theme="dark"] h2 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] label {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="password"] {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+}
+
+[data-theme="dark"] button {
+    background-color: var(--bg-navbar);
+    color: var(--text-navbar);
+}
+
+[data-theme="dark"] button:hover {
+    background-color: var(--dropdown-hover);
+}
+
+[data-theme="dark"] .home-link a {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .home-link a:hover {
+    color: var(--text-navbar-hover);
+} 
