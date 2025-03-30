@@ -68,7 +68,10 @@ if (!function_exists('autoload')) {
 
         $namespace_map = [
             'Qiniu\\' => __DIR__ . '/app/utils/Qiniu/',
-            'App\\Utils\\' => __DIR__ . '/app/utils/'
+            'App\\Utils\\' => __DIR__ . '/app/utils/',
+            'App\\Core\\' => __DIR__ . '/app/core/',
+            'App\\Controllers\\' => __DIR__ . '/app/controllers/',
+            'App\\Models\\' => __DIR__ . '/app/models/'
         ];
 
         foreach ($namespace_map as $namespace => $base_dir) {
@@ -83,7 +86,7 @@ if (!function_exists('autoload')) {
             }
         }
 
-        $path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, $className);
         $file = __DIR__ . DIRECTORY_SEPARATOR . $path . '.php';
         if (file_exists($file)) {
             require_once $file;
@@ -122,6 +125,10 @@ if (!function_exists('dump')) {
 
 mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
+// 项目根目录 用于项目内操作, 路径是绝对路径
 define('PROJECT_ROOT', getProjectRoot());
+// URL基础路径, 用于生成URL 地址是相对项目根目录
 define('BASE_PATH', getBasePath());
 define('ACCELERATE_DOMAIN', getBlogsConfig()['qiniu_accelerate_domain']);
+// 是否开启调试模式
+define('DEBUG', true);

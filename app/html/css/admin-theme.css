@@ -2,7 +2,7 @@
 /* 这个文件会覆盖admin.css中的相关样式，专门针对后台页面的暗色模式 */
 
 /* 只在暗色模式下应用以下样式 */
-[data-theme="dark"] .container {
+[data-theme="dark"] .main-content {
     background-color: var(--bg-secondary);
     box-shadow: 0 0 10px var(--shadow-color);
 }

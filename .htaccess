@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# 如果请求的不是实际存在的文件或目录
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# 重写所有请求到 index.php
+RewriteRule ^(.*)$ index.php/$1 [QSA,L] 

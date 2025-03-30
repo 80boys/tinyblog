@@ -1,23 +1,23 @@
 /* 博客列表样式 */
-table {
+.main-content table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-table th {
+.main-content table th {
     background-color: #f2f2f2;
     text-align: left;
     padding: 10px;
 }
 
-table th, table td {
+.main-content table th, table td {
     border: 1px solid #ddd;
     padding: 10px;
 }
 
 /* 后台整体布局 */
-.container {
+.main-content {
     max-width: 1024px;
     margin: 20px auto;
     padding: 20px;
@@ -26,7 +26,7 @@ table th, table td {
 }
 
 /* 博客管理列表样式 */
-.blog-item {
+.main-content .blog-item {
     background: #fff;
     padding: 20px;
     margin-bottom: 15px;
@@ -34,63 +34,63 @@ table th, table td {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.blog-item p {
+.main-content .blog-item p {
     margin: 8px 0;
     color: #333;
 }
 
-.blog-item a {
+.main-content .blog-item a {
     color: #1f8cea;
     text-decoration: none;
 }
 
-.blog-item a:hover {
+.main-content .blog-item a:hover {
     text-decoration: underline;
 }
 
-.blog-item .actions {
+.main-content .blog-item .actions {
     margin-top: 15px;
 }
 
-.blog-item .actions a {
+.main-content .blog-item .actions a {
     display: inline-block;
     margin-right: 15px;
     color: #666;
 }
 
-.blog-item .actions a:hover {
+.main-content .blog-item .actions a:hover {
     color: #1f8cea;
 }
 
 /* 标题样式 */
-h2 {
+.main-content h2 {
     color: #2c3e50;
     margin: 20px 0;
     font-size: 24px;
 }
 
 /* 分隔线样式 */
-hr {
+.main-content hr {
     border: none;
     border-top: 1px solid #eee;
     margin: 20px 0;
 }
 
 /* 表单样式 */
-.form-group {
+.main-content .form-group {
     margin-bottom: 20px;
 }
 
-.form-group label {
+.main-content .form-group label {
     display: block;
     margin-bottom: 5px;
     color: #333;
 }
 
-.form-group input[type="text"],
-.form-group input[type="password"],
-.form-group select,
-.form-group textarea {
+.main-content .form-group input[type="text"],
+.main-content .form-group input[type="password"],
+.main-content .form-group select,
+.main-content .form-group textarea {
     width: 100%;
     padding: 8px 12px;
     border: 1px solid #ddd;
@@ -98,13 +98,13 @@ hr {
     font-size: 14px;
 }
 
-.form-group textarea {
+.main-content .form-group textarea {
     min-height: 100px;
     resize: vertical;
 }
 
 /* 按钮样式 */
-.btn {
+.main-content .btn {
     display: inline-block;
     padding: 8px 16px;
     border: none;
@@ -116,106 +116,106 @@ hr {
     text-decoration: none;
 }
 
-.btn:hover {
+.main-content .btn:hover {
     background-color: #4a4e57;
 }
 
-.btn-danger {
+.main-content .btn-danger {
     background-color: #dc3545;
 }
 
-.btn-danger:hover {
+.main-content .btn-danger:hover {
     background-color: #c82333;
 }
 
 /* 响应式布局 */
 @media (max-width: 768px) {
-    .container {
+    .main-content {
         padding: 0 10px;
         margin: 10px auto;
     }
 
-    .blog-item {
+    .main-content .blog-item {
         padding: 15px;
     }
 
-    h2 {
+    .main-content h2 {
         font-size: 20px;
         margin: 15px 0;
     }
 
-    .blog-item .actions a {
+    .main-content .blog-item .actions a {
         display: block;
         margin: 10px 0;
     }
-    .container {
+    .main-content {
         padding: 20px;
     }
 }
 
 /* 后台博客文章样式 */
-.blog-posts {
+.main-content .blog-posts {
     margin-top: 20px;
 }
 
-.blog-post {
+.main-content .blog-post {
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #eee;
 }
 
-.blog-post h3 {
+.main-content .blog-post h3 {
     margin-top: 0;
     margin-bottom: 0.5rem;
     color: #34495e;
     font-size: 1.4em;
 }
 
-.blog-post p {
+.main-content .blog-post p {
     margin: 10px 0;
     color: #333;
 }
 
-.blog-post .meta {
+.main-content .blog-post .meta {
     font-size: 14px;
     color: #777;
     margin: 5px 0 15px 0;
 }
 
-.blog-post .meta span {
+.main-content .blog-post .meta span {
     margin-right: 15px;
 }
 
-.blog-post .actions {
+.main-content .blog-post .actions {
     margin-top: 10px;
 }
 
-.blog-post .actions a {
+.main-content .blog-post .actions a {
     color: #1f8cea;
     text-decoration: none;
     margin-right: 5px;
 }
 
-.blog-post .actions a:hover {
+.main-content .blog-post .actions a:hover {
     text-decoration: underline;
 }
 
 @media (max-width: 768px) {
-    .blog-post .meta {
+    .main-content .blog-post .meta {
         font-size: 13px;
     }
     
-    .blog-post .meta span {
+    .main-content .blog-post .meta span {
         display: block;
         margin-bottom: 5px;
     }
 }
 
-.admin-actions {
+.main-content .admin-actions {
     margin: 20px 0;
 }
 
-.btn-primary {
+.main-content .btn-primary {
     display: inline-block;
     padding: 8px 16px;
     background-color: #383c44;
@@ -228,18 +228,18 @@ hr {
     transition: background-color 0.2s;
 }
 
-.btn-primary:hover {
+.main-content .btn-primary:hover {
     background-color: #4a4e57;
     text-decoration: none;
 }
 
 /* 私有博客样式 */
-.private-blog {
+.main-content .private-blog {
     background-color: #f8f8f8;
     border-left: 3px solid #999;
 }
 
-.private-label {
+.main-content .private-label {
     background-color: #999;
     color: white;
     padding: 2px 6px;
@@ -249,11 +249,11 @@ hr {
 }
 
 /* 独立页面样式 */
-.independent-blog {
+.main-content .independent-blog {
     border-left: 3px solid #4a90e2;
 }
 
-.independent-label {
+.main-content .independent-label {
     background-color: #4a90e2;
     color: white;
     padding: 2px 6px;

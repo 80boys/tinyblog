@@ -2,12 +2,9 @@
 
 require_once 'autoload.php';
 
-$baseUrl = $_SERVER['REQUEST_URI'];
-$pos = strpos($_SERVER['REQUEST_URI'], 'index.php');
-if ($pos !== false) {
-    $baseUrl = trim(substr($_SERVER['REQUEST_URI'], $pos + strlen('index.php')), "/");
-}
+// 创建调度器
+$dispatcher = new \App\Core\Dispatcher();
 
-//dump($baseUrl);
-$renderer = new App\Utils\UrlContentRenderer(strtok($baseUrl, '?'), PROJECT_ROOT);
-echo $renderer->renderByUrl();
+// 分发请求并输出结果
+echo $dispatcher->dispatch();
+
