@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="<?= $this->getUserTheme() ?>">
+
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="<?= $this->asset('/app/favicon.ico') ?>">
@@ -13,11 +14,13 @@
             background-color: #121212 !important;
             color: #e0e0e0 !important;
         }
+
         /* 确保body也是暗色的 */
         html[data-theme="dark"] body {
             background-color: #121212 !important;
             color: #e0e0e0 !important;
         }
+
         /* 设置页面过渡，但延迟应用，避免初始加载时的过渡效果 */
         .theme-transition {
             transition: background-color 0.5s ease, color 0.5s ease !important;
@@ -42,13 +45,13 @@
         <div class="tiny-blog-nav">
             <header class="navbar-top">
                 <nav class="navbar">
-                    <a href="<?php echo BASE_PATH; ?>/app/block/index.html">前台</a>
-                    <a href="<?php echo BASE_PATH; ?>/app/end/index.html">后台</a>
-                    <a href="<?php echo BASE_PATH; ?>/app/end/edit.html">创建</a>
-                    <a href="<?php echo BASE_PATH; ?>/app/end/category.html">分类</a>
-                    <a href="<?php echo BASE_PATH; ?>/app/end/settings.html">设置</a>
-                    <a href="<?php echo BASE_PATH; ?>/app/end/refresh_cache.php">刷新</a>
-                    <a href="<?php echo BASE_PATH; ?>/app/end/logout.html">退出</a>
+                    <a href="<?= $this->getUrl('blog/index') ?>">前台</a>
+                    <a href="<?= $this->getUrl('admin/index') ?>">后台</a>
+                    <a href="<?= $this->getUrl('admin/edit') ?>">创建</a>
+                    <a href="<?= $this->getUrl('admin/category') ?>">分类</a>
+                    <a href="<?= $this->getUrl('admin/settings') ?>">设置</a>
+                    <a href="<?= $this->getUrl('admin/refresh_cache') ?>">刷新</a>
+                    <a href="<?= $this->getUrl('admin/logout') ?>">退出</a>
                     <!-- 主题切换按钮 -->
                     <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
                         <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun theme-icon">
@@ -85,4 +88,5 @@
         <?= $this->getAnalyticsCode() ?>
     </footer>
 </body>
+
 </html>

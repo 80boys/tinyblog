@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Core;
 
 /**
@@ -13,49 +14,49 @@ class Router
      * @var Router
      */
     private static $instance = null;
-    
+
     /**
      * 基础URL
      * @var string
      */
     private $baseUrl = '';
-    
+
     /**
      * 是否使用伪静态（URL重写）
      * @var bool
      */
     private $prettyUrl = true;
-    
+
     /**
      * 默认控制器
      * @var string
      */
     private $defaultController = 'Home';
-    
+
     /**
      * 默认方法
      * @var string
      */
     private $defaultAction = 'index';
-    
+
     /**
      * 当前控制器
      * @var string
      */
     private $currentController = '';
-    
+
     /**
      * 当前方法
      * @var string
      */
     private $currentAction = '';
-    
+
     /**
      * 当前参数
      * @var array
      */
     private $currentParams = [];
-    
+
     /**
      * 获取路由器单例实例
      * 
@@ -70,7 +71,7 @@ class Router
         }
         return self::$instance;
     }
-    
+
     /**
      * 构造函数（私有化，实现单例）
      * 
@@ -84,29 +85,29 @@ class Router
         if (!isset($_SERVER['REQUEST_URI'])) {
             $this->prettyUrl = false;
         }
-        
+
         // 检查是否存在index.php,如果存在则不是伪静态
         if (strpos($_SERVER['REQUEST_URI'], 'index.php') !== false) {
             $this->prettyUrl = false;
         }
-        
+
         // 检查是否存在查询字符串参数c和a,如果存在则不是伪静态
         if (isset($_GET['c']) || isset($_GET['a'])) {
             $this->prettyUrl = false;
         }
         $this->baseUrl = $baseUrl ?: $this->detectBaseUrl();
     }
-    
+
     /**
      * 防止对象被克隆（单例模式）
      */
     private function __clone() {}
-    
+
     /**
      * 防止反序列化（单例模式）
      */
     public function __wakeup() {}
-    
+
     /**
      * 检测基础URL
      * 
@@ -116,15 +117,15 @@ class Router
     {
         $scriptName = $_SERVER['SCRIPT_NAME'];
         $scriptDir = dirname($scriptName);
-        
+
         // 移除末尾的斜杠
         if ($scriptDir != '/' && substr($scriptDir, -1) == '/') {
             $scriptDir = substr($scriptDir, 0, -1);
         }
-        
+
         return $scriptDir;
     }
-    
+
     /**
      * 设置默认控制器和方法
      * 
@@ -138,7 +139,7 @@ class Router
         $this->defaultAction = $action;
         return $this;
     }
-    
+
     /**
      * 解析当前请求的URL
      * 
@@ -148,11 +149,11 @@ class Router
     {
         // 获取请求路径
         $path = $this->getRequestPath();
-        
+
         // 解析路径为控制器、方法和参数
         return $this->parseDefaultRoute($path);
     }
-    
+
     /**
      * 获取请求路径
      * 
@@ -171,23 +172,23 @@ class Router
             // 处理查询字符串形式的URL
             $controller = isset($_GET['c']) ? $_GET['c'] : $this->defaultController;
             $action = isset($_GET['a']) ? $_GET['a'] : $this->defaultAction;
-            
+
             // 构造一个虚拟路径
             $path = "/{$controller}/{$action}";
-            
+
             // 提取其他参数
             $params = $_GET;
             unset($params['c'], $params['a']);
-            
+
             // 设置控制器、动作和参数
             $this->currentController = $controller;
             $this->currentAction = $action;
             $this->currentParams = $params;
-            
+
             return $path;
         }
     }
-    
+
     /**
      * 解析路径为控制器、方法和参数
      * 
@@ -198,7 +199,7 @@ class Router
     {
         // 移除前导和尾随斜杠
         $path = trim($path, '/');
-        
+
         if (empty($path)) {
             // 空路径，使用默认控制器和动作
             $this->currentController = $this->defaultController;
@@ -206,36 +207,36 @@ class Router
             $this->currentParams = [];
             return true;
         }
-        
+
         // 解析路径段
         $segments = explode('/', $path);
-        
+
         // 确定控制器和方法
         $controller = ucfirst(array_shift($segments));
         $action = !empty($segments) ? array_shift($segments) : $this->defaultAction;
-        
+
         // 解析剩余参数
         $params = [];
-        
+
         // 如果有剩余部分，尝试解析为参数
         if (!empty($segments) && count($segments) % 2 === 0) {
             for ($i = 0; $i < count($segments); $i += 2) {
-                if (isset($segments[$i+1])) {
-                    $params[$segments[$i]] = $segments[$i+1];
+                if (isset($segments[$i + 1])) {
+                    $params[$segments[$i]] = $segments[$i + 1];
                 }
             }
         } else {
             // 否则，将剩余部分作为位置参数
             $params = $segments;
         }
-        
+
         $this->currentController = $controller;
         $this->currentAction = $action;
         $this->currentParams = $params;
-        
+
         return true;
     }
-    
+
     /**
      * 生成URL
      * 
@@ -248,8 +249,8 @@ class Router
     public function generateUrl($controller, $action = 'index', $params = [], $absolute = false)
     {
         if ($this->prettyUrl) {
-            $url = $this->baseUrl . '/' . $controller . '/' . $action;
-            
+            $url = trim($this->baseUrl, '/') . '/' . $controller . '/' . $action;
+
             // 附加参数
             if (!empty($params)) {
                 // 如果是关联数组，使用键值对形式
@@ -265,21 +266,20 @@ class Router
                 }
             }
         } else {
-            $url = $this->baseUrl . '/index.php?c=' . $controller . '&a=' . $action;
-            
+            $url = trim($this->baseUrl, '/') . '/index.php?c=' . $controller . '&a=' . $action;
             // 附加参数
             foreach ($params as $key => $value) {
                 $url .= '&' . urlencode($key) . '=' . urlencode($value);
             }
         }
-        
+
         if ($absolute) {
             return $this->getBaseHost() . $url;
         }
-        
+
         return $url;
     }
-    
+
     /**
      * 获取基础主机名
      * 
@@ -291,7 +291,7 @@ class Router
         $host = $_SERVER['HTTP_HOST'];
         return $protocol . '://' . $host;
     }
-    
+
     /**
      * 获取当前控制器名
      * 
@@ -301,7 +301,7 @@ class Router
     {
         return $this->currentController;
     }
-    
+
     /**
      * 获取当前方法名
      * 
@@ -311,7 +311,7 @@ class Router
     {
         return $this->currentAction;
     }
-    
+
     /**
      * 获取当前参数
      * 
@@ -321,7 +321,7 @@ class Router
     {
         return $this->currentParams;
     }
-    
+
     /**
      * 获取单个参数值
      * 
@@ -333,7 +333,7 @@ class Router
     {
         return isset($this->currentParams[$name]) ? $this->currentParams[$name] : $default;
     }
-    
+
     /**
      * 设置是否使用伪静态URL
      * 
@@ -345,7 +345,7 @@ class Router
         $this->prettyUrl = $prettyUrl;
         return $this;
     }
-    
+
     /**
      * 静态方法生成URL
      * 
@@ -356,14 +356,13 @@ class Router
      */
     public static function getUrl($path, $params = [], $absolute = false)
     {
+        $path = trim($path, '/');
         // 获取路由器单例实例
         $router = self::getInstance();
-        
         // 分解路径为控制器和方法
         $parts = explode('/', $path);
         $controller = $parts[0] ?? 'Home';
         $action = $parts[1] ?? 'index';
-        
         // 使用Router生成URL
         return $router->generateUrl($controller, $action, $params, $absolute);
     }

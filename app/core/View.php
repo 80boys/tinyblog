@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Core;
 
 /**
@@ -19,26 +20,26 @@ class View
      * @var array
      */
     private $viewData = [];
-    
+
     /**
      * 布局文件
      * @var string|null
      */
     private $layout = null;
-    
+
     /**
      * 页面标题
      * @var string
      */
     private $title = '';
-    
+
     /**
      * 构造函数
      * 
      * @param string|null $viewsDir 视图目录
      */
     public function __construct(?string $viewsDir = null)
-    {       
+    {
         $this->viewsDir = $viewsDir ?: __DIR__ . '/../views/';
         // 确保目录以斜杠结尾
         if (substr($this->viewsDir, -1) !== "\\" && substr($this->viewsDir, -1) !== "/") {
@@ -94,7 +95,7 @@ class View
      * @return string 完整的资源URL
      */
     public function asset($path)
-    {        
+    {
         return  $path;
         //return  $this->get('baseUrl') . '/' . $path;
     }
@@ -108,7 +109,7 @@ class View
     {
         return $this->get('analyticsCode', '');
     }
-    
+
     /**
      * 设置视图变量
      * 
@@ -126,10 +127,10 @@ class View
         } else {
             $this->viewData[$name] = $value;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * 获取视图变量
      * 
@@ -141,7 +142,7 @@ class View
     {
         return isset($this->viewData[$name]) ? $this->viewData[$name] : $default;
     }
-    
+
     /**
      * 设置视图目录
      * 
@@ -151,15 +152,15 @@ class View
     public function setViewsDir($dir)
     {
         $this->viewsDir = $dir;
-        
+
         // 确保目录以斜杠结尾
         if (substr($this->viewsDir, -1) !== DIRECTORY_SEPARATOR) {
             $this->viewsDir .= DIRECTORY_SEPARATOR;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * 设置布局文件
      * 
@@ -171,7 +172,7 @@ class View
         $this->layout = $layout;
         return $this;
     }
-    
+
     /**
      * 设置页面标题
      * 
@@ -183,7 +184,7 @@ class View
         $this->title = $title;
         return $this;
     }
-    
+
     /**
      * 获取页面标题
      * 
@@ -193,7 +194,7 @@ class View
     {
         return $this->title;
     }
-    
+
     /**
      * 渲染视图
      * 
@@ -205,25 +206,25 @@ class View
     {
         // 合并视图变量
         $data = array_merge($this->viewData, $data);
-        
+
         // 添加标题
         if (!isset($data['title']) && !empty($this->title)) {
             $data['title'] = $this->title;
         }
-        
+
         // 渲染视图内容
         $content = $this->renderFile($view, $data);
-       
+
         // 如果有布局文件，则渲染布局
         if ($this->layout) {
             // 将视图内容作为变量传给布局
             $data['content'] = $content;
             return $this->renderFile('layouts/' . $this->layout, $data);
         }
-        
+
         return $content;
     }
-    
+
     /**
      * 渲染视图文件
      * 
@@ -236,26 +237,26 @@ class View
     {
         // 确定视图文件路径
         $viewFile = $this->viewsDir . $view . '.php';
-        
+
         // 检查视图文件是否存在
         if (!file_exists($viewFile)) {
-            
+
             throw new \Exception("View file not found: {$viewFile}");
         }
-        
+
         // 提取变量到当前作用域
         extract($data);
-        
+
         // 开始输出缓冲
         ob_start();
-        
+
         // 包含视图文件
         include $viewFile;
-        
+
         // 返回渲染结果
         return ob_get_clean();
     }
-    
+
     /**
      * 渲染错误页面
      * 
@@ -267,16 +268,16 @@ class View
     {
         // 设置HTTP状态码
         http_response_code($code);
-        
+
         // 准备错误数据
         $errorData = [
             'code' => $code,
             'message' => $message
         ];
-        
+
         // 尝试加载错误视图
         $errorView = "errors/{$code}";
-        
+
         try {
             return $this->render($errorView, $errorData);
         } catch (\Exception $e) {
@@ -289,7 +290,7 @@ class View
             }
         }
     }
-    
+
     /**
      * 部分视图渲染（包含）
      * 
@@ -301,7 +302,7 @@ class View
     {
         return $this->renderFile('partials/' . $view, $data);
     }
-    
+
     /**
      * 直接输出部分视图
      * 
@@ -311,5 +312,10 @@ class View
     public function renderPartial($view, $data = [])
     {
         echo $this->partial($view, $data);
+    }
+
+    public function getUrl($path, $params = [])
+    {
+        return Router::getUrl($path, $params);
     }
 }
