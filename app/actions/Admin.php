@@ -7,6 +7,7 @@ use App\Models\BlogModel;
 use App\Utils\FileManager;
 use App\Core\Action;
 use App\Core\Router;
+use App\Models\CategoryModel;
 
 /**
  * 管理员Action
@@ -14,6 +15,30 @@ use App\Core\Router;
 class Admin extends Action
 {
     private $configPath = 'app/config/admin.php';
+
+    public function category()
+    {
+        $this->set('categories', CategoryModel::getAll());
+        $this->setLayout('admin');
+        $this->setTitle('分类管理');
+        $this->render('home/category');
+    }
+
+    public function edit($id = null)
+    {
+        if ($id) {  
+            $blog = BlogModel::findById($id, true);
+            if ($blog) {
+                $this->set('blog', $blog);
+            }
+        }
+
+        $this->set('categories', CategoryModel::getAll());
+
+        $this->setLayout('admin');
+        $this->setTitle('编辑博客');
+        $this->render('home/edit');
+    }
 
     public function settings()
     {
@@ -147,7 +172,7 @@ class Admin extends Action
      * @param array $data 博客数据
      * @return string|bool 成功返回博客ID，失败返回false
      */
-    public function saveBlog($data)
+    public function saveBlogs($data)
     {
         $blog = isset($data['id']) ? BlogModel::findById($data['id']) : new BlogModel();
 
@@ -174,7 +199,7 @@ class Admin extends Action
                 $blog->setCreatedAt($data['date']);
             }
 
-            return $blog->save();
+            return $blog->save() ? true : false;
         }
 
         return false;
@@ -239,36 +264,13 @@ class Admin extends Action
             return false;
         }
 
-        $caches = BlogsModel::getCaches();
-
         // 重命名分类
-        if (!empty($oldName) && $oldName != $name && isset($caches['categories'][$oldName])) {
-            // 保存旧分类的博客列表
-            $oldBlogs = $caches['categories'][$oldName]['blogs'];
-
-            // 更新每个博客的分类
-            foreach ($oldBlogs as $blogPath) {
-                $blog = BlogModel::findByPath($blogPath);
-                if ($blog) {
-                    $blog->setCategory($name);
-                    $blog->save();
-                }
-            }
-
-            // 重建缓存以反映更改
-            return BlogsModel::rebuildCache();
+        if (!empty($oldName) && $oldName != $name) {
+            return CategoryModel::rename($oldName, $name);
         }
 
-        // 创建新分类
-        if (!isset($caches['categories'][$name])) {
-            $caches['categories'][$name] = ['count' => 0, 'blogs' => []];
-
-            // 保存缓存
-            $cachePath = PROJECT_ROOT . '/app/blogs/caches.php';
-            return FileManager::savePhpConfigFile($cachePath, $caches);
-        }
-
-        return true;
+        // 添加新分类
+        return CategoryModel::add($name);
     }
 
     /**
@@ -279,29 +281,7 @@ class Admin extends Action
      */
     public function deleteCategory($name, $moveTo = '未分类')
     {
-        if (empty($name) || $name === $moveTo) {
-            return false;
-        }
-
-        $caches = BlogsModel::getCaches();
-
-        // 检查分类是否存在
-        if (!isset($caches['categories'][$name])) {
-            return false;
-        }
-
-        // 将分类下的博客移动到指定分类
-        $blogs = $caches['categories'][$name]['blogs'];
-        foreach ($blogs as $blogPath) {
-            $blog = BlogModel::findByPath($blogPath);
-            if ($blog) {
-                $blog->setCategory($moveTo);
-                $blog->save();
-            }
-        }
-
-        // 重建缓存以反映更改
-        return BlogsModel::rebuildCache();
+        return CategoryModel::delete($name, $moveTo);
     }
 
     /**

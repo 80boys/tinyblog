@@ -131,8 +131,28 @@ class Dispatcher
             throw new \Exception("Method not found: {$this->actionName} in {$controllerClass}");
         }
         
-        // 执行方法
-        return call_user_func_array([$this->controller, $this->actionName], array_values($this->params));
+        // 整合所有参数到一个数组
+        $allParams = [];
+        
+        // 添加路由参数
+        if (!empty($this->params)) {
+            $allParams = array_merge($allParams, $this->params);
+        }
+        
+        // 添加 GET 参数
+        if (!empty($_GET)) {
+            $allParams = array_merge($allParams, $_GET);
+            if (isset($allParams['c']))  unset($allParams['c']);
+            if (isset($allParams['a']))  unset($allParams['a']);
+        }
+        
+        // 添加 POST 参数
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+            $allParams = array_merge($allParams, $_POST);
+        }
+
+        // 执行方法，只传入一个参数（整合后的数组）
+        return call_user_func([$this->controller, $this->actionName], count($allParams) > 1 ? $allParams : current($allParams));
     }
     
     /**
@@ -143,6 +163,13 @@ class Dispatcher
      */
     protected function renderResponse($response)
     {
+        // 如果响应是布尔值，显示操作结果消息
+        if (is_bool($response)) {
+            $text = $response ? '操作成功' : '操作失败';
+            $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
+            return $this->view->renderMessage('操作提示', $text, $redirectUrl);
+        }
+        
         // 如果响应已经是字符串，直接返回
         if (is_string($response)) {
             return $response;

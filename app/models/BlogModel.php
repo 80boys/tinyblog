@@ -76,7 +76,7 @@ class BlogModel
     public function setIndependent($is_independent) { $this->is_independent = $is_independent; }
 
     // 从ID加载博客
-    public static function findById($id)
+    public static function findById($id, $array = false)
     {
         // 读取缓存
         $caches = self::getCaches();
@@ -90,7 +90,7 @@ class BlogModel
                 if (!empty($fullData)) {
                     $fullData['id'] = $id;
                     $fullData['path'] = $path;
-                    return new self($fullData);
+                    return $array ? $fullData : new self($fullData);
                 }
             }
         }

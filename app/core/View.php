@@ -318,4 +318,38 @@ class View
     {
         return Router::getUrl($path, $params);
     }
+
+    /**
+     * 渲染消息页面
+     * 
+     * @param string $title 消息标题
+     * @param string $text 消息内容
+     * @param string $redirectUrl 跳转URL
+     * @param int $seconds 等待秒数
+     * @return string 渲染后的内容
+     */
+    public function renderMessage($title, $text, $redirectUrl = null, $seconds = 3)
+    {
+        if ($redirectUrl === null) {
+            $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
+        }
+
+        return $this->render('message', [
+            'title' => $title,
+            'text' => $text,
+            'redirectUrl' => $redirectUrl,
+            'seconds' => $seconds
+        ]);
+    }
+
+    /**
+     * 转义HTML特殊字符
+     * 
+     * @param string $string 需要转义的字符串
+     * @return string 转义后的字符串
+     */
+    public function escape($string)
+    {
+        return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
 }

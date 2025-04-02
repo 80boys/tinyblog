@@ -232,7 +232,9 @@ class Router
 
         $this->currentController = $controller;
         $this->currentAction = $action;
-        $this->currentParams = $params;
+        if (is_array($params) && !empty($params)) {
+            $this->currentParams = $params;
+        }
 
         return true;
     }
@@ -272,6 +274,9 @@ class Router
                 $url .= '&' . urlencode($key) . '=' . urlencode($value);
             }
         }
+
+        $url = trim($url, '/');
+        $url = trim($url, '\\');
 
         if ($absolute) {
             return $this->getBaseHost() . $url;
