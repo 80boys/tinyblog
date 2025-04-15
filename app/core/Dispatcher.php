@@ -175,6 +175,7 @@ class Dispatcher
             return $response;
         }
         
+        // 懒得 return数组 就直接从控制器获取
         if (!$response) {
             $response = $this->controller->getRenderData();
         }
@@ -197,7 +198,11 @@ class Dispatcher
                 }
                 
                 // 渲染视图
-                return $this->view->render($view, $data);
+                try {
+                    return $this->view->render($view, $data);
+                } catch (\Exception $e) {
+                    return $e->getMessage();
+                }
             }
         }
         

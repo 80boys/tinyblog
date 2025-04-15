@@ -21,7 +21,10 @@ class Blog extends Action
      */
     public function index()
     {
-        return 'index';
+        $this->setLayout('default');
+        $this->setTitle('博客列表');
+        $blogs = BlogsModel::getList();
+        $this->render('blog/index', ['blogs' => $blogs]);
     }
 
     /**
@@ -47,7 +50,10 @@ class Blog extends Action
      */
     public function getBlogDetail($id)
     {
-        return BlogModel::findById($id);
+        $this->setLayout('blog');
+        $this->setTitle('博客详情');
+        $blog = BlogModel::findById($id, true);
+        $this->render('blog/detail', ['blog' => $blog]);
     }
 
     /**

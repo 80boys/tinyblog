@@ -1,10 +1,7 @@
 
-<link rel="stylesheet" href="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/css/simplemde.min.css" />
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin-theme.css">
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/edit.css">
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/edit-theme.css">
-<main class="container">
+<link rel="stylesheet" href="<?= $this->asset('/app/html/css/simplemde/simplemde.min.css') ?>" />
+<link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin/edit.css') ?>">
+<main class="container blog-edit-container">
     <article>
         <h2>编写博客</h2>
         <form action="<?= $this->getUrl('admin/saveBlogs') ?>" method="post" enctype="multipart/form-data">
@@ -63,8 +60,8 @@
         </form>
     </article>
 </main>
-<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/simplemde.min.js"></script>
-<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/qiniu.min.js"></script>
+<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/simplemde/simplemde.min.js"></script>
+<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/qiniu/qiniu.min.js"></script>
 <script>
     const bucketDoman = '<?php $settings = getBlogsConfig();
                             echo $settings["qiniu_domain"];  ?>';

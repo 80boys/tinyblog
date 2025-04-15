@@ -1,26 +1,26 @@
-.form-container {
+.blog-edit-container .form-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.form-group {
+.blog-edit-container .form-group {
     flex-basis: calc(50% - 10px);
     margin-top: 10px;
 }
 
-.full-width {
+.blog-edit-container .full-width {
     flex-basis: 100%;
     max-width: 100%; 
 }
 
-label {
+.blog-edit-container label {
     display: block;
     margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="file"] {
+.blog-edit-container input[type="text"],
+.blog-edit-container input[type="file"] {
     box-sizing: border-box;
     width: 100%;
     padding: 10px;
@@ -29,7 +29,7 @@ input[type="file"] {
     border-radius: 4px;
 }
 
-textarea {
+.blog-edit-container textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -37,7 +37,7 @@ textarea {
     border-radius: 4px;
 }
 
-button {
+.blog-edit-container button {
     background-color: #383c44;
     color: white;
     padding: 10px 20px;
@@ -47,11 +47,11 @@ button {
     margin-bottom: 10px;
 }
 
-button:hover {
+.blog-edit-container button:hover {
     background-color: #4a4e57;
 }
 
-#blog-category {
+.blog-edit-container #blog-category {
     width: 100%; /* 设置下拉框宽度为100%，使其与其他元素宽度一致 */
     padding: 10px; /* 添加一些内边距，使下拉框看起来更美观 */
     font-size: 16px; /* 设置字体大小，使其与其他元素字体大小一致 */
@@ -61,26 +61,26 @@ button:hover {
 }
 
 @media (max-width: 600px) {
-    .form-group {
+    .blog-edit-container .form-group {
         flex-basis: 100%;
     }
 
-    .container {
+    .blog-edit-container {
         padding: 10px;
     }
 
-    input[type="text"],
-    input[type="file"],
-    textarea {
+    .blog-edit-container input[type="text"],
+    .blog-edit-container input[type="file"],
+    .blog-edit-container textarea {
         padding: 8px;
     }
 
-    button {
+    .blog-edit-container button {
         padding: 8px 16px;
     }
 }
 
-.CodeMirror img {
+.blog-edit-container .CodeMirror img {
     max-width: 100%;
     height: auto;
     display: block;
@@ -88,17 +88,17 @@ button:hover {
 }
 
 /* 添加 toggle 开关样式 */
-.toggle-switch {
+.blog-edit-container .toggle-switch {
     position: relative;
     display: inline-block;
     margin-right: 10px;
 }
 
-.toggle-switch input[type="checkbox"] {
+.blog-edit-container .toggle-switch input[type="checkbox"] {
     display: none;
 }
 
-.toggle-switch label {
+.blog-edit-container .toggle-switch label {
     display: block;
     width: 40px;
     height: 20px;
@@ -109,7 +109,7 @@ button:hover {
     transition: background-color 0.3s;
 }
 
-.toggle-switch label:before {
+.blog-edit-container .toggle-switch label:before {
     content: '';
     position: absolute;
     width: 16px;
@@ -121,20 +121,20 @@ button:hover {
     transition: left 0.3s;
 }
 
-.toggle-switch input[type="checkbox"]:checked + label {
+.blog-edit-container .toggle-switch input[type="checkbox"]:checked + label {
     background-color: #2196F3;
 }
 
-.toggle-switch input[type="checkbox"]:checked + label:before {
+.blog-edit-container .toggle-switch input[type="checkbox"]:checked + label:before {
     left: 22px;
 }
 
-.toggle-label {
+.blog-edit-container .toggle-label {
     vertical-align: middle;
     margin-left: 5px;
 }
 
-.form-help {
+.blog-edit-container .form-help {
     color: #666;
     font-size: 0.85em;
     margin-top: 5px;

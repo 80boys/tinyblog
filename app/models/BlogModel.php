@@ -94,8 +94,7 @@ class BlogModel
                 }
             }
         }
-        
-        return null;
+        return false;
     }
 
     // 从路径加载博客

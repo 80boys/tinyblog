@@ -1,4 +1,3 @@
-/* 基础样式 */
 body,html {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -9,26 +8,27 @@ body,html {
     box-sizing: border-box;
     color: var(--text-primary);
 }
-.theme-transition .container {
+
+.container {
     max-width: 1024px;
     margin: 20px auto;
     padding: 20px;
     background-color: var(--bg-secondary);
     box-shadow: 0 0 10px var(--shadow-color);
 }
-.theme-transition footer {
+
+footer {
     text-align: center;
     padding: 20px; 
     color: var(--text-primary);
 }
-.theme-transition footer a {
+footer a {
     color: var(--text-primary);
     text-decoration: none;
 }
-.theme-transition footer a:hover {
+footer a:hover {
     text-decoration: underline;
 }
-
 @media (max-width: 768px) {
     .navbar a {
         display: block;
@@ -43,17 +43,18 @@ body,html {
         padding-top: 25px; /* 减小固定导航栏的空间 */
     }
 }
-/* 首先设置html元素的背景色，这是最早被渲染的 */
-html[data-theme="dark"] {
-    background-color: #121212 !important;
-    color: #e0e0e0 !important;
+
+.blog-posts {
+    margin-top: 20px;
 }
-/* 确保body也是暗色的 */
-html[data-theme="dark"] body {
-    background-color: #121212 !important;
-    color: #e0e0e0 !important;
+.blog-post {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
 }
-/* 设置页面过渡，但延迟应用，避免初始加载时的过渡效果 */
-.theme-transition {
-    transition: background-color 0.5s ease, color 0.5s ease !important;
+.blog-post h2 {
+    margin-top: 0;
+}
+.blog-post p {
+    margin: 10px 0;
 }

@@ -31,7 +31,7 @@ class Router
      * 默认控制器
      * @var string
      */
-    private $defaultController = 'Home';
+    private $defaultController = 'Blog';
 
     /**
      * 默认方法

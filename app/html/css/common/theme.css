@@ -1,0 +1,189 @@
+:root {
+    /* 亮色主题变量（默认） */
+    --bg-primary: #f4f4f4;
+    --bg-secondary: #fff;
+    --bg-navbar: #383c44;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --text-navbar: #c6c9d1;
+    --text-navbar-hover: #ffffff;
+    --border-color: #eee;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-bg: #fff;
+    --input-border: #ddd;
+    --input-text: #333;
+    --dropdown-bg: #2d3139;
+    --dropdown-hover: #383c44;
+    --search-bg: #2d3139;
+    --search-border: #4a4e57;
+    --search-text: #c6c9d1;
+    --search-button-bg: #383c44;
+    --search-placeholder: #7a7f8c;
+}
+
+/* 暗色主题 */
+[data-theme="dark"] {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-navbar: #1a1a1a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #aaaaaa;
+    --text-navbar: #e0e0e0;
+    --text-navbar-hover: #ffffff;
+    --border-color: #333;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --input-bg: #2d2d2d;
+    --input-border: #444;
+    --input-text: #e0e0e0;
+    --dropdown-bg: #2d2d2d;
+    --dropdown-hover: #3d3d3d;
+    --search-bg: #2d2d2d;
+    --search-border: #444;
+    --search-text: #e0e0e0;
+    --search-button-bg: #3d3d3d;
+    --search-placeholder: #888;
+}
+
+/* 编辑页面的暗色模式样式 */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="file"] {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+}
+
+[data-theme="dark"] textarea {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+}
+
+[data-theme="dark"] #blog-category {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+}
+
+/* 暗色模式下的帮助文本 */
+[data-theme="dark"] .form-help {
+    color: var(--text-secondary);
+}
+
+/* SimpleMDE编辑器暗色模式适配 */
+[data-theme="dark"] .CodeMirror {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .CodeMirror-cursor {
+    border-left: 1px solid var(--text-primary);
+}
+
+[data-theme="dark"] .CodeMirror-selected {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .CodeMirror-line {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .editor-toolbar {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+}
+
+[data-theme="dark"] .editor-toolbar a {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .editor-toolbar a:hover {
+    background-color: var(--dropdown-hover);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .editor-toolbar a.active {
+    background-color: var(--dropdown-hover);
+}
+
+/* 开关样式 */
+[data-theme="dark"] .toggle-switch label {
+    background-color: #444;
+}
+
+[data-theme="dark"] .toggle-switch input[type="checkbox"]:checked + label {
+    background-color: #2196F3;
+}
+
+/* 确保所有元素都应用过渡效果 */
+body, .container, .navbar-top, input, button, textarea, select,
+.blog-post, .blog-item, .settings-section, .form-group, table, hr, 
+.dropdown-content, .toggle-switch, .CodeMirror, .editor-toolbar {
+    transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* 主题切换按钮样式 */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    background-color: transparent;
+    color: var(--text-navbar);
+    flex-shrink: 0; /* 防止按钮被压缩 */
+}
+
+.theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: all 0.3s ease;
+}
+
+/* 主题图标显示/隐藏样式 */
+.theme-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+}
+
+.theme-icon.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-icon:not(.hidden) {
+    opacity: 1;
+}
+
+/* 移动端主题切换按钮样式 */
+@media (max-width: 768px) {
+    .theme-toggle {
+        width: 32px;
+        height: 32px;
+        margin-left: 5px;
+    }
+
+    .theme-toggle svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* 适应深色/浅色模式的平滑过渡 - 仅在页面加载完成后应用 */
+.theme-transition {
+    transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+}

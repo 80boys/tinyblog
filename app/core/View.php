@@ -195,6 +195,36 @@ class View
         return $this->title;
     }
 
+    /** 
+     * 获取页面描述
+     * 
+     * @return string 返回页面描述
+     */
+    public function getDescription()    
+    {
+        return $this->viewData['description'] ?? '默认页面描述';
+    }
+
+    /**
+     * 获取页面关键词
+     * 
+     * @return string 返回页面关键词
+     */
+    public function getKeywords()
+    {
+        return $this->viewData['keywords'] ?? '默认页面关键词';
+    }
+
+    /**
+     * 获取页面作者
+     * 
+     * @return string 返回页面作者
+     */
+    public function getAuthor()
+    {
+        return $this->viewData['author'] ?? '默认页面作者';
+    }
+
     /**
      * 渲染视图
      * 
@@ -205,7 +235,7 @@ class View
     public function render($view, $data = [])
     {
         // 合并视图变量
-        $data = array_merge($this->viewData, $data);
+        $this->viewData = $data = array_merge($this->viewData, $data);
 
         // 添加标题
         if (!isset($data['title']) && !empty($this->title)) {
@@ -218,8 +248,8 @@ class View
         // 如果有布局文件，则渲染布局
         if ($this->layout) {
             // 将视图内容作为变量传给布局
-            $data['content'] = $content;
-            return $this->renderFile('layouts/' . $this->layout, $data);
+            $this->viewData['content'] = $content;
+            return $this->renderFile('layouts/' . $this->layout, $this->viewData);
         }
 
         return $content;
@@ -240,21 +270,20 @@ class View
 
         // 检查视图文件是否存在
         if (!file_exists($viewFile)) {
-
             throw new \Exception("View file not found: {$viewFile}");
         }
 
         // 提取变量到当前作用域
         extract($data);
 
-        // 开始输出缓冲
-        ob_start();
-
-        // 包含视图文件
-        include $viewFile;
-
-        // 返回渲染结果
-        return ob_get_clean();
+        try {
+            ob_start();
+            include $viewFile;
+            return ob_get_clean();
+        } catch (\Exception $e) {
+            ob_end_clean();
+            throw $e;
+        }
     }
 
     /**
@@ -299,8 +328,8 @@ class View
      * @return string 渲染后的内容
      */
     public function partial($view, $data = [])
-    {
-        return $this->renderFile('partials/' . $view, $data);
+    {   
+        return $this->renderFile($view, $data);
     }
 
     /**
@@ -351,5 +380,26 @@ class View
     public function escape($string)
     {
         return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    /**
+     * 判断是否为暗黑模式
+     * 
+     * @return bool 如果为暗黑模式返回true，否则返回false
+     */
+    public function isDarkdisabled()
+    {
+        if (isset($_COOKIE['theme'])) {
+            return $_COOKIE['theme'] === 'dark';
+        }
+        return false;
+    }
+
+    /**
+     * 渲染内容
+     */
+    public function renderContent()
+    {
+        echo isset($this->viewData['content']) ? $this->viewData['content'] : '';
     }
 }
