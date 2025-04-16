@@ -151,8 +151,29 @@ class Dispatcher
             $allParams = array_merge($allParams, $_POST);
         }
 
-        // 执行方法，只传入一个参数（整合后的数组）
-        return call_user_func([$this->controller, $this->actionName], count($allParams) > 1 ? $allParams : current($allParams));
+        // 如果只有一个参数，直接传递
+        if (count($allParams) <= 1) {
+            return call_user_func([$this->controller, $this->actionName], current($allParams));
+        }
+
+        // 如果有多个参数，获取方法的参数列表
+        $reflection = new \ReflectionMethod($this->controller, $this->actionName);
+        $parameters = $reflection->getParameters();
+        
+        // 如果方法只有一个参数，传递整个参数数组
+        if (count($parameters) === 1) {
+            return call_user_func([$this->controller, $this->actionName], $allParams);
+        }
+        
+        // 如果方法有多个参数，按参数名匹配
+        $args = [];
+        foreach ($parameters as $param) {
+            $paramName = $param->getName();
+            $args[] = isset($allParams[$paramName]) ? $allParams[$paramName] : null;
+        }
+        
+        // 按顺序传递参数
+        return call_user_func_array([$this->controller, $this->actionName], $args);
     }
     
     /**

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理员登录 - 我的博客</title>
-    <link rel="stylesheet" href="<?= $this->asset('css/bootstrap.min.css') ?>">
     <style>
         html, body {
             height: 100%;
@@ -39,12 +38,8 @@
 </head>
 <body class="text-center">
     <main class="form-signin">
-        <form action="/admin/login" method="post">
+        <form action="/admin/doLogin" method="post">
             <h1 class="h3 mb-3 fw-normal">管理员登录</h1>
-            
-            <?php if ($error = $this->flash('error')): ?>
-                <div class="alert alert-danger"><?= $this->escape($error) ?></div>
-            <?php endif; ?>
             
             <div class="form-floating">
                 <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required>

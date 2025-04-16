@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="<?= $this->asset('/app/html/css/simplemde/simplemde.min.css') ?>" />
 <link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin/edit.css') ?>">
 <main class="container blog-edit-container">
@@ -24,14 +23,11 @@
                 <div class="form-group">
                     <label for="blog-category">博客分类：</label>
                     <select id="blog-category" name="blog_category">
-                        <?php
-                        if (!empty($categories)) {
-                            foreach ($categories as $category) {
-                                $selected = (isset($blog["category"]) && $blog["category"] == $category) ? "selected" : "";
-                                echo "<option value=\"$category\" $selected>$category</option>";
-                            }
-                        }
-                        ?>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?php echo $category; ?>" <?php echo (isset($blog['category']) && $blog['category'] === $category) ? 'selected' : ''; ?>>
+                                <?php echo $category; ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-group">

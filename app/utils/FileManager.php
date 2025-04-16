@@ -112,7 +112,7 @@ class FileManager
     }
     
     /**
-     * 获取目录下的所有文件
+     * 获取目录下的所有文件（包括子目录）
      * 
      * @param string $dir 目录路径
      * @param array $extensions 文件扩展名过滤
@@ -128,10 +128,17 @@ class FileManager
         $files = [];
         $pattern = empty($extensions) ? '*' : '*.{' . implode(',', $extensions) . '}';
         
+        // 获取当前目录下的文件
         foreach (glob($dir . '/' . $pattern, GLOB_BRACE) as $file) {
             if (!in_array(basename($file), $excludeFiles)) {
                 $files[] = $file;
             }
+        }
+        
+        // 递归获取子目录中的文件
+        foreach (glob($dir . '/*', GLOB_ONLYDIR) as $subdir) {
+            $subFiles = self::getFiles($subdir, $extensions, $excludeFiles);
+            $files = array_merge($files, $subFiles);
         }
         
         return $files;

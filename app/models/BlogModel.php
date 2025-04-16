@@ -78,17 +78,28 @@ class BlogModel
     // 从ID加载博客
     public static function findById($id, $array = false)
     {
+        // 处理包含年月的ID
+        $cleanId = basename($id);
+        $yearMonth = dirname($id);
+        if ($yearMonth != '.') {
+            $yearMonth = str_replace('\\', '/', $yearMonth) . '/';
+        } else {
+            $yearMonth = '';
+        }
+        
         // 读取缓存
         $caches = self::getCaches();
         
         // 遍历缓存查找匹配的博客
         foreach ($caches['blogs'] as $path => $blogData) {
-            if (basename($path, '.php') == $id) {
+            // 检查完整路径或仅ID是否匹配
+            if (basename($path, '.php') == $cleanId || 
+                ($yearMonth && strpos($path, $yearMonth) === 0 && basename($path, '.php') == $cleanId)) {
                 // 找到匹配的博客，读取完整内容
                 $fullPath = PROJECT_ROOT . '/' . self::$storagePath . $path;
                 $fullData = FileManager::readBlogFile($fullPath);
                 if (!empty($fullData)) {
-                    $fullData['id'] = $id;
+                    $fullData['id'] = $cleanId;
                     $fullData['path'] = $path;
                     return $array ? $fullData : new self($fullData);
                 }
@@ -114,54 +125,78 @@ class BlogModel
     // 保存博客
     public function save()
     {
-        // 设置ID和时间
-        if (!$this->id) {
-            $this->id = uniqid();
-        }
-        
-        $this->updated_at = date('Y-m-d H:i:s');
-        if (!$this->created_at) {
-            $this->created_at = $this->updated_at;
-        }
-        
-        // 准备要保存的数据
-        $data = [
-            'title' => $this->title,
-            'subtitle' => $this->subtitle,
-            'content' => $this->content,
-            'author' => $this->author,
-            'category' => $this->category,
-            'tags' => $this->tags,
-            'cover_image' => $this->cover_image,
-            'date' => $this->created_at,
-            'updated_at' => $this->updated_at
-        ];
-        
-        // 添加额外属性
-        if ($this->is_private) {
-            $data['is_private'] = true;
-        }
-        
-        if ($this->is_independent) {
-            $data['is_independent'] = true;
-        }
-        
-        // 准备文件路径
-        if (!$this->path) {
-            $this->path = $this->id . '.php';
-        }
-        
-        $filePath = PROJECT_ROOT . '/' . self::$storagePath . $this->path;
-        
-        // 保存文件
-        if (!FileManager::saveBlogFile($filePath, $data)) {
+        try {
+            // 设置ID和时间
+            if (!$this->id) {
+                $this->id = uniqid();
+            }
+            
+            $this->updated_at = date('Y-m-d H:i:s');
+            if (!$this->created_at) {
+                $this->created_at = $this->updated_at;
+            }
+            
+            // 准备要保存的数据
+            $data = [
+                'title' => $this->title,
+                'subtitle' => $this->subtitle,
+                'content' => $this->content,
+                'author' => $this->author,
+                'category' => $this->category,
+                'tags' => $this->tags,
+                'cover_image' => $this->cover_image,
+                'date' => $this->created_at,
+                'updated_at' => $this->updated_at
+            ];
+            
+            // 添加额外属性
+            if ($this->is_private) {
+                $data['is_private'] = true;
+            }
+            
+            if ($this->is_independent) {
+                $data['is_independent'] = true;
+            }
+            
+            // 准备文件路径
+            if (!$this->path) {
+                // 使用年月目录结构
+                $year = date('Y');
+                $month = date('m');
+                $this->path = $year . '/' . $month . '/' . $this->id . '.php';
+            }
+            
+            $filePath = PROJECT_ROOT . '/' . self::$storagePath . $this->path;
+            
+            // 确保目录存在
+            $dir = dirname($filePath);
+            if (!is_dir($dir)) {
+                if (!mkdir($dir, 0777, true)) {
+                    error_log("无法创建目录: " . $dir);
+                    return false;
+                }
+            }
+            
+            // 检查目录是否可写
+            if (!is_writable($dir)) {
+                error_log("目录不可写: " . $dir);
+                return false;
+            }
+            
+            // 保存文件
+            if (!FileManager::saveBlogFile($filePath, $data)) {
+                error_log("保存博客文件失败: " . $filePath);
+                return false;
+            }
+            
+            // 更新缓存
+            self::updateCache($this->path, $data);
+            
+            return $this->id;
+        } catch (\Exception $e) {
+            error_log("保存博客时发生错误: " . $e->getMessage());
             return false;
         }
-        
-        // 更新缓存
-        self::updateCache($this->path, $data);
-        
-        return $this->id;
     }
 
     // 删除博客

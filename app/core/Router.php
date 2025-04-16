@@ -25,7 +25,7 @@ class Router
      * 是否使用伪静态（URL重写）
      * @var bool
      */
-    private $prettyUrl = true;
+    public $prettyUrl = true;
 
     /**
      * 默认控制器
@@ -250,39 +250,42 @@ class Router
      */
     public function generateUrl($controller, $action = 'index', $params = [], $absolute = false)
     {
-        if ($this->prettyUrl) {
-            $url = trim($this->baseUrl, '/') . '/' . $controller . '/' . $action;
+        if (!$this->prettyUrl) {
+            // 非伪静态URL
+            $base = 'index.php';
+            $query = http_build_query([
+                'c' => $controller,
+                'a' => $action
+            ] + $params);
+            
+            if ($absolute) {
+                return rtrim($this->getBaseHost(), '/') . '/' . $base . '?' . $query;
+            }
+            return '/' . $base . '?' . $query;
+        }
 
-            // 附加参数
-            if (!empty($params)) {
-                // 如果是关联数组，使用键值对形式
-                if (array_keys($params) !== range(0, count($params) - 1)) {
-                    foreach ($params as $key => $value) {
-                        $url .= '/' . urlencode($key) . '/' . urlencode($value);
-                    }
-                } else {
-                    // 如果是索引数组，直接追加参数值
-                    foreach ($params as $value) {
-                        $url .= '/' . urlencode($value);
-                    }
+        // 伪静态URL
+        $url = $controller . '/' . $action;
+
+        // 处理参数
+        if (!empty($params)) {
+            if (array_keys($params) !== range(0, count($params) - 1)) {
+                // 关联数组：使用键值对形式
+                foreach ($params as $key => $value) {
+                    $url .= '/' . $key . '/' . trim($value, '/');
+                }
+            } else {
+                // 索引数组：直接追加值
+                foreach ($params as $value) {
+                    $url .= '/' . trim($value, '/');
                 }
             }
-        } else {
-            $url = trim($this->baseUrl, '/') . '/index.php?c=' . $controller . '&a=' . $action;
-            // 附加参数
-            foreach ($params as $key => $value) {
-                $url .= '&' . urlencode($key) . '=' . urlencode($value);
-            }
         }
-
-        $url = trim($url, '/');
-        $url = trim($url, '\\');
 
         if ($absolute) {
-            return $this->getBaseHost() . $url;
+            return rtrim($this->getBaseHost(), '/') . '/' . $url;
         }
-
-        return $url;
+        return '/' . $url;
     }
 
     /**
@@ -293,8 +296,7 @@ class Router
     private function getBaseHost()
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-        $host = $_SERVER['HTTP_HOST'];
-        return $protocol . '://' . $host;
+        return $protocol . '://' . $_SERVER['HTTP_HOST'];
     }
 
     /**

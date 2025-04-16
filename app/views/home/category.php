@@ -62,4 +62,4 @@
         </section>
     </article>
 </main>
-<?php include(PROJECT_ROOT . "/app/block/footer.php"); ?>
+<?php $this->renderPartial('common/footer'); ?>

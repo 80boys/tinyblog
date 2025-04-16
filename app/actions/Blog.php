@@ -45,13 +45,18 @@ class Blog extends Action
 
     /**
      * 获取博客详情
-     * @param int $id 博客ID
+     * @param string $id 博客ID
      * @return BlogModel|null 博客详情
      */
-    public function getBlogDetail($id)
+    public function getBlogDetail($id = null)
     {
         $this->setLayout('blog');
         $this->setTitle('博客详情');
+ 
+        if (is_array($id)) {
+            $id = implode('/', $id);
+        }
+        
         $blog = BlogModel::findById($id, true);
         $this->render('blog/detail', ['blog' => $blog]);
     }

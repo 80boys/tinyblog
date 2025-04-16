@@ -96,14 +96,11 @@ if (!function_exists('autoload')) {
 }
 
 if (!function_exists('showMessage')) {
-    function showMessage($title = '操作提示', $redirectUrl = null, $text = '操作成功', $seconds = 3)
+    function showMessage($message, $url = '', $error = '')
     {
-        if ($redirectUrl === null) {
-            $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
-        }
-        extract(compact('title', 'text', 'seconds', 'redirectUrl'));
+        extract(compact('message', 'url', 'error'));
         ob_start();
-        include_once __DIR__ . '/app/block/message.php';
+        include_once __DIR__ . '/app/views/message.php';
         $content = ob_get_clean();
         echo $content;
     }

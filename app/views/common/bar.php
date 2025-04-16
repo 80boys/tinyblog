@@ -6,7 +6,7 @@
         <a href="<?= $this->getUrl('admin/edit') ?>">创建</a>
         <a href="<?= $this->getUrl('admin/category') ?>">分类</a>
         <a href="<?= $this->getUrl('admin/settings') ?>">设置</a>
-        <a href="<?= $this->getUrl('admin/refresh_cache') ?>">刷新</a>
+        <a href="<?= $this->getUrl('admin/refreshCache') ?>">刷新</a>
         <a href="<?= $this->getUrl('admin/logout') ?>">退出</a>
         <!-- 主题切换按钮 -->
         <button class="theme-toggle" id="themeToggle" aria-label="切换主题">

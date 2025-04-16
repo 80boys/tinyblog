@@ -14,7 +14,7 @@ use App\Models\CategoryModel;
  */
 class Admin extends Action
 {
-    private $configPath = 'app/config/admin.php';
+    private $configPath = 'app/blogs/settings.php';
 
     public function category()
     {
@@ -26,7 +26,11 @@ class Admin extends Action
 
     public function edit($id = null)
     {
-        if ($id) {  
+        if ($id) {
+            // 如果ID是数组（来自URL路径参数），将其合并为字符串
+            if (is_array($id)) {
+                $id = implode('/', $id);
+            }
             $blog = BlogModel::findById($id, true);
             if ($blog) {
                 $this->set('blog', $blog);
@@ -34,7 +38,6 @@ class Admin extends Action
         }
 
         $this->set('categories', CategoryModel::getAll());
-
         $this->setLayout('admin');
         $this->setTitle('编辑博客');
         $this->render('home/edit');
@@ -42,13 +45,107 @@ class Admin extends Action
 
     public function settings()
     {
+        // 获取当前配置
+        $configPath = PROJECT_ROOT . '/' . $this->configPath;
+        $settings = FileManager::readPhpConfigFile($configPath, [
+            'site_name' => '',
+            'site_description' => '',
+            'author' => '',
+            'default_keywords' => '',
+            'contact_email' => '',
+            'wechat_id' => '',
+            'qiniu_access_key' => '',
+            'qiniu_secret_key' => '',
+            'qiniu_bucket' => '',
+            'qiniu_accelerate_domain' => '',
+            'qiniu_domain' => '',
+            'admin_username' => 'admin',
+            'admin_password' => password_hash('admin', PASSWORD_DEFAULT),
+            'beian_number' => '',
+            'footer_text' => '',
+            'analytics_code' => ''
+        ]);
+
+        $this->set('settings', $settings);
         $this->setLayout('admin');
-        $this->setTitle('博客配置页面');
-        $this->render('home/about');
+        $this->setTitle('网站设置');
+        $this->render('home/settings');
+    }
+
+    /**
+     * 保存网站设置
+     * @return bool 是否保存成功
+     */
+    public function saveSettings()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return false;
+        }
+
+        $configPath = PROJECT_ROOT . '/' . $this->configPath;
+        $currentSettings = FileManager::readPhpConfigFile($configPath, [
+            'site_name' => '',
+            'site_description' => '',
+            'author' => '',
+            'default_keywords' => '',
+            'contact_email' => '',
+            'wechat_id' => '',
+            'qiniu_access_key' => '',
+            'qiniu_secret_key' => '',
+            'qiniu_bucket' => '',
+            'qiniu_accelerate_domain' => '',
+            'qiniu_domain' => '',
+            'admin_username' => 'admin',
+            'admin_password' => password_hash('admin', PASSWORD_DEFAULT),
+            'beian_number' => '',
+            'footer_text' => '',
+            'analytics_code' => ''
+        ]);
+
+        // 获取所有提交的设置
+        $newSettings = [
+            'site_name' => $_POST['site_name'] ?? '',
+            'site_description' => $_POST['site_description'] ?? '',
+            'author' => $_POST['author'] ?? '',
+            'default_keywords' => $_POST['default_keywords'] ?? '',
+            'contact_email' => $_POST['contact_email'] ?? '',
+            'wechat_id' => $_POST['wechat_id'] ?? '',
+            'qiniu_access_key' => $_POST['qiniu_access_key'] ?? '',
+            'qiniu_secret_key' => $_POST['qiniu_secret_key'] ?? '',
+            'qiniu_bucket' => $_POST['qiniu_bucket'] ?? '',
+            'qiniu_accelerate_domain' => $_POST['qiniu_accelerate_domain'] ?? '',
+            'qiniu_domain' => $_POST['qiniu_domain'] ?? '',
+            'admin_username' => $_POST['admin_username'] ?? $currentSettings['admin_username'],
+            'beian_number' => $_POST['beian_number'] ?? '',
+            'footer_text' => $_POST['footer_text'] ?? '',
+            'analytics_code' => $_POST['analytics_code'] ?? ''
+        ];
+
+        // 如果提供了新密码，则更新密码
+        if (!empty($_POST['admin_password'])) {
+            $newSettings['admin_password'] = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
+        } else {
+            $newSettings['admin_password'] = $currentSettings['admin_password'];
+        }
+
+        // 保存设置并返回结果
+        return FileManager::savePhpConfigFile($configPath, $newSettings);
     }
 
     public function index()
     {
+        // 获取当前页码
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $pageSize = 10; // 每页显示的博客数量
+        
+        // 获取博客列表数据
+        $result = $this->getBlogList($currentPage, $pageSize);
+        
+        // 设置数据到视图
+        $this->set('blogs', $result['items']);
+        $this->set('totalPages', $result['total_pages']);
+        $this->set('currentPage', $currentPage);
+        
         $this->setLayout('admin');
         $this->setTitle('管理员');
         $this->render('home/index');
@@ -84,7 +181,19 @@ class Admin extends Action
      * @param string $password 密码
      * @return bool 是否登录成功
      */
-    public function login($username, $password)
+    public function login()
+    {
+        $this->setTitle('管理员登录');
+        $this->render('home/login');
+    }
+
+    /**
+     * 管理员登录
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @return bool 是否登录成功
+     */
+    public function doLogin($username, $password)
     {
         $configPath = PROJECT_ROOT . '/' . $this->configPath;
         $adminConfig = FileManager::readPhpConfigFile($configPath, [
@@ -93,13 +202,13 @@ class Admin extends Action
         ]);
 
         if (
-            $username === $adminConfig['username'] &&
-            (password_verify($password, $adminConfig['password']) || $password === $adminConfig['password'])
+            $username === $adminConfig['admin_username'] &&
+            (password_verify($password, $adminConfig['admin_password']))
         ) {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_username'] = $username;
             $_SESSION['admin_last_login'] = date('Y-m-d H:i:s');
-            return true;
+            $this->redirect(Router::getUrl('admin/index'));
         }
 
         return false;
@@ -149,12 +258,29 @@ class Admin extends Action
      */
     public function getBlogList($page = 1, $pageSize = 20)
     {
-        $filters = [
-            'include_private' => true,
-            'include_independent' => true
+        // 获取所有博客数据
+        $caches = BlogsModel::getCaches();
+        $blogs = $caches['blogs'];
+        
+        // 按日期降序排序
+        uasort($blogs, function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
+        
+        // 计算分页
+        $totalItems = count($blogs);
+        $totalPages = ceil($totalItems / $pageSize);
+        $offset = ($page - 1) * $pageSize;
+        
+        // 获取当前页的博客
+        $items = array_slice($blogs, $offset, $pageSize, true);
+        
+        return [
+            'items' => $items,
+            'total_pages' => $totalPages,
+            'current_page' => $page,
+            'total_items' => $totalItems
         ];
-
-        return BlogsModel::getList($page, $pageSize, $filters);
     }
 
     /**
@@ -170,48 +296,62 @@ class Admin extends Action
     /**
      * 保存博客
      * @param array $data 博客数据
-     * @return string|bool 成功返回博客ID，失败返回false
+     * @return bool 是否保存成功
      */
     public function saveBlogs($data)
     {
-        $blog = isset($data['id']) ? BlogModel::findById($data['id']) : new BlogModel();
+        // 处理表单数据
+        $blogData = [
+            'title' => $data['blog_title'] ?? '',
+            'subtitle' => $data['blog_subtitle'] ?? '',
+            'content' => $data['blog_content'] ?? '',
+            'category' => $data['blog_category'] ?? '未分类',
+            'tags' => empty($data['blog_tags']) ? [] : array_map('trim', explode(',', $data['blog_tags'])),
+            'path' => $data['blog_path'] ?? null
+        ];
 
-        if ($blog) {
-            // 设置博客属性
-            $blog->setTitle($data['title'] ?? '');
-            $blog->setSubtitle($data['subtitle'] ?? '');
-            $blog->setContent($data['content'] ?? '');
-            $blog->setCategory($data['category'] ?? '未分类');
-            $blog->setTags($data['tags'] ?? []);
-            $blog->setCoverImage($data['cover_image'] ?? '');
-            $blog->setAuthor($data['author'] ?? '');
-
-            if (isset($data['is_private'])) {
-                $blog->setPrivate($data['is_private']);
-            }
-
-            if (isset($data['is_independent'])) {
-                $blog->setIndependent($data['is_independent']);
-            }
-
-            // 如果有创建时间，则设置
-            if (isset($data['date']) && !empty($data['date'])) {
-                $blog->setCreatedAt($data['date']);
-            }
-
-            return $blog->save() ? true : false;
+        // 如果有 path，从中提取 ID
+        $id = null;
+        if (!empty($blogData['path'])) {
+            $id = basename($blogData['path'], '.php');
         }
 
-        return false;
+        // 创建或获取博客对象
+        $blog = $id ? BlogModel::findById($id) : new BlogModel();
+        
+        if (!$blog) {
+            $blog = new BlogModel();
+        }
+
+        // 设置博客属性
+        $blog->setTitle($blogData['title']);
+        $blog->setSubtitle($blogData['subtitle']);
+        $blog->setContent($blogData['content']);
+        $blog->setCategory($blogData['category']);
+        $blog->setTags($blogData['tags']);
+
+        // 如果是已有博客，保持原有路径
+        if (!empty($blogData['path'])) {
+            $blog->setPath($blogData['path']);
+        }
+
+        // 保存博客并返回布尔值
+        $result = $blog->save();
+        return $result !== false;
     }
 
     /**
      * 删除博客
-     * @param string $id 博客ID
+     * @param string|array $id 博客ID
      * @return bool 是否删除成功
      */
     public function deleteBlog($id)
     {
+        // 如果ID是数组（来自URL路径参数），将其合并为字符串
+        if (is_array($id)) {
+            $id = implode('/', $id);
+        }
+        
         $blog = BlogModel::findById($id);
         if ($blog) {
             return $blog->delete();
@@ -305,10 +445,10 @@ class Admin extends Action
     }
 
     /**
-     * 重建博客缓存
-     * @return bool 是否重建成功
+     * 刷新缓存
+     * @return bool 是否刷新成功
      */
-    public function rebuildCache()
+    public function refreshCache()
     {
         return BlogsModel::rebuildCache();
     }
@@ -413,5 +553,14 @@ class Admin extends Action
     {
         $settingsPath = PROJECT_ROOT . '/app/blogs/settings.php';
         return FileManager::savePhpConfigFile($settingsPath, $settings);
+    }
+
+    public function systemInfo()
+    {
+        $systemInfo = $this->getSystemInfo();
+        $this->set('systemInfo', $systemInfo);
+        $this->setLayout('admin');
+        $this->setTitle('系统信息');
+        $this->render('home/system_info');
     }
 }
