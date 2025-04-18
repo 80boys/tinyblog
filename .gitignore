@@ -46,7 +46,7 @@ bin-release/
 # information for Eclipse / Flash Builder.
 
 # Exclude directories
-app/blogs/
+content/
 
 # Whitelist specific directories
 !app/
