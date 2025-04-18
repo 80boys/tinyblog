@@ -8,14 +8,13 @@ use App\Utils\FileManager;
 use App\Core\Action;
 use App\Core\Router;
 use App\Models\CategoryModel;
+use App\Models\SettingsModel;
 
 /**
  * 管理员Action
  */
 class Admin extends Action
 {
-    private $configPath = 'app/blogs/settings.php';
-
     public function category()
     {
         $this->set('categories', CategoryModel::getAll());
@@ -45,28 +44,7 @@ class Admin extends Action
 
     public function settings()
     {
-        // 获取当前配置
-        $configPath = PROJECT_ROOT . '/' . $this->configPath;
-        $settings = FileManager::readPhpConfigFile($configPath, [
-            'site_name' => '',
-            'site_description' => '',
-            'author' => '',
-            'default_keywords' => '',
-            'contact_email' => '',
-            'wechat_id' => '',
-            'qiniu_access_key' => '',
-            'qiniu_secret_key' => '',
-            'qiniu_bucket' => '',
-            'qiniu_accelerate_domain' => '',
-            'qiniu_domain' => '',
-            'admin_username' => 'admin',
-            'admin_password' => password_hash('admin', PASSWORD_DEFAULT),
-            'beian_number' => '',
-            'footer_text' => '',
-            'analytics_code' => ''
-        ]);
-
-        $this->set('settings', $settings);
+        $this->set('settings', SettingsModel::getAll());
         $this->setLayout('admin');
         $this->setTitle('网站设置');
         $this->render('home/settings');
@@ -82,28 +60,7 @@ class Admin extends Action
             return false;
         }
 
-        $configPath = PROJECT_ROOT . '/' . $this->configPath;
-        $currentSettings = FileManager::readPhpConfigFile($configPath, [
-            'site_name' => '',
-            'site_description' => '',
-            'author' => '',
-            'default_keywords' => '',
-            'contact_email' => '',
-            'wechat_id' => '',
-            'qiniu_access_key' => '',
-            'qiniu_secret_key' => '',
-            'qiniu_bucket' => '',
-            'qiniu_accelerate_domain' => '',
-            'qiniu_domain' => '',
-            'admin_username' => 'admin',
-            'admin_password' => password_hash('admin', PASSWORD_DEFAULT),
-            'beian_number' => '',
-            'footer_text' => '',
-            'analytics_code' => ''
-        ]);
-
-        // 获取所有提交的设置
-        $newSettings = [
+        $settings = [
             'site_name' => $_POST['site_name'] ?? '',
             'site_description' => $_POST['site_description'] ?? '',
             'author' => $_POST['author'] ?? '',
@@ -115,21 +72,14 @@ class Admin extends Action
             'qiniu_bucket' => $_POST['qiniu_bucket'] ?? '',
             'qiniu_accelerate_domain' => $_POST['qiniu_accelerate_domain'] ?? '',
             'qiniu_domain' => $_POST['qiniu_domain'] ?? '',
-            'admin_username' => $_POST['admin_username'] ?? $currentSettings['admin_username'],
+            'admin_username' => $_POST['admin_username'] ?? '',
+            'admin_password' => $_POST['admin_password'] ?? '',
             'beian_number' => $_POST['beian_number'] ?? '',
             'footer_text' => $_POST['footer_text'] ?? '',
             'analytics_code' => $_POST['analytics_code'] ?? ''
         ];
 
-        // 如果提供了新密码，则更新密码
-        if (!empty($_POST['admin_password'])) {
-            $newSettings['admin_password'] = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
-        } else {
-            $newSettings['admin_password'] = $currentSettings['admin_password'];
-        }
-
-        // 保存设置并返回结果
-        return FileManager::savePhpConfigFile($configPath, $newSettings);
+        return SettingsModel::save($settings);
     }
 
     public function index()
@@ -137,15 +87,15 @@ class Admin extends Action
         // 获取当前页码
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $pageSize = 10; // 每页显示的博客数量
-        
+
         // 获取博客列表数据
         $result = $this->getBlogList($currentPage, $pageSize);
-        
+
         // 设置数据到视图
         $this->set('blogs', $result['items']);
         $this->set('totalPages', $result['total_pages']);
         $this->set('currentPage', $currentPage);
-        
+
         $this->setLayout('admin');
         $this->setTitle('管理员');
         $this->render('home/index');
@@ -195,22 +145,13 @@ class Admin extends Action
      */
     public function doLogin($username, $password)
     {
-        $configPath = PROJECT_ROOT . '/' . $this->configPath;
-        $adminConfig = FileManager::readPhpConfigFile($configPath, [
-            'username' => 'admin',
-            'password' => password_hash('admin', PASSWORD_DEFAULT)
-        ]);
-
-        if (
-            $username === $adminConfig['admin_username'] &&
-            (password_verify($password, $adminConfig['admin_password']))
-        ) {
+        if (SettingsModel::validateAdminLogin($username, $password)) {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_username'] = $username;
             $_SESSION['admin_last_login'] = date('Y-m-d H:i:s');
             $this->redirect(Router::getUrl('admin/index'));
+            return true;
         }
-
         return false;
     }
 
@@ -236,18 +177,7 @@ class Admin extends Action
      */
     public function changePassword($oldPassword, $newPassword)
     {
-        $configPath = PROJECT_ROOT . '/' . $this->configPath;
-        $adminConfig = FileManager::readPhpConfigFile($configPath, [
-            'username' => 'admin',
-            'password' => password_hash('admin', PASSWORD_DEFAULT)
-        ]);
-
-        if (password_verify($oldPassword, $adminConfig['password']) || $oldPassword === $adminConfig['password']) {
-            $adminConfig['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
-            return FileManager::savePhpConfigFile($configPath, $adminConfig);
-        }
-
-        return false;
+        return SettingsModel::changePassword($oldPassword, $newPassword);
     }
 
     /**
@@ -261,20 +191,20 @@ class Admin extends Action
         // 获取所有博客数据
         $caches = BlogsModel::getCaches();
         $blogs = $caches['blogs'];
-        
+
         // 按日期降序排序
-        uasort($blogs, function($a, $b) {
+        uasort($blogs, function ($a, $b) {
             return strtotime($b['date']) - strtotime($a['date']);
         });
-        
+
         // 计算分页
         $totalItems = count($blogs);
         $totalPages = ceil($totalItems / $pageSize);
         $offset = ($page - 1) * $pageSize;
-        
+
         // 获取当前页的博客
         $items = array_slice($blogs, $offset, $pageSize, true);
-        
+
         return [
             'items' => $items,
             'total_pages' => $totalPages,
@@ -318,7 +248,7 @@ class Admin extends Action
 
         // 创建或获取博客对象
         $blog = $id ? BlogModel::findById($id) : new BlogModel();
-        
+
         if (!$blog) {
             $blog = new BlogModel();
         }
@@ -351,7 +281,7 @@ class Admin extends Action
         if (is_array($id)) {
             $id = implode('/', $id);
         }
-        
+
         $blog = BlogModel::findById($id);
         if ($blog) {
             return $blog->delete();
@@ -439,8 +369,8 @@ class Admin extends Action
             'last_update' => $caches['last_update'],
             'php_version' => PHP_VERSION,
             'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
-            'storage_path' => PROJECT_ROOT . '/app/blogs',
-            'cache_file' => PROJECT_ROOT . '/app/blogs/caches.php'
+            'storage_path' => PROJECT_ROOT . '/content',
+            'cache_file' => PROJECT_ROOT . '/content/caches.php'
         ];
     }
 
@@ -533,7 +463,7 @@ class Admin extends Action
      */
     public function getBlogSettings()
     {
-        $settingsPath = PROJECT_ROOT . '/app/blogs/settings.php';
+        $settingsPath = PROJECT_ROOT . '/content/settings.php';
         return FileManager::readPhpConfigFile($settingsPath, [
             'site_title' => '我的博客',
             'site_description' => '这是一个简单的博客系统',
@@ -551,7 +481,7 @@ class Admin extends Action
      */
     public function saveBlogSettings($settings)
     {
-        $settingsPath = PROJECT_ROOT . '/app/blogs/settings.php';
+        $settingsPath = PROJECT_ROOT . '/content/settings.php';
         return FileManager::savePhpConfigFile($settingsPath, $settings);
     }
 

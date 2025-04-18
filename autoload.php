@@ -2,9 +2,6 @@
 
 session_start();
 
-// 引入通用函数库
-require_once __DIR__ . '/app/utils/functions.php';
-
 if (!function_exists('getProjectRoot')) {
     function getProjectRoot()
     {
@@ -70,7 +67,7 @@ if (!function_exists('autoload')) {
             'Qiniu\\' => __DIR__ . '/app/utils/Qiniu/',
             'App\\Utils\\' => __DIR__ . '/app/utils/',
             'App\\Core\\' => __DIR__ . '/app/core/',
-            'App\\Controllers\\' => __DIR__ . '/app/controllers/',
+            'App\\Actions\\' => __DIR__ . '/app/actions/',
             'App\\Models\\' => __DIR__ . '/app/models/'
         ];
 
@@ -126,6 +123,5 @@ header('Content-Type: text/html; charset=UTF-8');
 define('PROJECT_ROOT', getProjectRoot());
 // URL基础路径, 用于生成URL 地址是相对项目根目录
 define('BASE_PATH', getBasePath());
-define('ACCELERATE_DOMAIN', getBlogsConfig()['qiniu_accelerate_domain']);
 // 是否开启调试模式
 define('DEBUG', true);

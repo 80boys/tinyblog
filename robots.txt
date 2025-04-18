@@ -1,7 +1,9 @@
 User-agent: *
-Allow: /
-Allow: /app/blogs/
-Allow: /app/block/
-Disallow: /app/end/
-Disallow: /*.json$
+Allow: /content/
+Disallow: /app/
+Disallow: /vendor/
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /composer.json
+Disallow: /composer.lock
 Sitemap: /sitemap.xml 

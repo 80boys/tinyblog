@@ -28,7 +28,7 @@ class ParsedownExtra extends Parsedown
     function __construct()
     {
         if (version_compare(parent::version, '1.7.1') < 0) {
-            throw new Exception('ParsedownExtra requires a later version of Parsedown');
+            throw new \Exception('ParsedownExtra requires a later version of Parsedown');
         }
 
         $this->BlockTypes[':'][] = 'DefinitionList';
@@ -599,7 +599,7 @@ class ParsedownExtra extends Parsedown
             foreach ($DOMDocument->documentElement->childNodes as $Node) {
                 $nodeMarkup = $DOMDocument->saveHTML($Node);
 
-                if ($Node instanceof DOMElement and ! in_array($Node->nodeName, $this->textLevelElements)) {
+                if ($Node instanceof \DOMElement and ! in_array($Node->nodeName, $this->textLevelElements)) {
                     $elementText .= $this->processTag($nodeMarkup);
                 } else {
                     $elementText .= $nodeMarkup;

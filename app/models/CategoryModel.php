@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Utils\FileManager;
@@ -6,8 +7,8 @@ use App\Utils\FileManager;
 class CategoryModel
 {
     // 存储路径配置
-    private static $categoriesFile = 'app/blogs/categories.php';
-    private static $cachePath = 'app/blogs/caches.php';
+    private static $categoriesFile = 'content/categories.php';
+    private static $cachePath = 'content/caches.php';
 
     /**
      * 获取所有分类列表
@@ -19,7 +20,7 @@ class CategoryModel
         if (!file_exists($categoriesFile)) {
             return [];
         }
-        
+
         $categories = require $categoriesFile;
         return is_array($categories) ? $categories : [];
     }
@@ -51,7 +52,7 @@ class CategoryModel
         }
 
         $categories[] = $name;
-        
+
         // 保存到分类文件
         if (!self::saveCategories($categories)) {
             return false;
@@ -91,7 +92,7 @@ class CategoryModel
         if ($key !== false) {
             unset($categories[$key]);
             $categories = array_values($categories);
-            
+
             // 保存到分类文件
             if (!self::saveCategories($categories)) {
                 return false;
@@ -133,7 +134,7 @@ class CategoryModel
         $key = array_search($oldName, $categories);
         if ($key !== false) {
             $categories[$key] = $newName;
-            
+
             // 保存到分类文件
             if (!self::saveCategories($categories)) {
                 return false;
@@ -189,19 +190,19 @@ class CategoryModel
     private static function updateCategoryCache($categoryName)
     {
         $caches = BlogsModel::getCaches();
-        
+
         // 如果分类不存在于缓存中，添加它
         if (!isset($caches['categories'][$categoryName])) {
             $caches['categories'][$categoryName] = [
                 'count' => 0,
                 'blogs' => []
             ];
-            
+
             // 保存缓存
             $cachePath = PROJECT_ROOT . '/' . self::$cachePath;
             return FileManager::savePhpConfigFile($cachePath, $caches);
         }
-        
+
         return true;
     }
-} 
+}

@@ -17,13 +17,10 @@
             ?>
         </section>
         <section class="blog-index-contact">
-            <?php
-            $settings = getBlogsConfig();
-            ?>
             <h2>联系我们</h2>
             <p>如果您有任何问题或建议，请通过以下方式联系我们：</p>
-            <p>邮箱：<?php echo $settings['contact_email']; ?></p>
-            <p>微信：<?php echo $settings['wechat_id']; ?></p>
+            <p>邮箱：<?= $contact_email ?></p>
+            <p>微信：<?= $wechat_id ?></p>
         </section>
     </div>
 </main>

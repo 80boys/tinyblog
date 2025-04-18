@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Utils\FileManager;
@@ -22,8 +23,8 @@ class BlogModel
     private $is_independent; // 是否独立页面
 
     // 存储路径配置
-    private static $storagePath = 'app/blogs/';
-    private static $cachePath = 'app/blogs/caches.php';
+    private static $storagePath = 'content/';
+    private static $cachePath = 'content/caches.php';
 
     // 构造函数
     public function __construct($data = [])
@@ -46,34 +47,112 @@ class BlogModel
     }
 
     // Getter方法
-    public function getId() { return $this->id; }
-    public function getTitle() { return $this->title; }
-    public function getSubtitle() { return $this->subtitle; }
-    public function getContent() { return $this->content; }
-    public function getAuthor() { return $this->author; }
-    public function getCategory() { return $this->category; }
-    public function getTags() { return $this->tags; }
-    public function getCoverImage() { return $this->cover_image; }
-    public function getCreatedAt() { return $this->created_at; }
-    public function getUpdatedAt() { return $this->updated_at; }
-    public function getPath() { return $this->path; }
-    public function isPrivate() { return $this->is_private; }
-    public function isIndependent() { return $this->is_independent; }
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    public function getSubtitle()
+    {
+        return $this->subtitle;
+    }
+    public function getContent()
+    {
+        return $this->content;
+    }
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    public function getTags()
+    {
+        return $this->tags;
+    }
+    public function getCoverImage()
+    {
+        return $this->cover_image;
+    }
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+    public function getPath()
+    {
+        return $this->path;
+    }
+    public function isPrivate()
+    {
+        return $this->is_private;
+    }
+    public function isIndependent()
+    {
+        return $this->is_independent;
+    }
 
     // Setter方法
-    public function setId($id) { $this->id = $id; }
-    public function setTitle($title) { $this->title = $title; }
-    public function setSubtitle($subtitle) { $this->subtitle = $subtitle; }
-    public function setContent($content) { $this->content = $content; }
-    public function setAuthor($author) { $this->author = $author; }
-    public function setCategory($category) { $this->category = $category; }
-    public function setTags($tags) { $this->tags = $tags; }
-    public function setCoverImage($cover_image) { $this->cover_image = $cover_image; }
-    public function setCreatedAt($created_at) { $this->created_at = $created_at; }
-    public function setUpdatedAt($updated_at) { $this->updated_at = $updated_at; }
-    public function setPath($path) { $this->path = $path; }
-    public function setPrivate($is_private) { $this->is_private = $is_private; }
-    public function setIndependent($is_independent) { $this->is_independent = $is_independent; }
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+    public function setSubtitle($subtitle)
+    {
+        $this->subtitle = $subtitle;
+    }
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+    public function setCoverImage($cover_image)
+    {
+        $this->cover_image = $cover_image;
+    }
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
+    }
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+    public function setPrivate($is_private)
+    {
+        $this->is_private = $is_private;
+    }
+    public function setIndependent($is_independent)
+    {
+        $this->is_independent = $is_independent;
+    }
 
     // 从ID加载博客
     public static function findById($id, $array = false)
@@ -86,15 +165,17 @@ class BlogModel
         } else {
             $yearMonth = '';
         }
-        
+
         // 读取缓存
         $caches = self::getCaches();
-        
+
         // 遍历缓存查找匹配的博客
         foreach ($caches['blogs'] as $path => $blogData) {
             // 检查完整路径或仅ID是否匹配
-            if (basename($path, '.php') == $cleanId || 
-                ($yearMonth && strpos($path, $yearMonth) === 0 && basename($path, '.php') == $cleanId)) {
+            if (
+                basename($path, '.php') == $cleanId ||
+                ($yearMonth && strpos($path, $yearMonth) === 0 && basename($path, '.php') == $cleanId)
+            ) {
                 // 找到匹配的博客，读取完整内容
                 $fullPath = PROJECT_ROOT . '/' . self::$storagePath . $path;
                 $fullData = FileManager::readBlogFile($fullPath);
@@ -118,7 +199,7 @@ class BlogModel
             $data['path'] = $path;
             return new self($data);
         }
-        
+
         return null;
     }
 
@@ -130,12 +211,12 @@ class BlogModel
             if (!$this->id) {
                 $this->id = uniqid();
             }
-            
+
             $this->updated_at = date('Y-m-d H:i:s');
             if (!$this->created_at) {
                 $this->created_at = $this->updated_at;
             }
-            
+
             // 准备要保存的数据
             $data = [
                 'title' => $this->title,
@@ -148,16 +229,16 @@ class BlogModel
                 'date' => $this->created_at,
                 'updated_at' => $this->updated_at
             ];
-            
+
             // 添加额外属性
             if ($this->is_private) {
                 $data['is_private'] = true;
             }
-            
+
             if ($this->is_independent) {
                 $data['is_independent'] = true;
             }
-            
+
             // 准备文件路径
             if (!$this->path) {
                 // 使用年月目录结构
@@ -165,9 +246,9 @@ class BlogModel
                 $month = date('m');
                 $this->path = $year . '/' . $month . '/' . $this->id . '.php';
             }
-            
+
             $filePath = PROJECT_ROOT . '/' . self::$storagePath . $this->path;
-            
+
             // 确保目录存在
             $dir = dirname($filePath);
             if (!is_dir($dir)) {
@@ -176,22 +257,22 @@ class BlogModel
                     return false;
                 }
             }
-            
+
             // 检查目录是否可写
             if (!is_writable($dir)) {
                 error_log("目录不可写: " . $dir);
                 return false;
             }
-            
+
             // 保存文件
             if (!FileManager::saveBlogFile($filePath, $data)) {
                 error_log("保存博客文件失败: " . $filePath);
                 return false;
             }
-            
+
             // 更新缓存
             self::updateCache($this->path, $data);
-            
+
             return $this->id;
         } catch (\Exception $e) {
             error_log("保存博客时发生错误: " . $e->getMessage());
@@ -210,7 +291,7 @@ class BlogModel
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -226,7 +307,7 @@ class BlogModel
             'tags' => [],
             'blogs' => []
         ];
-        
+
         return FileManager::readPhpConfigFile($cachePath, $defaultCache);
     }
 
@@ -234,18 +315,18 @@ class BlogModel
     private static function updateCache($path, $blogData)
     {
         $cachePath = PROJECT_ROOT . '/' . self::$cachePath;
-        
+
         // 读取现有缓存
         $caches = self::getCaches();
-        
+
         // 更新最后更新时间
         $caches['last_update'] = date('Y-m-d H:i:s');
-        
+
         // 如果博客已存在于缓存中，先移除旧数据
         if (isset($caches['blogs'][$path])) {
             $oldCategory = $caches['blogs'][$path]['category'];
             $oldTags = $caches['blogs'][$path]['tags'];
-            
+
             // 从旧分类移除
             if (isset($caches['categories'][$oldCategory])) {
                 $index = array_search($path, $caches['categories'][$oldCategory]['blogs']);
@@ -255,7 +336,7 @@ class BlogModel
                     $caches['categories'][$oldCategory]['count'] = count($caches['categories'][$oldCategory]['blogs']);
                 }
             }
-            
+
             // 从旧标签移除
             foreach ($oldTags as $tag) {
                 if (isset($caches['tags'][$tag])) {
@@ -268,7 +349,7 @@ class BlogModel
                 }
             }
         }
-        
+
         // 更新博客索引
         $caches['blogs'][$path] = [
             'title' => $blogData['title'],
@@ -278,38 +359,38 @@ class BlogModel
             'date' => $blogData['date'],
             'path' => $path
         ];
-        
+
         // 添加额外属性
         if (isset($blogData['is_independent']) && $blogData['is_independent'] === true) {
             $caches['blogs'][$path]['is_independent'] = true;
         }
-        
+
         if (isset($blogData['is_private']) && $blogData['is_private'] === true) {
             $caches['blogs'][$path]['is_private'] = true;
         }
-        
+
         // 更新分类索引
         if (!isset($caches['categories'][$blogData['category']])) {
             $caches['categories'][$blogData['category']] = ['count' => 0, 'blogs' => []];
         }
         $caches['categories'][$blogData['category']]['blogs'][] = $path;
         $caches['categories'][$blogData['category']]['count'] = count(array_unique($caches['categories'][$blogData['category']]['blogs']));
-        
+
         // 更新标签索引
         foreach ($blogData['tags'] as $tag) {
             if (empty($tag)) continue;
-            
+
             if (!isset($caches['tags'][$tag])) {
                 $caches['tags'][$tag] = ['count' => 0, 'blogs' => []];
             }
             $caches['tags'][$tag]['blogs'][] = $path;
             $caches['tags'][$tag]['count'] = count(array_unique($caches['tags'][$tag]['blogs']));
         }
-        
+
         // 更新归档索引
         $year = date('Y', strtotime($blogData['date']));
         $month = date('m', strtotime($blogData['date']));
-        
+
         if (!isset($caches['archives'][$year])) {
             $caches['archives'][$year] = [];
         }
@@ -318,32 +399,32 @@ class BlogModel
         }
         $caches['archives'][$year][$month]['blogs'][] = $path;
         $caches['archives'][$year][$month]['count'] = count(array_unique($caches['archives'][$year][$month]['blogs']));
-        
+
         // 更新博客总数
         $caches['total_blogs'] = count($caches['blogs']);
-        
+
         // 保存缓存
         FileManager::savePhpConfigFile($cachePath, $caches);
     }
-    
+
     // 从缓存中移除博客
     private static function removeBlogFromCache($path)
     {
         $cachePath = PROJECT_ROOT . '/' . self::$cachePath;
-        
+
         // 读取现有缓存
         $caches = self::getCaches();
-        
+
         // 检查博客是否在缓存中
         if (!isset($caches['blogs'][$path])) {
             return false;
         }
-        
+
         $blogData = $caches['blogs'][$path];
-        
+
         // 从blogs索引中移除博客
         unset($caches['blogs'][$path]);
-        
+
         // 从categories索引中移除博客
         $category = $blogData['category'];
         if (isset($caches['categories'][$category])) {
@@ -354,7 +435,7 @@ class BlogModel
                 $caches['categories'][$category]['count'] = count($caches['categories'][$category]['blogs']);
             }
         }
-        
+
         // 从tags索引中移除博客
         foreach ($blogData['tags'] as $tag) {
             if (isset($caches['tags'][$tag])) {
@@ -366,12 +447,12 @@ class BlogModel
                 }
             }
         }
-        
+
         // 从archives索引中移除博客
         $date = strtotime($blogData['date']);
         $year = date('Y', $date);
         $month = date('m', $date);
-        
+
         if (isset($caches['archives'][$year][$month])) {
             $index = array_search($path, $caches['archives'][$year][$month]['blogs']);
             if ($index !== false) {
@@ -380,17 +461,17 @@ class BlogModel
                 $caches['archives'][$year][$month]['count'] = count($caches['archives'][$year][$month]['blogs']);
             }
         }
-        
+
         // 更新博客总数
         $caches['total_blogs'] = count($caches['blogs']);
         $caches['last_update'] = date('Y-m-d H:i:s');
-        
+
         // 保存缓存
         FileManager::savePhpConfigFile($cachePath, $caches);
-        
+
         return true;
     }
-    
+
     // 获取博客简介（摘要）
     public function getExcerpt($length = 200)
     {
@@ -400,13 +481,13 @@ class BlogModel
         }
         return mb_substr($content, 0, $length) . '...';
     }
-    
+
     // 获取博客URL
     public function getUrl()
     {
         return Router::getUrl('blog/index', ['id' => $this->id]);
     }
-    
+
     // 转换为数组
     public function toArray()
     {

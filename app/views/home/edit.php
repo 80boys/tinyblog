@@ -56,11 +56,10 @@
         </form>
     </article>
 </main>
-<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/simplemde/simplemde.min.js"></script>
-<script src="<?php echo ACCELERATE_DOMAIN . BASE_PATH; ?>/app/html/js/qiniu/qiniu.min.js"></script>
+<script src="<?= $this->asset('/app/html/js/simplemde/simplemde.min.js') ?>"></script>
+<script src="<?= $this->asset('/app/html/js/qiniu/qiniu.min.js') ?>"></script>
 <script>
-    const bucketDoman = '<?php $settings = getBlogsConfig();
-                            echo $settings["qiniu_domain"];  ?>';
+    const bucketDoman = '<?= $bucketDoman ?>';
     async function getQiniuToken() {
         const response = await fetch('/app/end/getQiniuToken.html');
         const data = await response.json();

@@ -39,9 +39,6 @@ body,html {
         padding: 15px;
         border-radius: 0;
     }
-    body, html {
-        padding-top: 25px; /* 减小固定导航栏的空间 */
-    }
 }
 /* 首先设置html元素的背景色，这是最早被渲染的 */
 html[data-theme="dark"] {

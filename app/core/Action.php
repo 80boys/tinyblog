@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Core;
+
+use App\Models\SettingsModel;
 
 /**
  * Action基类
@@ -7,19 +10,19 @@ namespace App\Core;
  * 所有控制器动作的基类，提供共享功能
  */
 abstract class Action
-{    
+{
     /**
      * 布局名称
      * @var string|null
      */
     protected $layout = null;
-    
+
     /**
      * 页面标题
      * @var string
      */
     protected $title = '';
-    
+
     /**
      * 视图变量，在控制器内部暂存
      * @var array
@@ -31,16 +34,16 @@ abstract class Action
      * @var array
      */
     protected $renderData = [];
-    
+
     /**
      * 构造函数
      */
     public function __construct()
-    {   
+    {
         // 初始化Action
         $this->initialize();
     }
-    
+
     /**
      * 初始化方法，可由子类重写
      */
@@ -48,7 +51,7 @@ abstract class Action
     {
         // 子类可以重写此方法来进行初始化
     }
-    
+
     /**
      * 设置视图变量
      * 
@@ -66,10 +69,10 @@ abstract class Action
         } else {
             $this->viewData[$name] = $value;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * 获取视图变量
      * 
@@ -81,7 +84,7 @@ abstract class Action
     {
         return isset($this->viewData[$name]) ? $this->viewData[$name] : $default;
     }
-    
+
     /**
      * 设置布局
      * 
@@ -93,7 +96,7 @@ abstract class Action
         $this->layout = $layout;
         return $this;
     }
-    
+
     /**
      * 设置页面标题
      * 
@@ -105,7 +108,34 @@ abstract class Action
         $this->title = $title;
         return $this;
     }
-    
+
+    /**
+     * 获取站点配置
+     * @param string|null $key 配置键名，为null时返回所有配置
+     * @param mixed $default 默认值
+     * @return mixed 配置值
+     */
+    protected function getSetting($key = null, $default = null)
+    {
+        return $key === null ? SettingsModel::getAll() : SettingsModel::get($key, $default);
+    }
+
+    /**
+     * 注入通用的视图数据
+     */
+    protected function injectCommonViewData()
+    {
+        // 注入站点基本信息
+        $this->set('site_name', $this->getSetting('site_name', '我的博客'));
+        $this->set('site_description', $this->getSetting('site_description'));
+        $this->set('author', $this->getSetting('author'));
+        $this->set('footer_text', $this->getSetting('footer_text'));
+        $this->set('beian_number', $this->getSetting('beian_number'));
+        $this->set('analytics_code', $this->getSetting('analytics_code'));
+        $this->set('contact_email', $this->getSetting('contact_email'));
+        $this->set('wechat_id', $this->getSetting('wechat_id'));
+    }
+
     /**
      * 渲染视图
      * 
@@ -115,9 +145,12 @@ abstract class Action
      */
     protected function render($view, $data = [])
     {
+        // 注入通用数据
+        $this->injectCommonViewData();
+
         // 合并视图变量
         $data = array_merge($this->viewData, $data);
-        
+
         // 返回包含视图信息的数组，由调度器处理
         $this->renderData =  [
             'view' => $view,
@@ -127,7 +160,7 @@ abstract class Action
         ];
         return $this->renderData;
     }
-    
+
     /**
      * 重定向到指定URL
      * 
@@ -139,7 +172,7 @@ abstract class Action
         header("Location: {$url}");
         exit;
     }
-    
+
     /**
      * 返回JSON响应
      * 
@@ -151,14 +184,14 @@ abstract class Action
     {
         // 设置HTTP状态码
         http_response_code($statusCode);
-        
+
         // 设置Content-Type头
         header('Content-Type: application/json');
-        
+
         // 返回JSON编码后的数据
         return json_encode($data);
     }
-    
+
     /**
      * 获取所有视图变量
      * 
@@ -178,4 +211,4 @@ abstract class Action
     {
         return $this->renderData;
     }
-} 
+}
