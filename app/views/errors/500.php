@@ -19,7 +19,6 @@
             padding: 30px;
             background: #f8f8f8;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
             font-size: 48px;

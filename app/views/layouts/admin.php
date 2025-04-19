@@ -2,8 +2,8 @@
 <html lang="zh-CN" data-theme="<?= $this->getUserTheme() ?>">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="<?= $this->asset('/app/favicon.ico') ?>">
-    <link rel="Bookmark" href="<?= $this->asset('/app/favicon.ico') ?>">
+    <link rel="shortcut icon" href="<?= $this->asset('/favicon.ico') ?>">
+    <link rel="Bookmark" href="<?= $this->asset('/favicon.ico') ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->getTitle() ?></title>
     <!-- 编辑器样式 -->

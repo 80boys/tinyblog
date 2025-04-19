@@ -24,22 +24,22 @@ class SettingsModel
         }
 
         self::$cache = FileManager::readPhpConfigFile(PROJECT_ROOT . '/' . self::$settingsPath, [
-            'site_name' => '',
-            'site_description' => '',
-            'author' => '',
-            'default_keywords' => '',
-            'contact_email' => '',
-            'wechat_id' => '',
-            'qiniu_access_key' => '',
-            'qiniu_secret_key' => '',
-            'qiniu_bucket' => '',
-            'qiniu_accelerate_domain' => '',
-            'qiniu_domain' => '',
+            'site_name' => 'site_name',
+            'site_description' => 'site_description',
+            'author' => 'author',
+            'default_keywords' => 'default_keywords',
+            'contact_email' => 'contact_email',
+            'wechat_id' => 'wechat_id',
+            'qiniu_access_key' => 'qiniu_access_key',
+            'qiniu_secret_key' => 'qiniu_secret_key',
+            'qiniu_bucket' => 'qiniu_bucket',
+            'qiniu_accelerate_domain' => 'qiniu_accelerate_domain',
+            'qiniu_domain' => 'qiniu_domain',
             'admin_username' => 'admin',
             'admin_password' => password_hash('admin', PASSWORD_DEFAULT),
-            'beian_number' => '',
-            'footer_text' => '',
-            'analytics_code' => ''
+            'beian_number' => 'beian_number',
+            'footer_text' => 'footer_text',
+            'analytics_code' => 'analytics_code'
         ]);
 
         return self::$cache;

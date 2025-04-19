@@ -1,10 +1,5 @@
-<link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin.css') ?>">
-<link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin-theme.css') ?>">
+<link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin/admin.css') ?>">
 <div class="main-content">
-    <h2>博客管理</h2>
-    <div class="admin-actions">
-        <a href="<?= $this->getUrl('admin/edit') ?>" class="btn btn-primary">添加新博客</a>
-    </div>
     <section class="blog-posts">
         <?php
         if (!empty($blogs)) {

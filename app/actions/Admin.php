@@ -134,6 +134,7 @@ class Admin extends Action
     public function login()
     {
         $this->setTitle('管理员登录');
+        $this->setLayout('common');
         $this->render('home/login');
     }
 
@@ -166,7 +167,7 @@ class Admin extends Action
         unset($_SESSION['admin_last_login']);
 
         session_destroy();
-        return true;
+        $this->redirect(Router::getUrl('admin/login'));
     }
 
     /**
@@ -492,5 +493,40 @@ class Admin extends Action
         $this->setLayout('admin');
         $this->setTitle('系统信息');
         $this->render('home/system_info');
+    }
+
+    /**
+     * 获取七牛云上传token
+     * @return array 包含token的JSON响应
+     */
+    public function getQiniuToken()
+    {
+        // 获取七牛云配置
+        $settings = SettingsModel::getAll();
+        $accessKey = $settings['qiniu_access_key'];
+        $secretKey = $settings['qiniu_secret_key'];
+        $bucket = $settings['qiniu_bucket'];
+
+        // 如果配置不完整，返回错误
+        if (empty($accessKey) || empty($secretKey) || empty($bucket)) {
+            header('Content-Type: application/json');
+            return $this->json(['error' => '七牛云配置不完整']);
+        }
+
+        // 构建上传策略
+        $policy = array(
+            'scope' => $bucket,
+            'deadline' => time() + 3600, // token有效期为1小时
+        );
+
+        // 生成上传token
+        $encodedPolicy = base64_encode(json_encode($policy));
+        $sign = hash_hmac('sha1', $encodedPolicy, $secretKey, true);
+        $encodedSign = base64_encode($sign);
+        $token = $accessKey . ':' . $encodedSign . ':' . $encodedPolicy;
+
+        // 返回JSON响应
+        header('Content-Type: application/json');
+        return $this->json(['token' => $token]);
     }
 }

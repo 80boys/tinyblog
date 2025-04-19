@@ -1,0 +1,201 @@
+.admin-login-page {
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s ease;
+}
+
+.admin-login-page .login-wrapper {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.admin-login-page .login-container {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 30px 20px;
+    transition: background-color 0.5s ease;
+}
+
+.admin-login-page .login-form {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.admin-login-page .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.admin-login-page .login-header h1 {
+    color: var(--text-primary);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    transition: color 0.5s ease;
+}
+
+.admin-login-page .form-group {
+    margin-bottom: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-login-page .form-group input[type="text"],
+.admin-login-page .form-group input[type="password"] {
+    width: 100%;
+    max-width: 280px;
+    height: 44px;
+    padding: 0 16px;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.admin-login-page .form-group input[type="text"]:focus,
+.admin-login-page .form-group input[type="password"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.admin-login-page .form-group input::placeholder {
+    color: var(--search-placeholder);
+    font-size: 15px;
+}
+
+/* 记住我样式 */
+.admin-login-page .remember-me {
+    margin: 24px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-login-page .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.admin-login-page .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0 8px 0 0;
+    border-radius: 4px;
+}
+
+.admin-login-page .checkbox-label span {
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: color 0.5s ease;
+}
+
+.admin-login-page .login-btn {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    height: 44px;
+    margin: 24px auto 0;
+    background: var(--search-button-bg, #3498db);
+    color: var(--text-navbar-hover, #ffffff);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-login-page .login-btn:hover {
+    opacity: 0.9;
+}
+
+.admin-login-page .login-btn:active {
+    transform: translateY(1px);
+}
+
+/* 返回首页链接样式 */
+.admin-login-page .text-center {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-login-page .back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.5s ease;
+}
+
+.admin-login-page .back-link:hover {
+    color: var(--text-navbar-hover, #3498db);
+}
+
+/* 暗色主题特定调整 */
+[data-theme="dark"] .admin-login-page .login-container {
+    background: #1e1e1e;
+}
+
+[data-theme="dark"] .admin-login-page .form-group input[type="text"],
+[data-theme="dark"] .admin-login-page .form-group input[type="password"] {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .admin-login-page .form-group input::placeholder {
+    color: #888;
+}
+
+[data-theme="dark"] .admin-login-page .login-btn {
+    background: var(--search-button-bg, #2196F3);
+}
+
+@media screen and (max-width: 480px) {
+    .admin-login-page .login-container {
+        padding: 24px 16px;
+    }
+    
+    .admin-login-page .login-header {
+        margin-bottom: 24px;
+    }
+    
+    .admin-login-page .login-header h1 {
+        font-size: 20px;
+    }
+    
+    .admin-login-page .form-group {
+        margin-bottom: 16px;
+    }
+    
+    .admin-login-page .form-group input[type="text"],
+    .admin-login-page .form-group input[type="password"] {
+        height: 40px;
+        font-size: 15px;
+    }
+    
+    .admin-login-page .form-group input::placeholder {
+        font-size: 14px;
+    }
+    
+    .admin-login-page .remember-me {
+        margin: 20px 0;
+    }
+    
+    .admin-login-page .login-btn {
+        height: 40px;
+        margin-top: 20px;
+        font-size: 15px;
+    }
+} 

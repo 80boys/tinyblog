@@ -3,6 +3,8 @@ namespace App\Actions;
 use App\Models\BlogsModel;
 use App\Models\BlogModel;
 use App\Core\Action;
+use App\Models\SettingsModel;
+
 
 /**
  * 博客Action
@@ -10,9 +12,38 @@ use App\Core\Action;
 class Blog extends Action
 {
 
-    public function __construct()
+    public function initialize()
     {
-        
+        // 注入通用数据
+        $this->injectCommonViewData();
+    }
+
+    /**
+     * 注入通用的视图数据
+     */
+    protected function injectCommonViewData()
+    {
+        // 注入站点基本信息
+        $settings = $this->getSetting();
+        $this->set('site_name', $settings['site_name']);
+        $this->set('site_description', $settings['site_description']);
+        $this->set('author', $settings['author']);
+        $this->set('footer_text', $settings['footer_text']);
+        $this->set('beian_number', $settings['beian_number']);
+        $this->set('analytics_code', $settings['analytics_code']);
+        $this->set('contact_email', $settings['contact_email']);
+        $this->set('wechat_id', $settings['wechat_id']);
+    }
+
+    /**
+     * 获取站点配置
+     * @param string|null $key 配置键名，为null时返回所有配置
+     * @param mixed $default 默认值
+     * @return mixed 配置值
+     */
+    protected function getSetting($key = null, $default = null)
+    {
+        return $key === null ? SettingsModel::getAll() : SettingsModel::get($key, $default);
     }
     
     /**
@@ -58,6 +89,13 @@ class Blog extends Action
         }
         
         $blog = BlogModel::findById($id, true);
+        // 如果找到博客,将 Markdown 内容转换为 HTML
+        if ($blog && isset($blog['content'])) {
+            $parsedown = new \App\Utils\ParsedownExtra();
+            $parsedown->setSafeMode(true); // 启用安全模式
+            $blog['content'] = $parsedown->text($blog['content']);
+        }
+
         $this->render('blog/detail', ['blog' => $blog]);
     }
 

@@ -92,16 +92,6 @@ if (!function_exists('autoload')) {
     spl_autoload_register('autoload');
 }
 
-if (!function_exists('showMessage')) {
-    function showMessage($message, $url = '', $error = '')
-    {
-        extract(compact('message', 'url', 'error'));
-        ob_start();
-        include_once __DIR__ . '/app/views/message.php';
-        $content = ob_get_clean();
-        echo $content;
-    }
-}
 
 if (!function_exists('dump')) {
     function dump()

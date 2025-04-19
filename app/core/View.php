@@ -28,12 +28,6 @@ class View
     private $layout = null;
 
     /**
-     * 页面标题
-     * @var string
-     */
-    private $title = '';
-
-    /**
      * 构造函数
      * 
      * @param string|null $viewsDir 视图目录
@@ -97,7 +91,6 @@ class View
     public function asset($path)
     {
         return  $path;
-        //return  $this->get('baseUrl') . '/' . $path;
     }
 
     /**
@@ -181,8 +174,7 @@ class View
      */
     public function setTitle($title)
     {
-        $this->title = $title;
-        return $this;
+        $this->viewData['title'] = $title;
     }
 
     /**
@@ -192,7 +184,7 @@ class View
      */
     public function getTitle()
     {
-        return $this->title;
+        return $this->viewData['title'] ?? '默认页面标题';
     }
 
     /** 
@@ -236,11 +228,6 @@ class View
     {
         // 合并视图变量
         $this->viewData = $data = array_merge($this->viewData, $data);
-
-        // 添加标题
-        if (!isset($data['title']) && !empty($this->title)) {
-            $data['title'] = $this->title;
-        }
 
         // 渲染视图内容
         $content = $this->renderFile($view, $data);
@@ -362,7 +349,7 @@ class View
         if ($redirectUrl === null) {
             $redirectUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
         }
-
+        $this->setLayout('common');
         return $this->render('message', [
             'title' => $title,
             'text' => $text,

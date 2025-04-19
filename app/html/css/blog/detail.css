@@ -1,0 +1,389 @@
+/* 博客详情页容器 */
+.blog-detail-container {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+/* 错误信息样式 */
+.blog-detail-container .error-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--card-bg-color);
+}
+
+.blog-detail-container .error-message h1 {
+    color: #ff4757;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.blog-detail-container .error-message p {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+.blog-detail-container .error-message a {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    background: var(--primary-color);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.blog-detail-container .error-message a:hover {
+    background: var(--primary-color-dark);
+}
+
+/* 博客文章样式 */
+.blog-detail-container .blog-details {
+    background: var(--card-bg-color);
+    padding: 1rem;
+}
+
+.blog-detail-container .blog-details h1 {
+    font-size: 2.2rem;
+    color: var(--heading-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+/* 元信息样式 */
+.blog-detail-container .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+}
+
+.blog-detail-container .meta span,
+.blog-detail-container .meta time {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    background: var(--tag-bg-color);
+    border-radius: 20px;
+}
+
+/* Markdown 内容样式 */
+.blog-detail-container .markdown-body {
+    line-height: 1.8;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.blog-detail-container .markdown-body h2 {
+    font-size: 1.8rem;
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--heading-color);
+}
+
+.blog-detail-container .markdown-body h3 {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 1rem;
+    color: var(--heading-color);
+}
+
+.blog-detail-container .markdown-body p {
+    margin-bottom: 1.2rem;
+}
+
+.blog-detail-container .markdown-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.blog-detail-container .markdown-body code {
+    background: var(--code-bg-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+    color: var(--code-color);
+    font-family: 'Fira Code', monospace;
+}
+
+.blog-detail-container .markdown-body pre {
+    margin: 1.5rem 0;
+    border-radius: 4px;
+    background: var(--pre-bg-color);
+}
+
+.blog-detail-container .markdown-body pre code {
+    display: block;
+    padding: 1rem;
+    overflow-x: auto;
+    transition: all 0.3s ease;
+}
+
+/* 代码块高亮主题 */
+.blog-detail-container .hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+    background: var(--pre-bg-color);
+    color: var(--pre-code-color);
+}
+
+.blog-detail-container .hljs-comment,
+.blog-detail-container .hljs-quote {
+    color: #a0a1a7;
+    font-style: italic;
+}
+
+.blog-detail-container .hljs-doctag,
+.blog-detail-container .hljs-keyword,
+.blog-detail-container .hljs-formula {
+    color: #a626a4;
+}
+
+.blog-detail-container .hljs-section,
+.blog-detail-container .hljs-name,
+.blog-detail-container .hljs-selector-tag,
+.blog-detail-container .hljs-deletion,
+.blog-detail-container .hljs-subst {
+    color: #e45649;
+}
+
+.blog-detail-container .hljs-literal {
+    color: #0184bb;
+}
+
+.blog-detail-container .hljs-string,
+.blog-detail-container .hljs-regexp,
+.blog-detail-container .hljs-addition,
+.blog-detail-container .hljs-attribute,
+.blog-detail-container .hljs-meta .hljs-string {
+    color: #50a14f;
+}
+
+.blog-detail-container .hljs-attr,
+.blog-detail-container .hljs-variable,
+.blog-detail-container .hljs-template-variable,
+.blog-detail-container .hljs-type,
+.blog-detail-container .hljs-selector-class,
+.blog-detail-container .hljs-selector-attr,
+.blog-detail-container .hljs-selector-pseudo,
+.blog-detail-container .hljs-number {
+    color: #986801;
+}
+
+.blog-detail-container .hljs-symbol,
+.blog-detail-container .hljs-bullet,
+.blog-detail-container .hljs-link,
+.blog-detail-container .hljs-meta,
+.blog-detail-container .hljs-selector-id,
+.blog-detail-container .hljs-title {
+    color: #4078f2;
+}
+
+.blog-detail-container .hljs-built_in,
+.blog-detail-container .hljs-title.class_,
+.blog-detail-container .hljs-class .hljs-title {
+    color: #c18401;
+}
+
+.blog-detail-container .hljs-emphasis {
+    font-style: italic;
+}
+
+.blog-detail-container .hljs-strong {
+    font-weight: bold;
+}
+
+/* 附件样式 */
+.blog-detail-container .attachment {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--tag-bg-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.blog-detail-container .attachment span {
+    color: var(--text-color-secondary);
+}
+
+.blog-detail-container .attachment a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.blog-detail-container .attachment a:hover {
+    color: var(--primary-color-dark);
+}
+
+/* 相关文章样式 */
+.blog-detail-container .related-posts {
+    padding: 2rem;
+    background: var(--card-bg-color);
+}
+
+.blog-detail-container .related-posts h2 {
+    font-size: 1.5rem;
+    color: var(--heading-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.blog-detail-container .related-post {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.blog-detail-container .related-post:last-child {
+    border-bottom: none;
+}
+
+.blog-detail-container .related-post h3 {
+    margin-bottom: 0.5rem;
+}
+
+.blog-detail-container .related-post h3 a {
+    color: var(--heading-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.blog-detail-container .related-post h3 a:hover {
+    color: var(--primary-color);
+}
+
+.blog-detail-container .related-post p {
+    color: var(--text-color-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.blog-detail-container .no-related {
+    color: var(--text-color-secondary);
+    text-align: center;
+    padding: 2rem 0;
+}
+
+/* 代码块功能栏样式 */
+.blog-detail-container .title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+    background: var(--pre-bg-color);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.blog-detail-container .title-bar .language-label {
+    margin-right: auto;
+    color: var(--text-color-secondary);
+    font-size: 0.9rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.blog-detail-container .title-bar .copy-button,
+.blog-detail-container .title-bar .collapse-button {
+    color: var(--text-color-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.2rem 0.5rem;
+    margin-left: 0.5rem;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.blog-detail-container .title-bar .copy-button:hover,
+.blog-detail-container .title-bar .collapse-button:hover {
+    color: var(--text-color);
+    background: var(--tag-bg-color);
+}
+
+/* 复制成功提示 - 由于是 fixed 定位，需要保持在全局 */
+.copy-success {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* CSS 变量定义 - 需要保持在全局 */
+:root {
+    /* 亮色主题 */
+    --primary-color: #2e86de;
+    --primary-color-dark: #2271b8;
+    --card-bg-color: #fff;
+    --text-color: #2d3436;
+    --text-color-secondary: #636e72;
+    --heading-color: #2d3436;
+    --border-color: #eee;
+    --tag-bg-color: #f5f6fa;
+    --code-bg-color: #f5f6fa;
+    --code-color: #e84393;
+    --pre-bg-color: #2d3436;
+    --pre-code-color: #dfe6e9;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 暗色主题 - 需要保持在全局 */
+[data-theme="dark"] {
+    --primary-color: #3498db;
+    --primary-color-dark: #2980b9;
+    --card-bg-color: #2d3436;
+    --text-color: #dfe6e9;
+    --text-color-secondary: #b2bec3;
+    --heading-color: #74b9ff;
+    --border-color: #636e72;
+    --tag-bg-color: #353b48;
+    --code-bg-color: #353b48;
+    --code-color: #ff79c6;
+    --pre-bg-color: #1e272e;
+    --pre-code-color: #dfe6e9;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .blog-detail-container .blog-details h1 {
+        font-size: 1.8rem;
+    }
+
+    .blog-detail-container .meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .blog-detail-container .meta span,
+    .blog-detail-container .meta time {
+        width: fit-content;
+    }
+
+    .blog-detail-container .markdown-body {
+        font-size: 1rem;
+    }
+
+    .blog-detail-container .related-posts {
+        padding: 1.5rem;
+    }
+} 

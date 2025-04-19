@@ -1,0 +1,157 @@
+/* 博客首页样式 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.blog-index-content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.blog-index-content .blog-index-posts {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.blog-index-content .blog-post {
+    padding: 20px;
+    margin-bottom: 10px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+}
+
+.blog-index-content .blog-post:last-child {
+    margin-bottom: 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .container {
+        padding: 0px !important;
+        margin: 0px auto !important;
+    }
+    
+    .blog-index-content {
+        margin-top: 10px;
+    }
+    
+    .blog-index-content .blog-index-posts {
+        padding: 12px;
+    }
+    
+    .blog-index-content .blog-post {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .blog-index-content .blog-post h2 {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+    
+    .blog-index-content .blog-post p {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+    
+    .blog-index-content .blog-index-contact {
+        padding: 12px;
+        margin-top: 10px;
+    }
+    
+    .blog-index-content .blog-index-contact h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .blog-index-content .blog-index-contact p {
+        font-size: 14px;
+    }
+    
+    .blog-index-content .no-data-tip {
+        padding: 20px 0;
+    }
+}
+
+/* 暗黑模式适配 */
+[data-theme="dark"] .blog-index-content .blog-post {
+    border-color: #3a3a3a;
+    background: #2d2d2d;
+}
+
+.blog-index-content .blog-post h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.blog-index-content .blog-post p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.blog-index-content .blog-post a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.blog-index-content .blog-post a:hover {
+    text-decoration: underline;
+}
+
+.blog-index-content .blog-index-contact {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.blog-index-content .blog-index-contact h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.blog-index-content .blog-index-contact p {
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.blog-index-content .no-data-tip {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+}
+
+.blog-index-content .no-data-tip p {
+    font-size: 16px;
+}
+
+/* 暗黑模式适配 */
+[data-theme="dark"] .blog-index-content .blog-index-contact,
+[data-theme="dark"] .blog-index-content .blog-index-posts {
+    background: #2d2d2d;
+}
+
+[data-theme="dark"] .blog-index-content .blog-post h2,
+[data-theme="dark"] .blog-index-content .blog-index-contact h2 {
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .blog-index-content .blog-post p,
+[data-theme="dark"] .blog-index-content .blog-index-contact p,
+[data-theme="dark"] .blog-index-content .no-data-tip,
+[data-theme="dark"] .blog-index-content .no-data-tip p {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .blog-index-content .blog-post a {
+    color: #66b1ff;
+}

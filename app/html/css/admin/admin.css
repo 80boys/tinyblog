@@ -1,0 +1,212 @@
+/* 后台管理页面样式 */
+.main-content {
+    max-width: 1024px;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.main-content h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.main-content .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.main-content .btn-primary {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.main-content .btn-primary:hover {
+    background: #e8e8e8;
+    border-color: #ccc;
+}
+
+.main-content .blog-posts {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.main-content .blog-post {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.main-content .blog-post:last-child {
+    border-bottom: none;
+}
+
+.main-content .blog-post h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.main-content .blog-post p {
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.main-content .blog-post .meta {
+    font-size: 14px;
+    color: #888;
+}
+
+.main-content .blog-post .meta span {
+    margin-right: 15px;
+}
+
+.main-content .blog-post .private-label,
+.main-content .blog-post .independent-label {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.main-content .blog-post .private-label {
+    background: #ffd700;
+    color: #333;
+}
+
+.main-content .blog-post .independent-label {
+    background: #98fb98;
+    color: #333;
+}
+
+.main-content .blog-post .actions {
+    margin-top: 15px;
+}
+
+.main-content .blog-post .actions a {
+    color: #666;
+    text-decoration: none;
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.main-content .blog-post .actions a:hover {
+    color: #333;
+}
+
+.main-content .no-blogs {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+    font-size: 16px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 0px !important;
+        margin: 0px auto !important;
+    }
+    .main-content .blog-posts {
+        padding: 0px !important;
+    }
+}
+
+/* 分页样式 */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 3px;
+    color: #666;
+    text-decoration: none;
+    border: 1px solid #ddd;
+}
+
+.pagination .current {
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+/* 暗黑模式适配 */
+[data-theme="dark"] .main-content h2 {
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .main-content .blog-posts {
+    background: #2d2d2d;
+}
+
+[data-theme="dark"] .main-content .blog-post {
+    border-bottom-color: #444;
+}
+
+[data-theme="dark"] .main-content .blog-post h3 {
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .main-content .blog-post p {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .main-content .blog-post .meta {
+    color: #888;
+}
+
+[data-theme="dark"] .main-content .blog-post .actions a {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .main-content .blog-post .actions a:hover {
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .main-content .no-blogs {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .main-content .btn {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .main-content .btn-primary {
+    background: #363636;
+    color: #e1e1e1;
+    border-color: #444;
+}
+
+[data-theme="dark"] .main-content .btn-primary:hover {
+    background: #404040;
+    border-color: #505050;
+}
+
+[data-theme="dark"] .pagination a {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .pagination .current {
+    background: #363636;
+    color: #e1e1e1;
+    border-color: #444;
+}

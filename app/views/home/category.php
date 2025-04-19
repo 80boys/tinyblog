@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin.css">
-<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/app/html/css/admin-theme.css">
 <style>
     /* 美化输入框 */
     input[type="text"] {
@@ -39,7 +37,6 @@
 </style>
 <main class="container">
     <article>
-        <h2>分类管理</h2>
         <section>
             <form action="<?= $this->getUrl('admin/saveCategory') ?>" method="post">
                 <label for="category-name">分类名称：</label>
@@ -62,4 +59,3 @@
         </section>
     </article>
 </main>
-<?php $this->renderPartial('common/footer'); ?>

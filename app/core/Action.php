@@ -2,8 +2,6 @@
 
 namespace App\Core;
 
-use App\Models\SettingsModel;
-
 /**
  * Action基类
  * 
@@ -110,33 +108,6 @@ abstract class Action
     }
 
     /**
-     * 获取站点配置
-     * @param string|null $key 配置键名，为null时返回所有配置
-     * @param mixed $default 默认值
-     * @return mixed 配置值
-     */
-    protected function getSetting($key = null, $default = null)
-    {
-        return $key === null ? SettingsModel::getAll() : SettingsModel::get($key, $default);
-    }
-
-    /**
-     * 注入通用的视图数据
-     */
-    protected function injectCommonViewData()
-    {
-        // 注入站点基本信息
-        $this->set('site_name', $this->getSetting('site_name', '我的博客'));
-        $this->set('site_description', $this->getSetting('site_description'));
-        $this->set('author', $this->getSetting('author'));
-        $this->set('footer_text', $this->getSetting('footer_text'));
-        $this->set('beian_number', $this->getSetting('beian_number'));
-        $this->set('analytics_code', $this->getSetting('analytics_code'));
-        $this->set('contact_email', $this->getSetting('contact_email'));
-        $this->set('wechat_id', $this->getSetting('wechat_id'));
-    }
-
-    /**
      * 渲染视图
      * 
      * @param string $view 视图名称，不含扩展名
@@ -145,9 +116,6 @@ abstract class Action
      */
     protected function render($view, $data = [])
     {
-        // 注入通用数据
-        $this->injectCommonViewData();
-
         // 合并视图变量
         $data = array_merge($this->viewData, $data);
 

@@ -1,0 +1,167 @@
+/* 设置页面样式 - 扁平化结构减少嵌套 */
+.settings-page {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.settings-page .settings-form {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+.settings-page .settings-section {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.settings-page .settings-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.settings-page .settings-section h3 {
+    color: #444;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.settings-page .form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.settings-page .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.settings-page .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+.settings-page .form-group input[type="text"],
+.settings-page .form-group input[type="email"],
+.settings-page .form-group input[type="password"],
+.settings-page .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.2s ease;
+}
+
+.settings-page .form-group input:focus,
+.settings-page .form-group textarea:focus {
+    border-color: #a0a0a0;
+    outline: none;
+}
+
+.settings-page .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.settings-page .form-group .hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+}
+
+.settings-page .settings-form button[type="submit"] {
+    display: block;
+    width: 200px;
+    margin: 30px auto 0;
+    padding: 12px 0;
+    background-color: #4a89dc;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.settings-page .settings-form button[type="submit"]:hover {
+    background-color: #3b7dd8;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .settings-page {
+        margin: 15px auto;
+        padding: 0 15px;
+    }
+    
+    .settings-page .settings-form {
+        padding: 20px 15px;
+        border-radius: 6px;
+    }
+    
+    .settings-page .settings-section {
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .settings-page .settings-form button[type="submit"] {
+        width: 100%;
+    }
+}
+
+/* 暗黑模式适配 */
+[data-theme="dark"] .settings-page .settings-form {
+    background: #2d2d2d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .settings-page .settings-section {
+    border-bottom-color: #444;
+}
+
+[data-theme="dark"] .settings-page .settings-section h3 {
+    color: #d0d0d0;
+}
+
+[data-theme="dark"] .settings-page .form-group label {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .settings-page .form-group input[type="text"],
+[data-theme="dark"] .settings-page .form-group input[type="email"],
+[data-theme="dark"] .settings-page .form-group input[type="password"],
+[data-theme="dark"] .settings-page .form-group textarea {
+    background-color: #333;
+    border-color: #444;
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .settings-page .form-group input:focus,
+[data-theme="dark"] .settings-page .form-group textarea:focus {
+    border-color: #666;
+}
+
+[data-theme="dark"] .settings-page .form-group .hint {
+    color: #888;
+}
+
+[data-theme="dark"] .settings-page .settings-form button[type="submit"] {
+    background-color: #3a6fbf;
+}
+
+[data-theme="dark"] .settings-page .settings-form button[type="submit"]:hover {
+    background-color: #2d5aa0;
+} 

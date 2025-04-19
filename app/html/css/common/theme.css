@@ -120,7 +120,7 @@
 body, .container, .navbar-top, input, button, textarea, select,
 .blog-post, .blog-item, .settings-section, .form-group, table, hr, 
 .dropdown-content, .toggle-switch, .CodeMirror, .editor-toolbar {
-    transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+    transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
 }
 
 /* 主题切换按钮样式 */
@@ -183,7 +183,3 @@ body, .container, .navbar-top, input, button, textarea, select,
     }
 }
 
-/* 适应深色/浅色模式的平滑过渡 - 仅在页面加载完成后应用 */
-.theme-transition {
-    transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
-}

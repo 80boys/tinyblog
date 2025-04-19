@@ -1,0 +1,143 @@
+/* 修复滚动条问题 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.message-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+    /* 添加背景图案，增加视觉层次感 */
+    background-image: 
+        radial-gradient(circle at 25px 25px, rgba(0, 0, 0, 0.05) 2%, transparent 0%),
+        radial-gradient(circle at 75px 75px, rgba(0, 0, 0, 0.05) 2%, transparent 0%);
+    background-size: 100px 100px;
+}
+
+.message-page .message-container {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 20px;
+    padding: 40px 30px;
+    text-align: center;
+    background: var(--card-bg-color, var(--bg-secondary));
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    /* 添加微妙的渐变背景，增强视觉效果 */
+    background-image: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    /* 添加边框高亮，增强与背景的区分 */
+    position: relative;
+}
+
+.message-page .message-title {
+    font-size: 28px;
+    color: var(--text-color, var(--text-primary));
+    margin-bottom: 24px;
+    margin-top: 0;
+    font-weight: 600;
+    /* 添加文字阴影，增强可读性 */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.message-page .message-content {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    line-height: 1.6;
+    /* 增加行高，提高可读性 */
+}
+
+.message-page .message-redirect {
+    color: var(--text-light, var(--text-secondary));
+    font-size: 14px;
+    margin-bottom: 0;
+    padding: 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.message-page .countdown {
+    color: var(--text-primary);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.message-page .message-redirect a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 500;
+}
+
+.message-page .message-redirect a:hover {
+    text-decoration: underline;
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .message-page .message-container {
+        padding: 30px 20px;
+        margin: 0 15px;
+        border-radius: 8px;
+    }
+
+    .message-page .message-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .message-page .message-content {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+    
+    .message-page .message-redirect {
+        padding: 8px;
+    }
+}
+
+/* 暗黑模式调整 */
+[data-theme="dark"] .message-page {
+    background-image: 
+        radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.03) 2%, transparent 0%),
+        radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.03) 2%, transparent 0%);
+}
+
+[data-theme="dark"] .message-page .message-container {
+    background-image: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.03),
+        transparent
+    );
+}
+
+[data-theme="dark"] .message-page .message-title {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .message-page .countdown {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .message-page .message-redirect a {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .message-page .message-redirect a:hover {
+    color: var(--text-primary);
+} 

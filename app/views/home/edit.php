@@ -1,8 +1,6 @@
-<link rel="stylesheet" href="<?= $this->asset('/app/html/css/simplemde/simplemde.min.css') ?>" />
 <link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin/edit.css') ?>">
 <main class="container blog-edit-container">
     <article>
-        <h2>编写博客</h2>
         <form action="<?= $this->getUrl('admin/saveBlogs') ?>" method="post" enctype="multipart/form-data">
             <section class="form-container">
                 <div class="full-width">
@@ -59,9 +57,9 @@
 <script src="<?= $this->asset('/app/html/js/simplemde/simplemde.min.js') ?>"></script>
 <script src="<?= $this->asset('/app/html/js/qiniu/qiniu.min.js') ?>"></script>
 <script>
-    const bucketDoman = '<?= $bucketDoman ?>';
+    const bucketDoman = 'https://maplebridge.com';
     async function getQiniuToken() {
-        const response = await fetch('/app/end/getQiniuToken.html');
+        const response = await fetch('<?= $this->getUrl('admin/getQiniuToken') ?>');
         const data = await response.json();
         console.log(data)
         return data.token;

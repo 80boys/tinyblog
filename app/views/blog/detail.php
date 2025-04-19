@@ -1,13 +1,12 @@
-<?php if (!$blog): ?>
-    <main class="layout-container">
+<link rel="stylesheet" href="<?= $this->asset('/app/html/css/blog/detail.css') ?>">
+<main class="blog-detail-container layout-container">
+    <?php if (!$blog): ?>
         <div class="error-message">
             <h1>博客不存在</h1>
             <p>抱歉，您请求的博客内容不存在或已被删除。</p>
             <a href="<?php echo BASE_PATH; ?>/blog/index">返回博客列表</a>
         </div>
-    </main>
-<?php else: ?>
-    <main class="layout-container">
+    <?php else: ?>
         <article class="blog-details" itemscope itemtype="http://schema.org/BlogPosting">
             <h1 itemprop="headline"><?php echo htmlspecialchars($blog['title'] ?? ''); ?></h1>
             <div class="meta">
@@ -66,5 +65,5 @@
                 <?php endif; ?>
             </section>
         <?php endif; ?>
-    </main>
-<?php endif; ?>
+    <?php endif; ?>
+</main>

@@ -1,6 +1,12 @@
 <main class="container">
+    <link rel="stylesheet" href="<?= $this->asset('/app/html/css/blog/index.css') ?>">
     <div class="blog-index-content">
         <section class="blog-index-posts">
+            <?php if (empty($blogs['items'])): ?>
+                <div class="no-data-tip">
+                    <p>暂无博客文章</p>
+                </div>
+            <?php endif; ?>
             <?php
             try {
                 foreach ($blogs['items'] as $blog) {
