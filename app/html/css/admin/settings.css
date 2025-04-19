@@ -60,6 +60,8 @@
     font-size: 14px;
     color: #333;
     transition: border-color 0.2s ease;
+    box-sizing: border-box; /* 确保padding不会增加宽度 */
+    max-width: 100%; /* 防止在小屏幕上溢出 */
 }
 
 .settings-page .form-group input:focus,
@@ -104,12 +106,14 @@
 @media (max-width: 768px) {
     .settings-page {
         margin: 15px auto;
-        padding: 0 15px;
+        padding: 0 10px; /* 减小左右内边距 */
     }
     
     .settings-page .settings-form {
         padding: 20px 15px;
         border-radius: 6px;
+        width: 100%; /* 确保表单占满容器宽度 */
+        box-sizing: border-box;
     }
     
     .settings-page .settings-section {
@@ -117,8 +121,25 @@
         margin-bottom: 20px;
     }
     
+    .settings-page .form-group input[type="text"],
+    .settings-page .form-group input[type="email"],
+    .settings-page .form-group input[type="password"],
+    .settings-page .form-group textarea {
+        padding: 8px 10px; /* 移动端减小内边距 */
+        font-size: 16px; /* 增大字体，避免iOS自动缩放 */
+        -webkit-appearance: none; /* 移除iOS默认样式 */
+        appearance: none;
+    }
+    
     .settings-page .settings-form button[type="submit"] {
         width: 100%;
+    }
+    
+    /* 确保所有元素在移动端不溢出 */
+    * {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
     }
 }
 
