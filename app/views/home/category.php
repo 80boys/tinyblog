@@ -1,61 +1,31 @@
-<style>
-    /* 美化输入框 */
-    input[type="text"] {
-        width: 80%;
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid var(--input-border);
-        border-radius: 4px;
-        box-sizing: border-box;
-        background-color: var(--input-bg);
-        color: var(--input-text);
-    }
-
-    /* 美化按钮 */
-    button[type="submit"] {
-        background-color: var(--bg-navbar);
-        color: var(--text-navbar);
-        padding: 10px 20px;
-        margin: 5px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-        background-color: var(--dropdown-hover);
-    }
-
-    /* 分类列表样式 */
-    ul {
-        color: var(--text-primary);
-    }
-
-    li {
-        margin-bottom: 5px;
-    }
-</style>
-<main class="container">
-    <article>
-        <section>
+<link rel="stylesheet" href="<?php echo $this->asset('/app/html/css/admin/category.css'); ?>">
+<main class="category-page">
+    <div class="category-container">
+        <div class="category-form">
+            <h2>添加分类</h2>
             <form action="<?= $this->getUrl('admin/saveCategory') ?>" method="post">
-                <label for="category-name">分类名称：</label>
-                <input type="text" id="category-name" name="category_name" required>
-                <br>
+                <div class="form-group">
+                    <label for="category-name">分类名称：</label>
+                    <input type="text" id="category-name" name="category_name" placeholder="请输入分类名称" required>
+                </div>
                 <button type="submit">保存分类</button>
             </form>
-            <h3>已存在的分类：</h3>
-            <ul>
-                <?php
-                if (!empty($categories)) {
-                    foreach ($categories as $category) {
-                        echo '<li>' . $category . '</li>';
-                    }
-                } else {
-                    echo '<li>暂无分类</li>';
-                }
-                ?>
-            </ul>
-        </section>
-    </article>
+        </div>
+        
+        <div class="category-list">
+            <h2>已存在的分类</h2>
+            <?php if (!empty($categories)): ?>
+                <ul>
+                    <?php foreach ($categories as $category): ?>
+                        <li>
+                            <span><?= htmlspecialchars($category) ?></span>
+                            <button class="delete-button" onclick="if(confirm('确定要删除此分类吗？')) window.location.href='<?= $this->getUrl('admin/deleteCategory', ['name' => urlencode($category)]) ?>'">删除</button>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p class="empty-category">暂无分类，请添加新分类</p>
+            <?php endif; ?>
+        </div>
+    </div>
 </main>

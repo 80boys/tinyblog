@@ -1,8 +1,7 @@
 /* 博客首页样式 */
 .container {
-    max-width: 1200px;
+    max-width: 1024px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 .blog-index-content {
@@ -20,8 +19,8 @@
 .blog-index-content .blog-post {
     padding: 20px;
     margin-bottom: 10px;
-    border: 1px solid #eaeaea;
-    border-radius: 8px;
+    border-bottom: 1px solid #eaeaea;
+    border-radius: 0px;
 }
 
 .blog-index-content .blog-post:last-child {
@@ -96,7 +95,7 @@
 }
 
 .blog-index-content .blog-post a {
-    color: #007bff;
+    color: #666;
     text-decoration: none;
     font-weight: 500;
 }

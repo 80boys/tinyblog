@@ -1,8 +1,8 @@
 /* 后台管理页面样式 */
 .main-content {
     max-width: 1024px;
-    padding: 20px;
     margin: 0 auto;
+    margin-top: 20px;
 }
 
 .main-content h2 {

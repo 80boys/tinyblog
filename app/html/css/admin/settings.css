@@ -1,8 +1,8 @@
 /* 设置页面样式 - 扁平化结构减少嵌套 */
 .settings-page {
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 0 20px;
+    max-width: 1024px; /* 与前台保持一致 */
+    margin: 0 auto;
+    margin-top: 20px;
 }
 
 .settings-page .settings-form {
@@ -106,12 +106,12 @@
 @media (max-width: 768px) {
     .settings-page {
         margin: 15px auto;
-        padding: 0 10px; /* 减小左右内边距 */
+        padding: 0; /* 移动端去掉内边距，与前台保持一致 */
     }
     
     .settings-page .settings-form {
-        padding: 20px 15px;
-        border-radius: 6px;
+        padding: 15px;
+        border-radius: 0; /* 移动端去掉圆角，全屏显示 */
         width: 100%; /* 确保表单占满容器宽度 */
         box-sizing: border-box;
     }

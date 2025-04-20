@@ -19,7 +19,7 @@ var timer = setInterval(function() {
     countdown.textContent = seconds;
     if (seconds <= 0) {
         clearInterval(timer);
-        //window.location.href = '<?= $this->escape($redirectUrl) ?>';
+        window.location.href = '<?= $this->escape($redirectUrl) ?>';
     }
 }, 1000);
 </script>

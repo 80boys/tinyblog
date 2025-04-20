@@ -1,0 +1,224 @@
+/* 分类管理页面样式 */
+.category-page {
+    max-width: 1024px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.category-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+.category-form {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px dashed #eee;
+}
+
+.category-form h2 {
+    margin-top: 0;
+    color: #444;
+    font-size: 22px;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #a0a0a0;
+    outline: none;
+}
+
+.category-form button[type="submit"] {
+    background-color: #4a89dc;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.2s ease;
+}
+
+.category-form button[type="submit"]:hover {
+    background-color: #3b7dd8;
+}
+
+.category-list {
+    padding-top: 10px;
+}
+
+.category-list h2 {
+    margin-top: 0;
+    color: #444;
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.category-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.category-list li:last-child {
+    margin-bottom: 0;
+}
+
+.empty-category {
+    text-align: center;
+    padding: 30px 0;
+    color: #888;
+    font-style: italic;
+}
+
+/* 删除按钮样式 */
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .category-page {
+        margin: 15px auto;
+        padding: 0;
+    }
+    
+    .category-container {
+        padding: 15px;
+        border-radius: 0;
+    }
+    
+    .category-form {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+    }
+    
+    .category-form h2,
+    .category-list h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .form-group input[type="text"] {
+        padding: 8px 10px;
+        font-size: 16px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    
+    .category-form button[type="submit"] {
+        width: 100%;
+        padding: 12px 0;
+    }
+    
+    .category-list li {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
+
+/* 暗黑模式适配 */
+[data-theme="dark"] .category-container {
+    background: #2d2d2d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .category-form {
+    border-bottom-color: #444;
+}
+
+[data-theme="dark"] .category-form h2,
+[data-theme="dark"] .category-list h2 {
+    color: #d0d0d0;
+}
+
+[data-theme="dark"] .form-group label {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .form-group input[type="text"] {
+    background-color: #333;
+    border-color: #444;
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .form-group input[type="text"]:focus {
+    border-color: #666;
+}
+
+[data-theme="dark"] .category-list li {
+    background-color: #333;
+    color: #e1e1e1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .empty-category {
+    color: #888;
+}
+
+[data-theme="dark"] .category-form button[type="submit"] {
+    background-color: #3a6fbf;
+}
+
+[data-theme="dark"] .category-form button[type="submit"]:hover {
+    background-color: #2d5aa0;
+}
+
+[data-theme="dark"] .delete-button {
+    background-color: #d32f2f;
+}
+
+[data-theme="dark"] .delete-button:hover {
+    background-color: #b71c1c;
+} 

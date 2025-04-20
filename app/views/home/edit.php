@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="<?= $this->asset('/app/html/css/admin/edit.css') ?>">
-<main class="container blog-edit-container">
+<main class="blog-edit-container">
     <article>
         <form action="<?= $this->getUrl('admin/saveBlogs') ?>" method="post" enctype="multipart/form-data">
             <section class="form-container">

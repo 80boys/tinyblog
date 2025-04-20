@@ -1,3 +1,13 @@
+.blog-edit-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: var(--bg-secondary);
+}
+.blog-edit-container article {
+    padding: 20px;
+}
+
 .blog-edit-container .form-container {
     display: flex;
     flex-wrap: wrap;
