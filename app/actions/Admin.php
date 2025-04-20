@@ -86,18 +86,23 @@ class Admin extends Action
     {
         // 获取当前页码
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $pageSize = 10; // 每页显示的博客数量
+        $currentPage = max(1, $currentPage); // 确保页码至少为1
+        $pageSize = 5; // 每页显示的博客数量
 
         // 获取博客列表数据
-        $result = $this->getBlogList($currentPage, $pageSize);
-
+        $blogs = $this->getBlogList($currentPage, $pageSize);
+        
+        // 构建分页URL模式，使用Router来获取完整URL
+        $urlPattern = Router::getUrl('admin/index') . '?page=%d';
+        
         // 设置数据到视图
-        $this->set('blogs', $result['items']);
-        $this->set('totalPages', $result['total_pages']);
+        $this->set('blogs', $blogs['items']);
+        $this->set('totalPages', ceil($blogs['total'] / $pageSize));
         $this->set('currentPage', $currentPage);
+        $this->set('urlPattern', $urlPattern);
 
         $this->setLayout('admin');
-        $this->setTitle('管理员');
+        $this->setTitle('博客管理');
         $this->render('home/index');
     }
 
@@ -197,20 +202,17 @@ class Admin extends Action
         uasort($blogs, function ($a, $b) {
             return strtotime($b['date']) - strtotime($a['date']);
         });
-
-        // 计算分页
-        $totalItems = count($blogs);
-        $totalPages = ceil($totalItems / $pageSize);
+        
+        // 计算分页数据
+        $total = count($blogs);
         $offset = ($page - 1) * $pageSize;
-
-        // 获取当前页的博客
-        $items = array_slice($blogs, $offset, $pageSize, true);
-
+        $items = array_slice($blogs, $offset, $pageSize);
+        
         return [
             'items' => $items,
-            'total_pages' => $totalPages,
-            'current_page' => $page,
-            'total_items' => $totalItems
+            'total' => $total,
+            'page' => $page,
+            'pageSize' => $pageSize
         ];
     }
 

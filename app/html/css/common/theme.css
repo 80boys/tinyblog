@@ -19,6 +19,7 @@
     --search-text: #c6c9d1;
     --search-button-bg: #383c44;
     --search-placeholder: #7a7f8c;
+    --card-bg-color: #fff;
 }
 
 /* 暗色主题 */
@@ -42,6 +43,7 @@
     --search-text: #e0e0e0;
     --search-button-bg: #3d3d3d;
     --search-placeholder: #888;
+    --card-bg-color: #2d2d2d;
 }
 
 /* 编辑页面的暗色模式样式 */

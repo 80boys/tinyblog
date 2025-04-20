@@ -53,8 +53,44 @@ class Blog extends Action
     public function index()
     {
         $this->setLayout('default');
-        $this->setTitle('博客列表');
-        $blogs = BlogsModel::getList();
+        
+        // 获取当前页码
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max(1, $page); // 确保页码至少为1
+        
+        // 设置每页显示的博客数量
+        $pageSize = 5;
+        
+        // 创建过滤条件
+        $filters = [
+            'include_private' => false,
+            'include_independent' => false
+        ];
+        
+        // 检查是否有搜索请求
+        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+        if (!empty($search)) {
+            $filters['search'] = $search;
+            $this->setTitle('搜索: ' . $search);
+            $this->set('searchQuery', $search);
+        } else {
+            $this->setTitle('博客列表');
+        }
+        
+        // 获取带有分页的博客列表
+        $blogs = BlogsModel::getList($page, $pageSize, $filters);
+        
+        // 计算总页数
+        $totalPages = ceil($blogs['total'] / $pageSize);
+        
+        // 构建分页URL模式，保留搜索参数
+        $urlPattern = empty($search) ? '?page=%d' : '?search=' . urlencode($search) . '&page=%d';
+        
+        // 传递分页数据到视图
+        $this->set('currentPage', $page);
+        $this->set('totalPages', $totalPages);
+        $this->set('urlPattern', $urlPattern);
+        
         $this->render('blog/index', ['blogs' => $blogs]);
     }
 

@@ -40,6 +40,7 @@
 .blog-detail-container .blog-details {
     background: var(--card-bg-color);
     padding: 1rem;
+    margin-top: 20px;
 }
 
 .blog-detail-container .blog-details h1 {
@@ -122,81 +123,6 @@
     padding: 1rem;
     overflow-x: auto;
     transition: all 0.3s ease;
-}
-
-/* 代码块高亮主题 */
-.blog-detail-container .hljs {
-    display: block;
-    overflow-x: auto;
-    padding: 1em;
-    background: var(--pre-bg-color);
-    color: var(--pre-code-color);
-}
-
-.blog-detail-container .hljs-comment,
-.blog-detail-container .hljs-quote {
-    color: #a0a1a7;
-    font-style: italic;
-}
-
-.blog-detail-container .hljs-doctag,
-.blog-detail-container .hljs-keyword,
-.blog-detail-container .hljs-formula {
-    color: #a626a4;
-}
-
-.blog-detail-container .hljs-section,
-.blog-detail-container .hljs-name,
-.blog-detail-container .hljs-selector-tag,
-.blog-detail-container .hljs-deletion,
-.blog-detail-container .hljs-subst {
-    color: #e45649;
-}
-
-.blog-detail-container .hljs-literal {
-    color: #0184bb;
-}
-
-.blog-detail-container .hljs-string,
-.blog-detail-container .hljs-regexp,
-.blog-detail-container .hljs-addition,
-.blog-detail-container .hljs-attribute,
-.blog-detail-container .hljs-meta .hljs-string {
-    color: #50a14f;
-}
-
-.blog-detail-container .hljs-attr,
-.blog-detail-container .hljs-variable,
-.blog-detail-container .hljs-template-variable,
-.blog-detail-container .hljs-type,
-.blog-detail-container .hljs-selector-class,
-.blog-detail-container .hljs-selector-attr,
-.blog-detail-container .hljs-selector-pseudo,
-.blog-detail-container .hljs-number {
-    color: #986801;
-}
-
-.blog-detail-container .hljs-symbol,
-.blog-detail-container .hljs-bullet,
-.blog-detail-container .hljs-link,
-.blog-detail-container .hljs-meta,
-.blog-detail-container .hljs-selector-id,
-.blog-detail-container .hljs-title {
-    color: #4078f2;
-}
-
-.blog-detail-container .hljs-built_in,
-.blog-detail-container .hljs-title.class_,
-.blog-detail-container .hljs-class .hljs-title {
-    color: #c18401;
-}
-
-.blog-detail-container .hljs-emphasis {
-    font-style: italic;
-}
-
-.blog-detail-container .hljs-strong {
-    font-weight: bold;
 }
 
 /* 附件样式 */
@@ -328,43 +254,11 @@
     100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* CSS 变量定义 - 需要保持在全局 */
-:root {
-    /* 亮色主题 */
-    --primary-color: #2e86de;
-    --primary-color-dark: #2271b8;
-    --card-bg-color: #fff;
-    --text-color: #2d3436;
-    --text-color-secondary: #636e72;
-    --heading-color: #2d3436;
-    --border-color: #eee;
-    --tag-bg-color: #f5f6fa;
-    --code-bg-color: #f5f6fa;
-    --code-color: #e84393;
-    --pre-bg-color: #2d3436;
-    --pre-code-color: #dfe6e9;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-}
-
-/* 暗色主题 - 需要保持在全局 */
-[data-theme="dark"] {
-    --primary-color: #3498db;
-    --primary-color-dark: #2980b9;
-    --card-bg-color: #2d3436;
-    --text-color: #dfe6e9;
-    --text-color-secondary: #b2bec3;
-    --heading-color: #74b9ff;
-    --border-color: #636e72;
-    --tag-bg-color: #353b48;
-    --code-bg-color: #353b48;
-    --code-color: #ff79c6;
-    --pre-bg-color: #1e272e;
-    --pre-code-color: #dfe6e9;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-}
-
 /* 响应式设计 */
 @media (max-width: 768px) {
+    .blog-detail-container .blog-details {
+        margin-top: 0;
+    }
     .blog-detail-container .blog-details h1 {
         font-size: 1.8rem;
     }

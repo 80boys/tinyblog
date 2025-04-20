@@ -8,51 +8,8 @@ $urlPattern = isset($urlPattern) ? $urlPattern : '?page=%d';
 $range = 2; // 当前页码前后显示的页数
 $startPage = max(1, $currentPage - $range);
 $endPage = min($totalPages, $currentPage + $range);
-
-// 添加分页样式
 ?>
-<style>
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-    padding: 0;
-    list-style: none;
-}
-
-.pagination li {
-    margin: 0 2px;
-}
-
-.pagination a,
-.pagination span {
-    display: inline-block;
-    padding: 8px 12px;
-    text-decoration: none;
-    border: 1px solid var(--border-color, #ddd);
-    color: var(--text-primary, #333);
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.pagination a:hover {
-    background-color: var(--hover-bg, #f5f5f5);
-    border-color: var(--hover-border, #ccc);
-}
-
-.pagination .active span {
-    background-color: var(--active-bg, #007bff);
-    border-color: var(--active-border, #007bff);
-    color: var(--active-text, #fff);
-}
-
-.pagination .disabled span {
-    color: var(--disabled-text, #999);
-    cursor: not-allowed;
-    background-color: var(--disabled-bg, #fff);
-}
-</style>
+<link rel="stylesheet" href="<?= $this->asset('/app/html/css/common/pagination.css') ?>">
 
 <?php if ($totalPages > 1): ?>
 <nav aria-label="分页导航">

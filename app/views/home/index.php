@@ -35,9 +35,13 @@
     </section>
 
     <!-- 分页 -->
-    <?php 
-    // 设置分页URL模式
-    $urlPattern = $this->getUrl('admin/index') . '?page=%d';
-    $this->renderPartial('common/pagination');
-    ?>
+    <?php if (isset($totalPages) && $totalPages > 1): ?>
+        <?php 
+        $this->renderPartial('common/pagination', [
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'urlPattern' => $urlPattern ?? '?page=%d'
+        ]);
+        ?>
+    <?php endif; ?>
 </div>

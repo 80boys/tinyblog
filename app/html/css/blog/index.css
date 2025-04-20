@@ -154,3 +154,50 @@
 [data-theme="dark"] .blog-index-content .blog-post a {
     color: #66b1ff;
 }
+
+/* 搜索结果样式 */
+.blog-index-content .search-result-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.blog-index-content .search-result-header h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.blog-index-content .search-result-header p {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.blog-index-content .back-to-all {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.blog-index-content .back-to-all:hover {
+    text-decoration: underline;
+}
+
+/* 暗黑模式适配 */
+[data-theme="dark"] .blog-index-content .search-result-header {
+    border-bottom-color: #3a3a3a;
+}
+
+[data-theme="dark"] .blog-index-content .search-result-header h1 {
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .blog-index-content .search-result-header p {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .blog-index-content .back-to-all {
+    color: #66b1ff;
+}
