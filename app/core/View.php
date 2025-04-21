@@ -257,20 +257,100 @@ class View
 
         // 检查视图文件是否存在
         if (!file_exists($viewFile)) {
-            throw new \Exception("View file not found: {$viewFile}");
+            throw new \Exception("视图文件不存在: {$viewFile}");
         }
 
         // 提取变量到当前作用域
         extract($data);
 
+        // 保存当前错误处理程序
+        $previousErrorHandler = set_error_handler(function($errno, $errstr, $errfile, $errline) use (&$previousErrorHandler) {
+            // 将PHP错误转换为异常
+            if (!(error_reporting() & $errno)) {
+                // 如果当前错误报告级别不包含此错误，则尊重当前的错误处理
+                return $previousErrorHandler ? $previousErrorHandler($errno, $errstr, $errfile, $errline) : false;
+            }
+            
+            // 将错误转换为异常
+            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        });
+
         try {
+            // 开始输出缓冲
             ob_start();
+            
+            // 包含视图文件
             include $viewFile;
-            return ob_get_clean();
-        } catch (\Exception $e) {
-            ob_end_clean();
-            throw $e;
+            
+            // 获取并清除缓冲区内容
+            $content = ob_get_clean();
+            
+            // 恢复原始错误处理程序
+            restore_error_handler();
+            
+            return $content;
+        } catch (\Throwable $e) {
+
+            // 确保缓冲区被清除
+            if (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+            
+            // 恢复原始错误处理程序
+            restore_error_handler();
+            
+            echo $this->renderErrorView($e, $view);
         }
+    }
+
+    /**
+     * 渲染错误视图，用于开发环境
+     * 
+     * @param \Throwable $e 捕获的错误或异常
+     * @param string $view 原始视图名称
+     * @return string 错误视图HTML
+     */
+    private function renderErrorView(\Throwable $e, $view)
+    {
+        $errorType = get_class($e);
+        $message = $e->getMessage();
+        $file = $e->getFile();
+        $line = $e->getLine();
+        $trace = $e->getTraceAsString();
+        
+        $html = <<<HTML
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>视图渲染错误</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; color: #333; }
+                .error-container { background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+                .error-title { color: #721c24; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+                .error-info { margin-bottom: 15px; }
+                .error-trace { background: #f8f9fa; border: 1px solid #eee; padding: 15px; overflow: auto; font-family: monospace; font-size: 13px; }
+                .error-info strong { width: 100px; display: inline-block; }
+            </style>
+        </head>
+        <body>
+            <div class="error-container">
+                <div class="error-title">视图渲染错误</div>
+                <div class="error-info">
+                    <p><strong>视图:</strong> {$view}.php</p>
+                    <p><strong>错误类型:</strong> {$errorType}</p>
+                    <p><strong>错误信息:</strong> {$message}</p>
+                    <p><strong>文件:</strong> {$file}</p>
+                    <p><strong>行号:</strong> {$line}</p>
+                </div>
+                <div class="error-trace">
+                    <pre>{$trace}</pre>
+                </div>
+            </div>
+        </body>
+        </html>
+        HTML;
+        
+        return $html;
     }
 
     /**

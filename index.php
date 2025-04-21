@@ -10,5 +10,8 @@ error_reporting(E_ALL);
 $dispatcher = new \App\Core\Dispatcher();
 
 // 分发请求并输出结果
-echo $dispatcher->dispatch();
-
+try {
+    echo $dispatcher->dispatch();
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}

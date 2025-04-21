@@ -47,8 +47,8 @@ class Blog extends Action
     }
     
     /**
-     * 首页
-     * @return string 首页内容
+     * 首页/分类/搜索页面
+     * @return string 页面内容
      */
     public function index()
     {
@@ -73,8 +73,19 @@ class Blog extends Action
             $filters['search'] = $search;
             $this->setTitle('搜索: ' . $search);
             $this->set('searchQuery', $search);
-        } else {
+            $urlPattern = '?search=' . urlencode($search) . '&page={page}';
+        } 
+        // 检查是否有分类请求
+        else if (isset($_GET['category'])) {
+            $category = trim($_GET['category']);
+            $filters['category'] = $category;
+            $this->setTitle('分类: ' . $category);
+            $this->set('categoryQuery', $category);
+            $urlPattern = '?category=' . urlencode($category) . '&page={page}';
+        }
+        else {
             $this->setTitle('博客列表');
+            $urlPattern = '?page={page}';
         }
         
         // 获取带有分页的博客列表
@@ -82,9 +93,6 @@ class Blog extends Action
         
         // 计算总页数
         $totalPages = ceil($blogs['total'] / $pageSize);
-        
-        // 构建分页URL模式，保留搜索参数
-        $urlPattern = empty($search) ? '?page=%d' : '?search=' . urlencode($search) . '&page=%d';
         
         // 传递分页数据到视图
         $this->set('currentPage', $page);
@@ -153,23 +161,6 @@ class Blog extends Action
         return BlogsModel::getTags();
     }
 
-    /**
-     * 根据分类获取博客列表
-     * @param string $category 分类名
-     * @param int $page 页码
-     * @param int $pageSize 每页数量
-     * @return array 博客列表
-     */
-    public function getBlogsByCategory($category, $page = 1, $pageSize = 10)
-    {
-        $filters = [
-            'category' => $category,
-            'include_private' => false,
-            'include_independent' => false
-        ];
-        
-        return BlogsModel::getList($page, $pageSize, $filters);
-    }
 
     /**
      * 根据标签获取博客列表

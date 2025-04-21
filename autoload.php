@@ -106,6 +106,14 @@ if (!function_exists('dump')) {
     }
 }
 
+if (!function_exists('error_log')) {
+    function error_log($message)
+    {
+        echo "<pre>";
+        echo $message;
+        echo "</pre>";
+    }
+}
 
 mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');

@@ -93,7 +93,7 @@ class Admin extends Action
         $blogs = $this->getBlogList($currentPage, $pageSize);
         
         // 构建分页URL模式，使用Router来获取完整URL
-        $urlPattern = Router::getUrl('admin/index') . '?page=%d';
+        $urlPattern = Router::getUrl('admin/index') . '?page={page}';
         
         // 设置数据到视图
         $this->set('blogs', $blogs['items']);

@@ -76,6 +76,12 @@ class Dispatcher
             $this->controllerName = $this->router->getController();
             $this->actionName = $this->router->getAction();
             $this->params = $this->router->getParams();
+            // 将路由参数同步到 $_GET
+            if (!empty($this->params)) {
+                foreach ($this->params as $key => $value) {
+                    $_GET[$key] = urldecode($value);
+                }
+            }
             return true;
         }
         

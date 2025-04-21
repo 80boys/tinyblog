@@ -5,7 +5,21 @@
         <div class="dropdown">
             <a href="javascript:void(0);" class="dropbtn">分类</a>
             <div class="dropdown-content" id="categoryDropdown">
-                
+                <?php
+                // 获取博客分类列表
+                $categories = \App\Models\BlogsModel::getCategories();
+                if (!empty($categories)) {
+                    foreach ($categories as $categoryName => $categoryData) {
+                        // 显示分类名称和博客数量
+                        $blogCount = $categoryData['count'] ?? 0;
+                        echo '<a href="' . $this->getUrl('blog/index', ['category' => $categoryName]) . '">' . 
+                             $categoryName . ' (' . $blogCount . ')' . 
+                             '</a>';
+                    }
+                } else {
+                    echo '<a href="javascript:void(0);">暂无分类</a>';
+                }
+                ?>
             </div>
         </div>
         <a href="<?= $this->getUrl('admin/index') ?>">后台</a>
@@ -41,3 +55,5 @@
         </button>
     </nav>
 </header>
+<!-- 导航交互脚本，只在有导航栏的页面加载 -->
+<script src="<?= $this->asset('/app/html/js/navigation.js') ?>"></script>

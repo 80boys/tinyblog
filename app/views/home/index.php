@@ -40,7 +40,7 @@
         $this->renderPartial('common/pagination', [
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
-            'urlPattern' => $urlPattern ?? '?page=%d'
+            'urlPattern' => $urlPattern ?? '?page={page}'
         ]);
         ?>
     <?php endif; ?>
