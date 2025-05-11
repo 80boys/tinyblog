@@ -3,6 +3,7 @@ namespace App\Actions;
 use App\Models\BlogsModel;
 use App\Models\BlogModel;
 use App\Core\Action;
+use App\Core\Router;
 use App\Models\SettingsModel;
 
 
@@ -24,7 +25,7 @@ class Blog extends Action
     protected function injectCommonViewData()
     {
         // 注入站点基本信息
-        $settings = SettingsModel::getAll();
+        $settings = SettingsModel::getAll(true);
         $this->set('site_name', $settings['site_name']);
         $this->set('site_description', $settings['site_description']);
         $this->set('author', $settings['author']);
@@ -33,8 +34,41 @@ class Blog extends Action
         $this->set('analytics_code', $settings['analytics_code']);
         $this->set('contact_email', $settings['contact_email']);
         $this->set('wechat_id', $settings['wechat_id']);
+        $this->set('bucket_domain', $settings['qiniu_domain']);
+        $this->set('bucket_accelerate_domain', $settings['qiniu_accelerate_domain']);
     }
     
+    /**
+     * 管理员登录
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @return bool 是否登录成功
+     */
+    public function login()
+    {
+        $this->setTitle('管理员登录');
+        $this->setLayout('common');
+        $this->render('home/login');
+    }
+
+        /**
+     * 管理员登录
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @return bool 是否登录成功
+     */
+    public function doLogin($username, $password)
+    {
+        if (SettingsModel::validateAdminLogin($username, $password)) {
+            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_username'] = $username;
+            $_SESSION['admin_last_login'] = date('Y-m-d H:i:s');
+            $this->redirect(Router::getUrl('admin/index'));
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 首页/分类/搜索页面
      * @return string 页面内容
@@ -122,6 +156,7 @@ class Blog extends Action
         }
         
         $blog = BlogModel::findById($id, true);
+        
         // 如果找到博客,将 Markdown 内容转换为 HTML
         if ($blog && isset($blog['content'])) {
             $parsedown = new \App\Utils\ParsedownExtra();

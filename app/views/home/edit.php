@@ -57,7 +57,7 @@
 <script src="<?= $this->asset('/app/html/js/simplemde/simplemde.min.js') ?>"></script>
 <script src="<?= $this->asset('/app/html/js/qiniu/qiniu.min.js') ?>"></script>
 <script>
-    const bucketDoman = 'https://maplebridge.com';
+    const bucketDoman = "<?= $this->get('bucket_domain') ?>";
     async function getQiniuToken() {
         const response = await fetch('<?= $this->getUrl('admin/getQiniuToken') ?>');
         const data = await response.json();

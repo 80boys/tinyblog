@@ -64,7 +64,7 @@ class Router
      * @param string|null $baseUrl 基础URL
      * @return Router
      */
-    public static function getInstance(bool $prettyUrl = true, ?string $baseUrl = null)
+    public static function getInstance(bool $prettyUrl = false, ?string $baseUrl = null)
     {
         if (self::$instance === null) {
             self::$instance = new self($prettyUrl, $baseUrl);

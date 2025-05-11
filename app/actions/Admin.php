@@ -9,6 +9,8 @@ use App\Core\Action;
 use App\Core\Router;
 use App\Models\CategoryModel;
 use App\Models\SettingsModel;
+require_once  __DIR__ . '/../utils/Qiniu/functions.php';
+require_once  __DIR__ . '/../utils/Qiniu/Http/Middleware/Middleware.php';
 
 /**
  * 管理员Action
@@ -32,6 +34,10 @@ class Admin extends Action
         $this->set('analytics_code', $settings['analytics_code']);
         $this->set('contact_email', $settings['contact_email']);
         $this->set('wechat_id', $settings['wechat_id']);
+        $this->set('bucket_domain', $settings['qiniu_domain']);
+        $this->set('bucket_accelerate_domain', $settings['qiniu_accelerate_domain']);
+
+        $this->checkLogin();
     }
 
     public function category()
@@ -168,12 +174,6 @@ class Admin extends Action
         $this->render('home/index');
     }
 
-    public function __construct()
-    {
-        // 确保已登录
-        // $this->checkLogin();
-    }
-
     /**
      * 检查是否已登录
      * @return bool
@@ -184,43 +184,12 @@ class Admin extends Action
             // 如果未登录且不是登录页面，重定向到登录页面
             $currentUrl = $_SERVER['REQUEST_URI'];
             if (!strpos($currentUrl, 'login')) {
-                $this->redirect(Router::getUrl('admin/login'));
+                $this->redirect(Router::getUrl('blog/login'));
                 exit;
             }
             return false;
         }
         return true;
-    }
-
-    /**
-     * 管理员登录
-     * @param string $username 用户名
-     * @param string $password 密码
-     * @return bool 是否登录成功
-     */
-    public function login()
-    {
-        $this->setTitle('管理员登录');
-        $this->setLayout('common');
-        $this->render('home/login');
-    }
-
-    /**
-     * 管理员登录
-     * @param string $username 用户名
-     * @param string $password 密码
-     * @return bool 是否登录成功
-     */
-    public function doLogin($username, $password)
-    {
-        if (SettingsModel::validateAdminLogin($username, $password)) {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_username'] = $username;
-            $_SESSION['admin_last_login'] = date('Y-m-d H:i:s');
-            $this->redirect(Router::getUrl('admin/index'));
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -234,7 +203,7 @@ class Admin extends Action
         unset($_SESSION['admin_last_login']);
 
         session_destroy();
-        $this->redirect(Router::getUrl('admin/login'));
+        $this->redirect(Router::getUrl('blog/login'));
     }
 
     /**
@@ -348,7 +317,8 @@ class Admin extends Action
             'is_independent' => $data['is_independent'] ?? false,
             'category' => $data['blog_category'] ?? '未分类',
             'tags' => empty($data['blog_tags']) ? [] : array_map('trim', explode(',', $data['blog_tags'])),
-            'path' => $data['blog_path'] ?? null
+            'path' => $data['blog_path'] ?? null,
+            'blog_attachment' => isset($_FILES['blog_attachment']) ? $this->uploadAttachment($_FILES['blog_attachment']) : null
         ];
 
         // 如果有 path，从中提取 ID
@@ -356,7 +326,7 @@ class Admin extends Action
         if (!empty($blogData['path'])) {
             $id = basename($blogData['path'], '.php');
         }
-
+        
         // 创建或获取博客对象
         $blog = $id ? BlogModel::findById($id) : new BlogModel();
 
@@ -373,7 +343,7 @@ class Admin extends Action
         $blog->setAuthor($blogData['author']);
         $blog->setIndependent($blogData['is_independent']);
         $blog->setPrivate($blogData['is_private']);
-
+        $blog->setBlogAttachment($blogData['blog_attachment']);
 
         // 如果是已有博客，保持原有路径
         if (!empty($blogData['path'])) {
@@ -383,6 +353,44 @@ class Admin extends Action
         // 保存博客并返回布尔值
         $result = $blog->save();
         return $result !== false;
+    }
+
+    /**
+     * 上传附件 通过七牛云
+     * @param array $file $_FILES数组中的文件
+     * @return string|bool 成功返回图片URL，失败返回false
+     */
+    public function uploadAttachment($file)
+    {
+        if (!isset($file['name']) 
+            || !isset($file['tmp_name']) 
+            || !isset($file['error'])
+            || !isset($file['size'])
+            || !isset($file['type'])
+        ) {
+            return false;
+        }
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return false;
+        }
+
+        $settings = SettingsModel::getAll();
+        $accessKey = $settings['qiniu_access_key'];
+        $secretKey = $settings['qiniu_secret_key'];
+        $bucket = $settings['qiniu_bucket'];
+
+        $fileName = $file['name'];
+        $filePath = $file['tmp_name'];
+        
+        $auth = new \Qiniu\Auth($accessKey, $secretKey);
+        $token = $auth->uploadToken($bucket);
+        $uploadManager = new \Qiniu\Storage\UploadManager();
+        list($ret, $err) = $uploadManager->putFile($token, "mapleBridge/" . time() . "-" . $fileName, $filePath);
+        if ($err === null) {
+            return $settings["qiniu_domain"] . "/" . $ret['key'];
+        }
+        return false;
     }
 
     /**
@@ -401,39 +409,6 @@ class Admin extends Action
         if ($blog) {
             return $blog->delete();
         }
-        return false;
-    }
-
-    /**
-     * 上传图片
-     * @param array $file $_FILES数组中的文件
-     * @return string|bool 成功返回图片URL，失败返回false
-     */
-    public function uploadImage($file)
-    {
-        $uploadDir = PROJECT_ROOT . '/public/uploads/images/';
-
-        // 确保上传目录存在
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        // 检查文件类型
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!in_array($file['type'], $allowedTypes)) {
-            return false;
-        }
-
-        // 生成唯一文件名
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $newFilename = uniqid() . '.' . $extension;
-        $targetFile = $uploadDir . $newFilename;
-
-        // 移动上传的文件
-        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            return '/uploads/images/' . $newFilename;
-        }
-
         return false;
     }
 

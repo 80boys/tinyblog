@@ -307,7 +307,7 @@
 
 /* 深色模式适配 */
 [data-theme="dark"] .main-content .filter-toolbar {
-    background-color: #2d333b;
+    background-color: #2d2d2d;
 }
 
 [data-theme="dark"] .main-content select,

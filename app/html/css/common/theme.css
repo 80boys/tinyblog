@@ -1,5 +1,6 @@
 :root {
     /* 亮色主题变量（默认） */
+    --pre-bg-color: #e9ecef;
     --bg-primary: #f4f4f4;
     --bg-secondary: #fff;
     --bg-navbar: #383c44;
@@ -24,6 +25,7 @@
 
 /* 暗色主题 */
 [data-theme="dark"] {
+    --pre-bg-color: #282c34;
     --bg-primary: #121212;
     --bg-secondary: #1e1e1e;
     --bg-navbar: #1a1a1a;

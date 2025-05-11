@@ -59,6 +59,24 @@ class Dispatcher
      */
     public function __construct(?Router $router = null, ?View $view = null)
     {
+        // 将警告和通知等转为异常
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            // 只转换非致命错误，因为致命错误无法在这里处理
+            if (!(error_reporting() & $errno)) {
+                return false;
+            }
+            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        });
+
+        // 捕获致命错误
+        register_shutdown_function(function() {
+            $error = error_get_last();
+            if ($error !== null && in_array($error['type'], 
+                [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+                echo $error['message'];
+            }
+        });
+
         $this->router = $router ?: Router::getInstance();
         $this->view = $view ?: new View(getProjectRoot() . '/app/views/');
     }
@@ -264,6 +282,7 @@ class Dispatcher
         // 否则显示500错误页面
         if (defined('DEBUG') && constant('DEBUG')) {
             // 调试模式下显示详细错误信息
+            dump($e->getMessage());die;
             return $this->view->renderError(500, $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n" . $e->getTraceAsString());
         }
         

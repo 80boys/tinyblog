@@ -21,6 +21,7 @@ class BlogModel
     private $path;        // 文件路径
     private $is_private;  // 是否私有
     private $is_independent; // 是否独立页面
+    private $blog_attachment; // 博客附件
 
     // 存储路径配置
     private static $storagePath = 'content/';
@@ -43,6 +44,7 @@ class BlogModel
             $this->path = isset($data['path']) ? $data['path'] : null;
             $this->is_private = isset($data['is_private']) ? $data['is_private'] : false;
             $this->is_independent = isset($data['is_independent']) ? $data['is_independent'] : false;
+            $this->blog_attachment = isset($data['blog_attachment']) ? $data['blog_attachment'] : '';
         }
     }
 
@@ -99,6 +101,11 @@ class BlogModel
     {
         return $this->is_independent;
     }
+    public function getBlogAttachment()
+    {
+        return $this->blog_attachment;
+    }
+
 
     // Setter方法
     public function setId($id)
@@ -152,6 +159,10 @@ class BlogModel
     public function setIndependent($is_independent)
     {
         $this->is_independent = $is_independent;
+    }
+    public function setBlogAttachment($blog_attachment)
+    {
+        $this->blog_attachment = $blog_attachment;
     }
 
     // 从ID加载博客
@@ -219,6 +230,8 @@ class BlogModel
 
             // 准备要保存的数据
             $data = [
+                'id' => $this->id,
+                'path' => $this->path,
                 'title' => $this->title,
                 'subtitle' => $this->subtitle,
                 'content' => $this->content,
@@ -227,16 +240,22 @@ class BlogModel
                 'tags' => $this->tags,
                 'cover_image' => $this->cover_image,
                 'date' => $this->created_at,
-                'updated_at' => $this->updated_at
+                'updated_at' => $this->updated_at,
+                'blog_attachment' => $this->blog_attachment,
+                'created_at' => $this->created_at,
             ];
 
             // 添加额外属性
             if ($this->is_private) {
                 $data['is_private'] = true;
+            } else {
+                $data['is_private'] = false;
             }
 
             if ($this->is_independent) {
                 $data['is_independent'] = true;
+            } else {
+                $data['is_independent'] = false;
             }
 
             // 准备文件路径

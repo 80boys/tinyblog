@@ -6,7 +6,7 @@
             <div class="login-header">
                 <h1>管理员登录</h1>
             </div>
-            <form action="/admin/doLogin" method="post" class="login-form">
+            <form action="<?= $this->getUrl('/blog/doLogin') ?>" method="post" class="login-form">
                 <div class="form-group">
                     <input type="text" id="username" name="username" placeholder="请输入用户名" required>
                 </div>

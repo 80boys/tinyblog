@@ -36,7 +36,7 @@ class SettingsModel
             'qiniu_accelerate_domain' => 'qiniu_accelerate_domain',
             'qiniu_domain' => 'qiniu_domain',
             'admin_username' => 'admin',
-            'admin_password' => password_hash('admin', PASSWORD_DEFAULT),
+            'admin_password' => password_hash('admin123', PASSWORD_DEFAULT),
             'beian_number' => 'beian_number',
             'footer_text' => 'footer_text',
             'analytics_code' => 'analytics_code'
