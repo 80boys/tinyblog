@@ -48,7 +48,7 @@ class View
      */
     public function getBeianNumber()
     {
-        return $this->get('beianNumber', '默认备案号');
+        return $this->get('beian_number', '默认备案号');
     }
 
 
@@ -59,7 +59,7 @@ class View
      */
     public function getSiteName()
     {
-        return $this->get('siteName', '默认网站名称');
+        return $this->get('site_name', '默认网站名称');
     }
 
     /**
@@ -69,7 +69,7 @@ class View
      */
     public function getSiteDescription()
     {
-        return $this->get('siteDescription', '默认网站描述');
+        return $this->get('site_description', '默认网站描述');
     }
 
     /**
@@ -100,7 +100,7 @@ class View
      */
     public function getAnalyticsCode()
     {
-        return $this->get('analyticsCode', '');
+        return $this->get('analytics_code', '');
     }
 
     /**

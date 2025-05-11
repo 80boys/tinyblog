@@ -15,6 +15,25 @@ use App\Models\SettingsModel;
  */
 class Admin extends Action
 {
+
+    public function initialize()
+    {
+        $this->injectCommonViewData();
+    }
+
+    private function injectCommonViewData()
+    {
+        $settings = SettingsModel::getAll(true);
+        $this->set('site_name', $settings['site_name']);
+        $this->set('site_description', $settings['site_description']);
+        $this->set('author', $settings['author']);
+        $this->set('footer_text', $settings['footer_text']);
+        $this->set('beian_number', $settings['beian_number']);
+        $this->set('analytics_code', $settings['analytics_code']);
+        $this->set('contact_email', $settings['contact_email']);
+        $this->set('wechat_id', $settings['wechat_id']);
+    }
+
     public function category()
     {
         $this->set('categories', CategoryModel::getAll());
@@ -87,19 +106,62 @@ class Admin extends Action
         // 获取当前页码
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $currentPage = max(1, $currentPage); // 确保页码至少为1
-        $pageSize = 5; // 每页显示的博客数量
+        $pageSize = 10; // 每页显示的博客数量
+        
+        // 获取筛选条件
+        $filters = [];
+        
+        // 分类筛选
+        if (isset($_GET['category']) && !empty($_GET['category'])) {
+            $filters['category'] = $_GET['category'];
+        }
+        
+        // 搜索功能
+        if (isset($_GET['search']) && !empty($_GET['search'])) {
+            $filters['search'] = $_GET['search'];
+        }
+        
+        // 排序功能
+        if (isset($_GET['sort_by']) && !empty($_GET['sort_by'])) {
+            $filters['sort_by'] = $_GET['sort_by'];
+        } else {
+            $filters['sort_by'] = 'date'; // 默认按日期排序
+        }
+        
+        if (isset($_GET['sort_order']) && in_array($_GET['sort_order'], ['asc', 'desc'])) {
+            $filters['sort_order'] = $_GET['sort_order'];
+        } else {
+            $filters['sort_order'] = 'desc'; // 默认降序
+        }
 
         // 获取博客列表数据
-        $blogs = $this->getBlogList($currentPage, $pageSize);
+        $blogs = $this->getBlogList($currentPage, $pageSize, $filters);
         
-        // 构建分页URL模式，使用Router来获取完整URL
-        $urlPattern = Router::getUrl('admin/index') . '?page={page}';
+        // 构建分页URL模式，保留所有筛选参数
+        $urlParams = [];
+        if (isset($filters['category'])) $urlParams[] = 'category=' . urlencode($filters['category']);
+        if (isset($filters['search'])) $urlParams[] = 'search=' . urlencode($filters['search']);
+        if (isset($filters['sort_by'])) $urlParams[] = 'sort_by=' . urlencode($filters['sort_by']);
+        if (isset($filters['sort_order'])) $urlParams[] = 'sort_order=' . urlencode($filters['sort_order']);
+        
+        $urlPattern = Router::getUrl('admin/index');
+        if (!empty($urlParams)) {
+            $urlPattern .= '?' . implode('&', $urlParams) . '&page={page}';
+        } else {
+            $urlPattern .= '?page={page}';
+        }
+        
+        // 获取所有分类，用于筛选
+        $categories = CategoryModel::getAllWithStats();
         
         // 设置数据到视图
         $this->set('blogs', $blogs['items']);
         $this->set('totalPages', ceil($blogs['total'] / $pageSize));
         $this->set('currentPage', $currentPage);
         $this->set('urlPattern', $urlPattern);
+        $this->set('categories', $categories);
+        $this->set('filters', $filters);
+        $this->set('totalBlogs', $blogs['total']);
 
         $this->setLayout('admin');
         $this->setTitle('博客管理');
@@ -190,17 +252,60 @@ class Admin extends Action
      * 获取博客列表 (后台版本)
      * @param int $page 页码
      * @param int $pageSize 每页数量
+     * @param array $filters 过滤条件
      * @return array 博客列表
      */
-    public function getBlogList($page = 1, $pageSize = 20)
+    public function getBlogList($page = 1, $pageSize = 20, $filters = [])
     {
         // 获取所有博客数据
         $caches = BlogsModel::getCaches();
         $blogs = $caches['blogs'];
 
-        // 按日期降序排序
-        uasort($blogs, function ($a, $b) {
-            return strtotime($b['date']) - strtotime($a['date']);
+        // 应用筛选条件
+        if (!empty($filters)) {
+            $blogs = array_filter($blogs, function ($blog) use ($filters) {
+                // 按分类筛选
+                if (isset($filters['category']) && !empty($filters['category'])) {
+                    if ($blog['category'] !== $filters['category']) {
+                        return false;
+                    }
+                }
+                
+                // 按搜索条件筛选
+                if (isset($filters['search']) && !empty($filters['search'])) {
+                    $search = strtolower($filters['search']);
+                    $title = strtolower($blog['title'] ?? '');
+                    $subtitle = strtolower($blog['subtitle'] ?? '');
+                    
+                    if (strpos($title, $search) === false && strpos($subtitle, $search) === false) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+        }
+
+        // 应用排序
+        $sortBy = $filters['sort_by'] ?? 'date';
+        $sortOrder = $filters['sort_order'] ?? 'desc';
+        
+        uasort($blogs, function ($a, $b) use ($sortBy, $sortOrder) {
+            $valA = $a[$sortBy] ?? '';
+            $valB = $b[$sortBy] ?? '';
+            
+            // 日期特殊处理
+            if ($sortBy === 'date') {
+                $valA = strtotime($valA);
+                $valB = strtotime($valB);
+            }
+            
+            // 根据排序方向比较
+            if ($sortOrder === 'asc') {
+                return $valA <=> $valB;
+            } else {
+                return $valB <=> $valA;
+            }
         });
         
         // 计算分页数据
@@ -238,6 +343,9 @@ class Admin extends Action
             'title' => $data['blog_title'] ?? '',
             'subtitle' => $data['blog_subtitle'] ?? '',
             'content' => $data['blog_content'] ?? '',
+            'author' => $data['blog_author'] ?? 'admin',
+            'is_private' => $data['is_private'] ?? false,
+            'is_independent' => $data['is_independent'] ?? false,
             'category' => $data['blog_category'] ?? '未分类',
             'tags' => empty($data['blog_tags']) ? [] : array_map('trim', explode(',', $data['blog_tags'])),
             'path' => $data['blog_path'] ?? null
@@ -262,6 +370,10 @@ class Admin extends Action
         $blog->setContent($blogData['content']);
         $blog->setCategory($blogData['category']);
         $blog->setTags($blogData['tags']);
+        $blog->setAuthor($blogData['author']);
+        $blog->setIndependent($blogData['is_independent']);
+        $blog->setPrivate($blogData['is_private']);
+
 
         // 如果是已有博客，保持原有路径
         if (!empty($blogData['path'])) {

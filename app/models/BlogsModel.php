@@ -190,6 +190,46 @@ class BlogsModel
         return $caches['categories'];
     }
 
+    // 获取公开的分类列表（不包含私有和独立页面的统计）
+    public static function getPublicCategories()
+    {
+        $caches = self::getCaches();
+        $categories = $caches['categories'];
+        $blogs = $caches['blogs'];
+        
+        // 创建一个新的分类统计数组
+        $publicCategories = [];
+        
+        // 复制原始分类结构
+        foreach ($categories as $categoryName => $categoryData) {
+            $publicCategories[$categoryName] = [
+                'count' => 0,
+                'blogs' => []
+            ];
+        }
+        
+        // 重新计算每个分类的公开博客数量
+        foreach ($blogs as $path => $blog) {
+            // 跳过私有和独立页面
+            if ((isset($blog['is_private']) && $blog['is_private'] === true) ||
+                (isset($blog['is_independent']) && $blog['is_independent'] === true)) {
+                continue;
+            }
+            
+            $category = $blog['category'];
+            if (isset($publicCategories[$category])) {
+                $publicCategories[$category]['blogs'][] = $path;
+            }
+        }
+        
+        // 更新计数
+        foreach ($publicCategories as &$category) {
+            $category['count'] = count($category['blogs']);
+        }
+        
+        return $publicCategories;
+    }
+
     // 获取标签列表
     public static function getTags()
     {
@@ -244,7 +284,9 @@ class BlogsModel
 
         $independentPages = [];
         foreach ($blogs as $path => $blog) {
-            if (isset($blog['is_independent']) && $blog['is_independent'] === true) {
+            // 确保页面是独立页面且不是私有的
+            if (isset($blog['is_independent']) && $blog['is_independent'] === true &&
+                (!isset($blog['is_private']) || $blog['is_private'] !== true)) {
                 $blogFilePath = PROJECT_ROOT . '/' . self::$storagePath . $path;
                 $fullBlog = FileManager::readBlogFile($blogFilePath);
 

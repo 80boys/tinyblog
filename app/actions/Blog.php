@@ -24,7 +24,7 @@ class Blog extends Action
     protected function injectCommonViewData()
     {
         // 注入站点基本信息
-        $settings = $this->getSetting();
+        $settings = SettingsModel::getAll();
         $this->set('site_name', $settings['site_name']);
         $this->set('site_description', $settings['site_description']);
         $this->set('author', $settings['author']);
@@ -33,17 +33,6 @@ class Blog extends Action
         $this->set('analytics_code', $settings['analytics_code']);
         $this->set('contact_email', $settings['contact_email']);
         $this->set('wechat_id', $settings['wechat_id']);
-    }
-
-    /**
-     * 获取站点配置
-     * @param string|null $key 配置键名，为null时返回所有配置
-     * @param mixed $default 默认值
-     * @return mixed 配置值
-     */
-    protected function getSetting($key = null, $default = null)
-    {
-        return $key === null ? SettingsModel::getAll() : SettingsModel::get($key, $default);
     }
     
     /**

@@ -6,15 +6,17 @@
             <a href="javascript:void(0);" class="dropbtn">分类</a>
             <div class="dropdown-content" id="categoryDropdown">
                 <?php
-                // 获取博客分类列表
-                $categories = \App\Models\BlogsModel::getCategories();
+                // 获取博客分类列表（只统计公开的博客）
+                $categories = \App\Models\BlogsModel::getPublicCategories();
                 if (!empty($categories)) {
                     foreach ($categories as $categoryName => $categoryData) {
-                        // 显示分类名称和博客数量
+                        // 只显示有公开博客的分类
                         $blogCount = $categoryData['count'] ?? 0;
-                        echo '<a href="' . $this->getUrl('blog/index', ['category' => $categoryName]) . '">' . 
-                             $categoryName . ' (' . $blogCount . ')' . 
-                             '</a>';
+                        if ($blogCount > 0) {
+                            echo '<a href="' . $this->getUrl('blog/index', ['category' => $categoryName]) . '">' . 
+                                 $categoryName . ' (' . $blogCount . ')' . 
+                                 '</a>';
+                        }
                     }
                 } else {
                     echo '<a href="javascript:void(0);">暂无分类</a>';
@@ -22,6 +24,22 @@
                 ?>
             </div>
         </div>
+        
+        <?php
+        // 获取独立页面并生成导航链接
+        $independentPages = \App\Models\BlogsModel::getIndependentPages();
+        if (!empty($independentPages)) {
+            foreach ($independentPages as $page) {
+                // 确保页面有标题和ID
+                if (isset($page['title']) && isset($page['id'])) {
+                    echo '<a href="' . $this->getUrl('blog/getBlogDetail', ['id' => $page['id']]) . '">' . 
+                         htmlspecialchars($page['title']) . 
+                         '</a>';
+                }
+            }
+        }
+        ?>
+        
         <a href="<?= $this->getUrl('admin/index') ?>">后台</a>
         <div class="search-container">
             <form action="<?= $this->getUrl('blog/index') ?>" method="get">
