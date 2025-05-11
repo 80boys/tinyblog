@@ -241,8 +241,8 @@ class BlogModel
                 'cover_image' => $this->cover_image,
                 'date' => $this->created_at,
                 'updated_at' => $this->updated_at,
-                'blog_attachment' => $this->blog_attachment,
                 'created_at' => $this->created_at,
+                'blog_attachment' => $this->blog_attachment
             ];
 
             // 添加额外属性

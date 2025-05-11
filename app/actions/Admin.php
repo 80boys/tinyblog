@@ -317,9 +317,18 @@ class Admin extends Action
             'is_independent' => $data['is_independent'] ?? false,
             'category' => $data['blog_category'] ?? '未分类',
             'tags' => empty($data['blog_tags']) ? [] : array_map('trim', explode(',', $data['blog_tags'])),
-            'path' => $data['blog_path'] ?? null,
-            'blog_attachment' => isset($_FILES['blog_attachment']) ? $this->uploadAttachment($_FILES['blog_attachment']) : null
+            'path' => $data['blog_path'] ?? null
         ];
+        
+        if (isset($_FILES['blog_attachment'])
+            && isset($_FILES['blog_attachment']['error'])
+            && $_FILES['blog_attachment']['error'] === UPLOAD_ERR_OK
+        ) {
+            $fileUrl = $this->uploadAttachment($_FILES['blog_attachment']);
+            if ($fileUrl) {
+                $blogData['blog_attachment'] = $fileUrl;
+            }
+        }
 
         // 如果有 path，从中提取 ID
         $id = null;
@@ -343,7 +352,10 @@ class Admin extends Action
         $blog->setAuthor($blogData['author']);
         $blog->setIndependent($blogData['is_independent']);
         $blog->setPrivate($blogData['is_private']);
-        $blog->setBlogAttachment($blogData['blog_attachment']);
+        
+        if (isset($blogData['blog_attachment'])) {
+            $blog->setBlogAttachment($blogData['blog_attachment']);
+        }
 
         // 如果是已有博客，保持原有路径
         if (!empty($blogData['path'])) {

@@ -3,6 +3,11 @@
     <!-- 筛选和搜索工具栏 -->
     <section class="filter-toolbar">
         <form action="<?= $this->getUrl('admin/index') ?>" method="get" class="filter-form">
+        <?php if (!$this->isPrettyUrl()): ?>
+            <!-- 只在非伪静态模式下添加隐藏字段 -->
+            <input type="hidden" name="c" value="admin">
+            <input type="hidden" name="a" value="index">
+        <?php endif; ?>
             <div class="filter-row">
                 <div class="filter-group">
                     <label for="category-filter">分类筛选:</label>

@@ -42,7 +42,7 @@
     <div class="error-container">
         <h1>500</h1>
         <p>很抱歉，服务器遇到了错误。</p>
-        <p>请稍后再试或联系网站管理员。</p>
+        <p>错误信息：<?= $message ?></p>
         <p><a href="/">返回首页</a></p>
     </div>
 </body>

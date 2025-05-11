@@ -469,4 +469,9 @@ class View
     {
         echo isset($this->viewData['content']) ? $this->viewData['content'] : '';
     }
+
+    public function isPrettyUrl()
+    {
+        return Router::getInstance()->prettyUrl;
+    }
 }

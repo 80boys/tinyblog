@@ -282,8 +282,7 @@ class Dispatcher
         // 否则显示500错误页面
         if (defined('DEBUG') && constant('DEBUG')) {
             // 调试模式下显示详细错误信息
-            dump($e->getMessage());die;
-            return $this->view->renderError(500, $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "\n" . $e->getTraceAsString());
+            return $this->view->renderError(500, $e->getTraceAsString());
         }
         
         return $this->view->renderError(500, "系统错误，请稍后再试");
