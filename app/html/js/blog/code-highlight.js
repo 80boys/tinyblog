@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 创建语言标签
             const languageLabel = document.createElement('span');
             languageLabel.classList.add('language-label');
-            console.log(block.classList)
+            // console.log(block.classList)
             languageLabel.textContent = block.classList[1]?.replace('language-', '') || 'text';
 
             // 创建折叠按钮
