@@ -1,6 +1,6 @@
 .theme-transition footer {
     text-align: center;
-    padding: 20px; 
+    /* padding: 20px;  */
     color: var(--text-primary);
 }
 .theme-transition footer a {
