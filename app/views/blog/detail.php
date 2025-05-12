@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="<?= $this->asset('/app/html/css/blog/detail.css') ?>">
 <main class="blog-detail-container layout-container">
-    <?php if (!$blog || ($blog['is_private'] && !isset($_SESSION['admin_logged_in']))): ?>
+    <?php if (!$blog || (isset($blog['is_private']) && $blog['is_private'] && !isset($_SESSION['admin_logged_in']))): ?>
         <div class="error-message">
             <h1>博客不存在</h1>
             <p>抱歉，您请求的博客内容不存在或已被删除。</p>
@@ -40,11 +40,14 @@
             <section class="related-posts">
                 <?php
                 $relatedPosts = [];
-                $allBlogs = \App\Models\BlogsModel::getList(1, 10000, 
+                $allBlogs = \App\Models\BlogsModel::getList(
+                    1,
+                    10000,
                     [
-                        'include_private' => false, 
+                        'include_private' => false,
                         'include_independent' => false
-                    ]);
+                    ]
+                );
                 if (isset($allBlogs["items"])) {
                     $relatedPosts = array_filter($allBlogs["items"], function ($post) use ($blog) {
                         return !empty($post['category']) &&
@@ -53,7 +56,7 @@
                     });
                     $relatedPosts = array_slice($relatedPosts, 0, 3);
                 }
-               
+
                 if (empty($relatedPosts)): ?>
                     <h2>相关文章</h2>
                     <div class="no-related">暂无相关文章</div>
@@ -61,11 +64,11 @@
                     <h2>相关文章</h2>
                     <?php foreach ($relatedPosts as $post): ?>
                         <div class="related-post">
-                            <h3><a href="<?= $this->getUrl('blog/getBlogDetail', ['id' => htmlspecialchars(str_replace('.php', '', $post['path']))] )?>">
+                            <h3><a href="<?= $this->getUrl('blog/getBlogDetail', ['id' => htmlspecialchars(str_replace('.php', '', $post['path']))]) ?>">
                                     <?php echo htmlspecialchars($post['title'] ?? ''); ?>
                                 </a></h3>
                             <?php if (!empty($post['subtitle'])): ?>
-                                <a href="<?= $this->getUrl('blog/getBlogDetail', ['id' => htmlspecialchars(str_replace('.php', '', $post['path']))] )?>">
+                                <a href="<?= $this->getUrl('blog/getBlogDetail', ['id' => htmlspecialchars(str_replace('.php', '', $post['path']))]) ?>">
                                     <p><?php echo htmlspecialchars($post['subtitle']); ?></p>
                                 </a>
                             <?php endif; ?>

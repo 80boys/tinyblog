@@ -27,6 +27,15 @@
                     value="<?php echo htmlspecialchars($settings['default_keywords'] ?? ''); ?>">
                 <span class="hint">用于SEO，多个关键词用英文逗号分隔</span>
             </div>
+            <div class="form-group">
+                <label for="is_static">是否启用伪静态：</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="is_static" name="is_static"
+                        <?php echo isset($settings['is_static']) && $settings['is_static'] ? 'checked' : ''; ?>>
+                    <label for="is_static"></label>
+                    <span class="toggle-label">启用</span>
+                </div>
+            </div>
         </div>
 
         <!-- 联系方式设置 -->

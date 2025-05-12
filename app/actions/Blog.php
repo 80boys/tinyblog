@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Actions;
+
 use App\Models\BlogsModel;
 use App\Models\BlogModel;
 use App\Core\Action;
@@ -37,7 +39,7 @@ class Blog extends Action
         $this->set('bucket_domain', $settings['qiniu_domain']);
         $this->set('bucket_accelerate_domain', $settings['qiniu_accelerate_domain']);
     }
-    
+
     /**
      * 管理员登录
      * @param string $username 用户名
@@ -51,7 +53,7 @@ class Blog extends Action
         $this->render('home/login');
     }
 
-        /**
+    /**
      * 管理员登录
      * @param string $username 用户名
      * @param string $password 密码
@@ -76,20 +78,20 @@ class Blog extends Action
     public function index()
     {
         $this->setLayout('default');
-        
+
         // 获取当前页码
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $page = max(1, $page); // 确保页码至少为1
-        
+
         // 设置每页显示的博客数量
         $pageSize = 5;
-        
+
         // 创建过滤条件
         $filters = [
             'include_private' => false,
             'include_independent' => false
         ];
-        
+
         // 检查是否有搜索请求
         $search = isset($_GET['search']) ? trim($_GET['search']) : '';
         if (!empty($search)) {
@@ -97,7 +99,7 @@ class Blog extends Action
             $this->setTitle('搜索: ' . $search);
             $this->set('searchQuery', $search);
             $urlPattern = '?search=' . urlencode($search) . '&page={page}';
-        } 
+        }
         // 检查是否有分类请求
         else if (isset($_GET['category'])) {
             $category = trim($_GET['category']);
@@ -105,23 +107,22 @@ class Blog extends Action
             $this->setTitle('分类: ' . $category);
             $this->set('categoryQuery', $category);
             $urlPattern = '?category=' . urlencode($category) . '&page={page}';
-        }
-        else {
-            $this->setTitle('博客列表');
+        } else {
+            $this->setTitle($this->get('site_name', '博客列表'));
             $urlPattern = '?page={page}';
         }
-        
+
         // 获取带有分页的博客列表
         $blogs = BlogsModel::getList($page, $pageSize, $filters);
-        
+
         // 计算总页数
         $totalPages = ceil($blogs['total'] / $pageSize);
-        
+
         // 传递分页数据到视图
         $this->set('currentPage', $page);
         $this->set('totalPages', $totalPages);
         $this->set('urlPattern', $urlPattern);
-        
+
         $this->render('blog/index', ['blogs' => $blogs]);
     }
 
@@ -137,7 +138,7 @@ class Blog extends Action
             'include_private' => false,
             'include_independent' => false
         ];
-        
+
         return BlogsModel::getList($page, $pageSize, $filters);
     }
 
@@ -150,13 +151,13 @@ class Blog extends Action
     {
         $this->setLayout('blog');
         $this->setTitle('博客详情');
- 
+
         if (is_array($id)) {
             $id = implode('/', $id);
         }
-        
+
         $blog = BlogModel::findById($id, true);
-        
+
         // 如果找到博客,将 Markdown 内容转换为 HTML
         if ($blog && isset($blog['content'])) {
             $parsedown = new \App\Utils\ParsedownExtra();
@@ -200,7 +201,7 @@ class Blog extends Action
             'include_private' => false,
             'include_independent' => false
         ];
-        
+
         return BlogsModel::getList($page, $pageSize, $filters);
     }
 
@@ -218,10 +219,10 @@ class Blog extends Action
             'include_private' => false,
             'include_independent' => false
         ];
-        
+
         return BlogsModel::getList($page, $pageSize, $filters);
     }
-    
+
     /**
      * 获取最近的博客
      * @param int $limit 获取数量
@@ -231,7 +232,7 @@ class Blog extends Action
     {
         return BlogsModel::getRecentBlogs($limit);
     }
-    
+
     /**
      * 获取相关博客
      * @param string $blogId 博客ID
@@ -242,7 +243,7 @@ class Blog extends Action
     {
         return BlogsModel::getRelatedBlogs($blogId, $limit);
     }
-    
+
     /**
      * 获取博客归档
      * @return array 归档数据
@@ -251,7 +252,7 @@ class Blog extends Action
     {
         return BlogsModel::getArchives();
     }
-    
+
     /**
      * 根据年月获取博客列表
      * @param int $year 年份
@@ -267,12 +268,11 @@ class Blog extends Action
             'include_private' => false,
             'include_independent' => false
         ];
-        
+
         if ($month) {
             $filters['month'] = $month;
         }
-        
+
         return BlogsModel::getList($page, $pageSize, $filters);
     }
-    
 }

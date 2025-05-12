@@ -5,6 +5,47 @@
     margin-top: 20px;
 }
 
+.settings-page .toggle-switch {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.settings-page .toggle-switch input[type="checkbox"] {
+    display: none;
+}
+
+.settings-page .toggle-switch label {
+    display: block;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.settings-page .toggle-switch label:before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: left 0.3s;
+}
+
+.settings-page .toggle-switch input[type="checkbox"]:checked + label {
+    background-color: #2196F3;
+}
+
+.settings-page .toggle-switch input[type="checkbox"]:checked + label:before {
+    left: 22px;
+}
+
 .settings-page .settings-form {
     background: #fff;
     border-radius: 8px;

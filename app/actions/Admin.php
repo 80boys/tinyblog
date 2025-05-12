@@ -9,6 +9,7 @@ use App\Core\Action;
 use App\Core\Router;
 use App\Models\CategoryModel;
 use App\Models\SettingsModel;
+
 require_once  __DIR__ . '/../utils/Qiniu/functions.php';
 require_once  __DIR__ . '/../utils/Qiniu/Http/Middleware/Middleware.php';
 
@@ -104,6 +105,12 @@ class Admin extends Action
             'analytics_code' => $_POST['analytics_code'] ?? ''
         ];
 
+        if (isset($_POST['is_static']) && $_POST['is_static'] == 'on') {
+            $settings['is_static'] = true;
+        } else {
+            $settings['is_static'] = false;
+        }
+
         return SettingsModel::save($settings);
     }
 
@@ -113,27 +120,27 @@ class Admin extends Action
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $currentPage = max(1, $currentPage); // 确保页码至少为1
         $pageSize = 10; // 每页显示的博客数量
-        
+
         // 获取筛选条件
         $filters = [];
-        
+
         // 分类筛选
         if (isset($_GET['category']) && !empty($_GET['category'])) {
             $filters['category'] = $_GET['category'];
         }
-        
+
         // 搜索功能
         if (isset($_GET['search']) && !empty($_GET['search'])) {
             $filters['search'] = $_GET['search'];
         }
-        
+
         // 排序功能
         if (isset($_GET['sort_by']) && !empty($_GET['sort_by'])) {
             $filters['sort_by'] = $_GET['sort_by'];
         } else {
             $filters['sort_by'] = 'date'; // 默认按日期排序
         }
-        
+
         if (isset($_GET['sort_order']) && in_array($_GET['sort_order'], ['asc', 'desc'])) {
             $filters['sort_order'] = $_GET['sort_order'];
         } else {
@@ -142,24 +149,24 @@ class Admin extends Action
 
         // 获取博客列表数据
         $blogs = $this->getBlogList($currentPage, $pageSize, $filters);
-        
+
         // 构建分页URL模式，保留所有筛选参数
         $urlParams = [];
         if (isset($filters['category'])) $urlParams[] = 'category=' . urlencode($filters['category']);
         if (isset($filters['search'])) $urlParams[] = 'search=' . urlencode($filters['search']);
         if (isset($filters['sort_by'])) $urlParams[] = 'sort_by=' . urlencode($filters['sort_by']);
         if (isset($filters['sort_order'])) $urlParams[] = 'sort_order=' . urlencode($filters['sort_order']);
-        
+
         $urlPattern = Router::getUrl('admin/index');
         if (!empty($urlParams)) {
             $urlPattern .= '?' . implode('&', $urlParams) . '&page={page}';
         } else {
             $urlPattern .= '?page={page}';
         }
-        
+
         // 获取所有分类，用于筛选
         $categories = CategoryModel::getAllWithStats();
-        
+
         // 设置数据到视图
         $this->set('blogs', $blogs['items']);
         $this->set('totalPages', ceil($blogs['total'] / $pageSize));
@@ -239,18 +246,18 @@ class Admin extends Action
                         return false;
                     }
                 }
-                
+
                 // 按搜索条件筛选
                 if (isset($filters['search']) && !empty($filters['search'])) {
                     $search = strtolower($filters['search']);
                     $title = strtolower($blog['title'] ?? '');
                     $subtitle = strtolower($blog['subtitle'] ?? '');
-                    
+
                     if (strpos($title, $search) === false && strpos($subtitle, $search) === false) {
                         return false;
                     }
                 }
-                
+
                 return true;
             });
         }
@@ -258,17 +265,17 @@ class Admin extends Action
         // 应用排序
         $sortBy = $filters['sort_by'] ?? 'date';
         $sortOrder = $filters['sort_order'] ?? 'desc';
-        
+
         uasort($blogs, function ($a, $b) use ($sortBy, $sortOrder) {
             $valA = $a[$sortBy] ?? '';
             $valB = $b[$sortBy] ?? '';
-            
+
             // 日期特殊处理
             if ($sortBy === 'date') {
                 $valA = strtotime($valA);
                 $valB = strtotime($valB);
             }
-            
+
             // 根据排序方向比较
             if ($sortOrder === 'asc') {
                 return $valA <=> $valB;
@@ -276,12 +283,12 @@ class Admin extends Action
                 return $valB <=> $valA;
             }
         });
-        
+
         // 计算分页数据
         $total = count($blogs);
         $offset = ($page - 1) * $pageSize;
         $items = array_slice($blogs, $offset, $pageSize);
-        
+
         return [
             'items' => $items,
             'total' => $total,
@@ -319,8 +326,9 @@ class Admin extends Action
             'tags' => empty($data['blog_tags']) ? [] : array_map('trim', explode(',', $data['blog_tags'])),
             'path' => $data['blog_path'] ?? null
         ];
-        
-        if (isset($_FILES['blog_attachment'])
+
+        if (
+            isset($_FILES['blog_attachment'])
             && isset($_FILES['blog_attachment']['error'])
             && $_FILES['blog_attachment']['error'] === UPLOAD_ERR_OK
         ) {
@@ -335,7 +343,7 @@ class Admin extends Action
         if (!empty($blogData['path'])) {
             $id = basename($blogData['path'], '.php');
         }
-        
+
         // 创建或获取博客对象
         $blog = $id ? BlogModel::findById($id) : new BlogModel();
 
@@ -352,7 +360,7 @@ class Admin extends Action
         $blog->setAuthor($blogData['author']);
         $blog->setIndependent($blogData['is_independent']);
         $blog->setPrivate($blogData['is_private']);
-        
+
         if (isset($blogData['blog_attachment'])) {
             $blog->setBlogAttachment($blogData['blog_attachment']);
         }
@@ -374,8 +382,9 @@ class Admin extends Action
      */
     public function uploadAttachment($file)
     {
-        if (!isset($file['name']) 
-            || !isset($file['tmp_name']) 
+        if (
+            !isset($file['name'])
+            || !isset($file['tmp_name'])
             || !isset($file['error'])
             || !isset($file['size'])
             || !isset($file['type'])
@@ -394,7 +403,7 @@ class Admin extends Action
 
         $fileName = $file['name'];
         $filePath = $file['tmp_name'];
-        
+
         $auth = new \Qiniu\Auth($accessKey, $secretKey);
         $token = $auth->uploadToken($bucket);
         $uploadManager = new \Qiniu\Storage\UploadManager();
