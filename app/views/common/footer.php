@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<?= $this->asset('/app/html/css/common/footer.css') ?>" />
 <footer class="footer mt-auto py-3 bg-light">
     <div class="text-center">
         <p>&copy; <?= date('Y') ?> <?= $this->getSiteName() ?>. All rights reserved.</p>
