@@ -53,6 +53,7 @@ class BlogsModel
             $blogFilePath = PROJECT_ROOT . '/' . self::$storagePath . $blog['path'];
             $fullBlog = FileManager::readBlogFile($blogFilePath);
             if (!empty($fullBlog)) {
+                $fullBlog['path'] = $blog['path'];
                 $blog = array_merge($blog, $fullBlog);
                 $blog['id'] = basename($blog['path'], '.php');
             }
@@ -196,10 +197,10 @@ class BlogsModel
         $caches = self::getCaches();
         $categories = $caches['categories'];
         $blogs = $caches['blogs'];
-        
+
         // 创建一个新的分类统计数组
         $publicCategories = [];
-        
+
         // 复制原始分类结构
         foreach ($categories as $categoryName => $categoryData) {
             $publicCategories[$categoryName] = [
@@ -207,26 +208,27 @@ class BlogsModel
                 'blogs' => []
             ];
         }
-        
+
         // 重新计算每个分类的公开博客数量
         foreach ($blogs as $path => $blog) {
             // 跳过私有和独立页面
             if ((isset($blog['is_private']) && $blog['is_private'] === true) ||
-                (isset($blog['is_independent']) && $blog['is_independent'] === true)) {
+                (isset($blog['is_independent']) && $blog['is_independent'] === true)
+            ) {
                 continue;
             }
-            
+
             $category = $blog['category'];
             if (isset($publicCategories[$category])) {
                 $publicCategories[$category]['blogs'][] = $path;
             }
         }
-        
+
         // 更新计数
         foreach ($publicCategories as &$category) {
             $category['count'] = count($category['blogs']);
         }
-        
+
         return $publicCategories;
     }
 
@@ -285,8 +287,10 @@ class BlogsModel
         $independentPages = [];
         foreach ($blogs as $path => $blog) {
             // 确保页面是独立页面且不是私有的
-            if (isset($blog['is_independent']) && $blog['is_independent'] === true &&
-                (!isset($blog['is_private']) || $blog['is_private'] !== true)) {
+            if (
+                isset($blog['is_independent']) && $blog['is_independent'] === true &&
+                (!isset($blog['is_private']) || $blog['is_private'] !== true)
+            ) {
                 $blogFilePath = PROJECT_ROOT . '/' . self::$storagePath . $path;
                 $fullBlog = FileManager::readBlogFile($blogFilePath);
 
